@@ -1,7 +1,7 @@
 # Учебный проект - "Stellar Burgers". Яндекс Практикум. Спринт 11.
 # Автор - Константин Узких
 
-Проект размещен по адресу: https://konstantinuzkikh.github.io/mesto-project-bootcamp/
+Проект размещен по адресу: https://github.com/KonstantinUzkikh/react-burger/tree/sprint-11
 
 # Обзор
 Проектная работа предусматривает разработку интерактивного приложения Stellar Burgers (бургерная),
