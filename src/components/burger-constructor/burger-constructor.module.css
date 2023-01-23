@@ -1,0 +1,35 @@
+.boxConstructor {
+  display: flex;
+  flex-direction: column;
+  width: 600px;
+  margin-top: 100px;
+  padding-left: 16px;
+  padding-right: 16px;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.components {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.component {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.total {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+
+.icon {
+  width: 22px;
+  height: 22px;
+  margin-left: 9.5px;
+}

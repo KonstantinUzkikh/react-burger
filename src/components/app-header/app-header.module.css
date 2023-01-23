@@ -1,0 +1,29 @@
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.nav {
+  display: flex;
+  gap: 8px;
+}
+
+.button {
+  display: flex;
+  align-content: center;
+  margin: 0;
+  padding: 16px 20px;
+  background: transparent;
+  border: none;
+  color: #8585AD;
+  cursor: pointer;
+}
+
+.button:hover {
+  color: #F2F2F3;
+}
+
+.icon {
+  margin-left: 112px;
+  margin-right: 289px;
+}

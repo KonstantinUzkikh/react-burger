@@ -1,0 +1,28 @@
+.box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 60px;
+  margin-right: 60px;
+}
+
+.image {
+  width: 480px;
+  height: 240px;
+  object-fit: contain;
+  object-position: center;
+}
+
+.value {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 120px;
+  height: 56px;
+}
+
+.valuesBox {
+  display: flex;
+  gap: 20px;
+}
