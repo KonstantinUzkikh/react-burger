@@ -1,4 +1,4 @@
-.box {
+.boxMain {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,16 +13,21 @@
   object-position: center;
 }
 
-.value {
+.name {
+  width: 100%;
+  text-align: center;
+}
+
+.boxValues {
+  display: flex;
+  gap: 20px;
+}
+
+.boxValue {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   width: 120px;
   height: 56px;
-}
-
-.valuesBox {
-  display: flex;
-  gap: 20px;
 }

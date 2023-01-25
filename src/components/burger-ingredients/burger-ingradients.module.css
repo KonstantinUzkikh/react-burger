@@ -7,6 +7,21 @@
   justify-content: center;
 }
 
+.boxTypeIngredients {
+  display: flex;
+  flex-direction: column;
+}
+
+.boxTab {
+  display: flex;
+  max-height: 56px;
+}
+
+.boxListIngredients {
+  max-height: 756px;
+  overflow: auto;
+}
+
 .buttonIngradient {
   display: flex;
   flex-direction: column;

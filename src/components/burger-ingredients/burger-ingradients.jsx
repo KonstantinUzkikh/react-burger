@@ -4,31 +4,26 @@ import PropTypes from 'prop-types';
 // eslint-disable-next-line no-unused-vars
 import { Counter, CurrencyIcon, Tab, Typography, Box } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import ModalOverlay from '../modal-overlay/modal-overlay';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import { ingredientType } from '../../utils/types.js';
 import ingradientsLayout from './burger-ingradients.module.css';
 
-const Ingredient = ({data, setIsActive, setComponent}) => {
+const Ingredient = ({data, onOpen, setComponent}) => {
 
   const {image, name, price, count } = data;
   const isCount = (typeof(count) === 'number');
 
-  const img = (
-    <img
-      src={image}
-      alt={name}
-    />
-  );
-
-  const onClickComponent = () =>  {
+  const onClickComponent = () => {
     setComponent(data);
-    setIsActive(true);
+    onOpen();
   }
 
   return (
-    <div href='#' type="button"  className={ingradientsLayout.buttonIngradient} onClick={(() => onClickComponent())} >
-      <div className={ingradientsLayout.image}>{img}</div>
+    <div href='#' type="button"  className={ingradientsLayout.buttonIngradient} onClick={onClickComponent} >
+      <div className={ingradientsLayout.image}>
+        <img src={image} alt={name}/>
+      </div>
       <div className={ingradientsLayout.price}>
         <span className="text text_type_digits-default">{price}</span>
         <CurrencyIcon type="primary" />
@@ -44,17 +39,12 @@ const Ingredient = ({data, setIsActive, setComponent}) => {
 };
 
 Ingredient.propTypes = {
-  data: PropTypes.shape({
-    image: PropTypes.string,
-    name: PropTypes.string,
-    price: PropTypes.number,
-    count: PropTypes.number
-  }).isRequired,
-  setIsActive: PropTypes.func,
-  setComponent: PropTypes.func
+  data: ingredientType,
+  onOpen: PropTypes.func.isRequired,
+  setComponent: PropTypes.func.isRequired
 };
 
-const TypeIngredients = ({type, arr, setIsActive, setComponent}) => {
+const TypeIngredients = ({type, arr, onOpen, setComponent}) => {
 
   let name;
   switch (type) {
@@ -64,22 +54,22 @@ const TypeIngredients = ({type, arr, setIsActive, setComponent}) => {
     case 'sauce':
       name = 'Соусы';
       break;
-      case 'main':
-        name = 'Начинки';
-        break;
-      default:
-      name = '';
+    case 'main':
+      name = 'Начинки';
       break;
+    default:
+      name = '';
+    break;
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <div className={ingradientsLayout.boxTypeIngredients}>
       <h3 className="text text_type_main-medium mb-6 mt-10">{name}</h3>
       <div className={ingradientsLayout.ingradients}>
-        {arr.map((item, index) => {
+        {arr.map((item) => {
           if (item.type === type) {
             return (
-              <Ingredient data={item} key={index} setIsActive={setIsActive} setComponent={setComponent} />
+              <Ingredient data={item} key={item._id} onOpen={onOpen} setComponent={setComponent} />
             )
           }
         })}
@@ -90,59 +80,44 @@ const TypeIngredients = ({type, arr, setIsActive, setComponent}) => {
 
 TypeIngredients.propTypes = {
   type: PropTypes.string,
-  arr: PropTypes.arrayOf(PropTypes.shape({
-    image: PropTypes.string,
-    name: PropTypes.string,
-    price: PropTypes.number,
-    count: PropTypes.number
-  })).isRequired,
-  setIsActive: PropTypes.func,
-  setComponent: PropTypes.func
+  arr: PropTypes.arrayOf(ingredientType).isRequired,
+  onOpen: PropTypes.func.isRequired,
+  setComponent: PropTypes.func.isRequired
 };
 
 function BurgerIngredients({data}) {
 
   const [current, setCurrent] = React.useState('one');
-  const [isModal, setIsModal] = React.useState(false);
   const [component, setComponent] = React.useState({});
+
+  const [isModal, setIsModal] = React.useState(false);
+  const onCloseModal = () => { setIsModal(false) }
+  const onOpenModal = () => { setIsModal(true) }
 
   return (
     <div>
       <h1 className="text text_type_main-large mb-5 mt-9">Соберите бургер</h1>
-      <div style={{ display: 'flex', maxHeight: 56 }}>
-        <Tab value="one" active={current === 'one'} onClick={setCurrent}>
-          Булки
-        </Tab>
-        <Tab value="two" active={current === 'two'} onClick={setCurrent}>
-          Соусы
-        </Tab>
-        <Tab value="three" active={current === 'three'} onClick={setCurrent}>
-          Начинки
-        </Tab>
+      <div className={ingradientsLayout.boxTab}>
+        <Tab value="one" active={current === 'one'} onClick={setCurrent} >Булки</Tab>
+        <Tab value="two" active={current === 'two'} onClick={setCurrent} >Соусы</Tab>
+        <Tab value="three" active={current === 'three'} onClick={setCurrent} >Начинки</Tab>
       </div>
-      <div style={{ maxHeight: 756, overflow: 'auto' }}>
-        <TypeIngredients type="bun" arr={data} setIsActive={setIsModal} setComponent={setComponent} />
-        <TypeIngredients type="main" arr={data} setIsActive={setIsModal} setComponent={setComponent} />
-        <TypeIngredients type="sauce" arr={data} setIsActive={setIsModal} setComponent={setComponent} />
+      <div className={ingradientsLayout.boxListIngredients}>
+        <TypeIngredients type="bun" arr={data} onOpen={onOpenModal} setComponent={setComponent} />
+        <TypeIngredients type="main" arr={data} onOpen={onOpenModal} setComponent={setComponent} />
+        <TypeIngredients type="sauce" arr={data} onOpen={onOpenModal} setComponent={setComponent} />
       </div>
       {isModal && (
-        <ModalOverlay isActive={isModal} setIsActive={setIsModal} >
-          <Modal title="Детали ингредиента" isActive={isModal} setIsActive={setIsModal} >
-            <IngredientDetails component={component} />
-          </Modal>
-        </ModalOverlay>
+        <Modal title="Детали ингредиента" onClose={onCloseModal} >
+          <IngredientDetails component={component} />
+        </Modal>
       )}
     </div>
   )
 };
 
 BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({
-    image: PropTypes.string,
-    name: PropTypes.string,
-    price: PropTypes.number,
-    count: PropTypes.number
-  })).isRequired
+  data: PropTypes.arrayOf(ingredientType).isRequired
 };
 
 export default BurgerIngredients;

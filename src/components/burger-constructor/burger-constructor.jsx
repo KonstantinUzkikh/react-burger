@@ -4,15 +4,12 @@ import PropTypes from 'prop-types';
 // eslint-disable-next-line no-unused-vars
 import { ConstructorElement, Button, DragIcon, CurrencyIcon, Typography, Box } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import ModalOverlay from '../modal-overlay/modal-overlay';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
-
-import componentsLayout from './burger-constructor.module.css';
+import { order } from '../../utils/constants.js';
+import { ingredientType } from '../../utils/types.js';
 import currency from '../../images/currency-icon.svg';
-
-  // Временные константы, используемые для отладки
-  const order = '034536'
+import componentsLayout from './burger-constructor.module.css';
 
 const BurgerComponent = (props) => {
 
@@ -36,9 +33,9 @@ BurgerComponent.propTypes = {
   isDrag: PropTypes.bool,
   type: PropTypes.oneOf(["top", "bottom"]),
   isLocked: PropTypes.bool,
-  text: PropTypes.string,
-  price: PropTypes.number,
-  thumbnail: PropTypes.string,
+  text: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+  thumbnail: PropTypes.string.isRequired,
   extraClass: PropTypes.string,
   handleClose: PropTypes.func
 };
@@ -47,8 +44,8 @@ const BurgerComponents = ({arr}) => {
 
   return (
     <div className={componentsLayout.components}>
-      {arr.map((item, index) => {
-          // временное условие (на период разработки)
+      {arr.map((item) => {
+          // временные константы (на период разработки). Заменить на динамические указатели
           if ((item._id !== "60d3b41abdacab0026a733c6") && (item._id !==  "60d3b41abdacab0026a733c7")) {
           return (
             <BurgerComponent
@@ -56,7 +53,7 @@ const BurgerComponents = ({arr}) => {
               text = {item.name}
               price = {item.price}
               thumbnail = {item.image}
-              key={index}
+              key={item._id}
             />
           )
         }
@@ -66,46 +63,41 @@ const BurgerComponents = ({arr}) => {
 }
 
 BurgerComponents.propTypes = {
-  arr: PropTypes.arrayOf(PropTypes.shape({
-    image: PropTypes.string,
-    name: PropTypes.string,
-    price: PropTypes.number
-  })).isRequired
+  arr: PropTypes.arrayOf(ingredientType).isRequired
 };
 
-function BurgerConstructor({ top, bottom, data }) {
+function BurgerConstructor({ bun, data }) {
 
-  let total = data.reduce((previousValue, item) => { return previousValue + item.price }, top.price + bottom.price);
+  let total = data.reduce((previousValue, item) => { return previousValue + item.price }, 2 * bun.price);
 
   const [isModal, setIsModal] = React.useState(false)
+  const onCloseModal = () => { setIsModal(false) }
 
   return (
-    <div className={componentsLayout.boxConstructor}>
+    <div className={componentsLayout.boxMain}>
       <BurgerComponent
         isDrag = {false}
         type = "top"
         isLocked = {true}
-        text = {top.name}
-        price = {top.price}
-        thumbnail = {top.image}
+        text = {`${bun.name} (верх)`}
+        price = {bun.price}
+        thumbnail = {bun.image}
         extraClass = "mb-4"
       />
 
-      <div style={{ maxHeight: 464, overflow: 'auto' }} >
-        <BurgerComponents arr={data} />
-      </div>
+      <BurgerComponents arr={data} />
 
       <BurgerComponent
         isDrag = {false}
         type = "bottom"
         isLocked = {true}
-        text = {bottom.name}
-        price = {bottom.price}
-        thumbnail = {bottom.image}
+        text = {`${bun.name} (низ)`}
+        price = {bun.price}
+        thumbnail = {bun.image}
         extraClass = "mt-4 mb-9"
       />
 
-      <div className={componentsLayout.total} style={{overflow: 'hidden'}}>
+      <div className={componentsLayout.total} >
         <Button
           htmlType="button"
           type="primary"
@@ -119,32 +111,17 @@ function BurgerConstructor({ top, bottom, data }) {
         <span className="text text_type_digits-medium">{total}</span>
       </div>
       {isModal && (
-        <ModalOverlay isActive={isModal} setIsActive={setIsModal} >
-          <Modal title="" isActive={isModal} setIsActive={setIsModal} >
-            <OrderDetails order={order} />
-          </Modal>
-        </ModalOverlay>
+        <Modal title="" onClose={onCloseModal} >
+          <OrderDetails order={order} />
+        </Modal>
       )}
     </div>
   )
 }
 
 BurgerConstructor.propTypes = {
-  top: PropTypes.shape({
-    image: PropTypes.string,
-    name: PropTypes.string,
-    price: PropTypes.number
-  }),
-  bottom: PropTypes.shape({
-    image: PropTypes.string,
-    name: PropTypes.string,
-    price: PropTypes.number
-  }),
-  data: PropTypes.arrayOf(PropTypes.shape({
-    image: PropTypes.string,
-    name: PropTypes.string,
-    price: PropTypes.number
-  })),
+  bun: ingredientType,
+  data: PropTypes.arrayOf(ingredientType).isRequired
 };
 
 export default BurgerConstructor;

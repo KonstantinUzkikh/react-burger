@@ -1,4 +1,4 @@
-.header {
+.boxMain {
   display: flex;
   align-items: center;
 }
@@ -6,6 +6,11 @@
 .nav {
   display: flex;
   gap: 8px;
+}
+
+.logo {
+  margin-left: 112px;
+  margin-right: 289px;
 }
 
 .button {
@@ -23,7 +28,6 @@
   color: #F2F2F3;
 }
 
-.icon {
-  margin-left: 112px;
-  margin-right: 289px;
+.primary {
+  color: #F2F2F3;
 }

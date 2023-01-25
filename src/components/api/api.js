@@ -1,6 +1,3 @@
-// server request parameters
-//const config = {}
-
 function checkResponse(res) {
   if (res.ok) {
     return res.json();
@@ -8,8 +5,8 @@ function checkResponse(res) {
   return Promise.reject(`Ошибка: ${res.status}`);
 }
 
-function getIngredients(url) {
-  return fetch(url).then(checkResponse)
+function request(url, options) {
+  return fetch(url, options).then(checkResponse)
 }
 
-export {getIngredients}
+export {request}

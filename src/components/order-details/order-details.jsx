@@ -9,7 +9,7 @@ import done from '../../images/done.svg'
 
 function OrderDetails({order}) {
   return (
-    <div className={orderLayout.box}>
+    <div className={orderLayout.boxMain}>
       <p className="text text_type_digits-large" >{order}</p>
       <p className="text text_type_main-medium mb-15 mt-8">идентификатор заказа</p>
       <img src={done} alt="заказ принят" className={orderLayout.icon} />
@@ -20,7 +20,7 @@ function OrderDetails({order}) {
 }
 
 OrderDetails.propTypes = {
-  order: PropTypes.string
+  order: PropTypes.string.isRequired
 };
 
 export default OrderDetails

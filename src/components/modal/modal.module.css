@@ -1,4 +1,4 @@
-.box {
+.boxMain {
   display: flex;
   position: relative;
   flex-direction: column;
@@ -11,7 +11,7 @@
   background-color: #1C1C21;
 }
 
-.titleBox {
+.boxTitle {
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-between;

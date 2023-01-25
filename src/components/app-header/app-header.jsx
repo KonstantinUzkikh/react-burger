@@ -6,82 +6,58 @@ import { Logo, BurgerIcon, ListIcon, ProfileIcon, Typography, Box } from '@ya.pr
 
 import headerLayout from './app-header.module.css'
 
-function ButtonHeader({content, type}) {
-  let  isActive = false
-
-  if (type === "primary") { isActive = true}
-
+const Icon = ({content, type}) => {
   switch (content) {
-    case "burger":
-      return (
-        <button href='#' type="button" className={headerLayout.button}>
-          <BurgerIcon type={type} />
-          {isActive
-          ? (<span className="text text_type_main-default ml-2" style={{ color: '#F2F2F3' }}>
-              Конструктор
-            </span>
-            )
-          : (<span className="text text_type_main-default ml-2">
-              Конструктор
-            </span>
-            )
-          }
-        </button>
-      )
-    case "list":
-      return (
-        <button href='#' type="button" className={headerLayout.button}>
-          <ListIcon type={type} />
-          {isActive
-          ? (<span className="text text_type_main-default ml-2" style={{ color: '#F2F2F3' }}>
-              Лента заказов
-            </span>
-            )
-          : (<span className="text text_type_main-default ml-2">
-              Лента заказов
-            </span>
-            )
-          }
-        </button>
-      )
-    case "profile":
-      return (
-        <button href='#' type="button" className={headerLayout.button}>
-          <ProfileIcon type={type} />
-          {isActive
-          ? (<span className="text text_type_main-default ml-2" style={{ color: '#F2F2F3' }}>
-              Личный кабинет
-            </span>
-            )
-          : (<span className="text text_type_main-default ml-2">
-              Личный кабинет
-            </span>
-            )
-          }
-        </button>
-      )
-    default:
-      break;
+    case "burger": return ( <BurgerIcon type={type} /> );
+    case "list": return ( <ListIcon type={type} /> );
+    case "profile": return ( <ProfileIcon type={type} /> );
+    default: return ('Ошибка: отсутствует контент');
   }
+}
+
+Icon.propTypes = {
+  content: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired
+};
+
+const ButtonHeader = ({content, isActive, ...props }) => {
+
+  let type, style;
+  if (isActive) {
+    type = "primary";
+    style = `${headerLayout.primary}`;
+  } else {
+    type = "secondary";
+    style = ''
+  }
+
+  return (
+    <button href='#' type="button" className={headerLayout.button}>
+      <Icon content={content} type={type} />
+      <span className={`${style} text text_type_main-default ml-2`}>
+        {props.children}
+      </span>
+    </button>
+  )
 }
 
 ButtonHeader.propTypes = {
   content: PropTypes.string.isRequired,
-  type: PropTypes.string
+  isActive: PropTypes.bool
 };
 
 function AppHeader() {
 
     return (
-    <div className={headerLayout.header}>
+    <div className= {`${headerLayout.boxMain} mb-4 mt-4`}>
       <nav className={headerLayout.nav}>
-        <ButtonHeader content="burger" type="primary" />
-        <ButtonHeader content="list" type="secondary" />
+        <ButtonHeader content="burger" isActive={true}>Конструктор</ButtonHeader>
+        <ButtonHeader content="list" isActive={false}>Лента заказов</ButtonHeader>
       </nav>
-      <div className={headerLayout.icon}>
+      <div className={headerLayout.logo}>
         <Logo />
       </div>
-      <ButtonHeader content="profile" type="secondary" />
+      <ButtonHeader content="profile" isActive={false}>Личный кабинет</ButtonHeader>
     </div>
   );
 }
