@@ -24,7 +24,7 @@ const BurgerComponent = (props) => {
           extraClass={props.extraClass}
           handleClose={props.handleClose}
         />
-      {props.isDrag ? (<DragIcon type={props.typeDrag} />) : (<div></div>)}
+      {props.isDrag ? <DragIcon type={props.typeDrag} /> : null}
     </div>
   );
 }
