@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
 
 // eslint-disable-next-line no-unused-vars
@@ -17,23 +18,22 @@ function Modal({ title, onClose, ...props }) {
     }
   }, []);
 
-  return (
-    <>
-      <ModalOverlay onClose={onClose}>
-        <div className={modalLayout.boxMain} onKeyDown={keyboardListener} onClick={(evt) => evt.stopPropagation()}>
-          <div className={modalLayout.boxTitle}>
-            <button className={modalLayout.buttonClose} href='#' type="button" onClick={onClose}>
-              <CloseIcon type="primary" />
-            </button>
-            <h3 className="text text_type_main-large">{title}</h3>
-          </div>
-          <div className={modalLayout.children}>
-            {props.children}
-          </div>
+  return ReactDOM.createPortal(
+    <ModalOverlay onClose={onClose}>
+      <div className={modalLayout.boxMain} onKeyDown={keyboardListener} onClick={(evt) => evt.stopPropagation()}>
+        <div className={modalLayout.boxTitle}>
+          <button className={modalLayout.buttonClose} href='#' type="button" onClick={onClose}>
+            <CloseIcon type="primary" />
+          </button>
+          <h3 className="text text_type_main-large">{title}</h3>
         </div>
-      </ModalOverlay>
-    </>
-  )
+        <div className={modalLayout.children}>
+          {props.children}
+        </div>
+      </div>
+    </ModalOverlay>,
+    document.body
+  );
 }
 
 Modal.propTypes = {

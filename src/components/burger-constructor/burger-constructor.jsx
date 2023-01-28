@@ -74,7 +74,7 @@ function BurgerConstructor({ bun, data }) {
   const onCloseModal = () => { setIsModal(false) }
 
   return (
-    <div className={componentsLayout.boxMain}>
+    <section className={componentsLayout.boxMain}>
       <BurgerComponent
         isDrag = {false}
         type = "top"
@@ -115,7 +115,7 @@ function BurgerConstructor({ bun, data }) {
           <OrderDetails order={order} />
         </Modal>
       )}
-    </div>
+    </section>
   )
 }
 

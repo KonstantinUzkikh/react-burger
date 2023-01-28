@@ -95,7 +95,7 @@ function BurgerIngredients({data}) {
   const onOpenModal = () => { setIsModal(true) }
 
   return (
-    <div>
+    <section>
       <h1 className="text text_type_main-large mb-5 mt-9">Соберите бургер</h1>
       <div className={ingradientsLayout.boxTab}>
         <Tab value="one" active={current === 'one'} onClick={setCurrent} >Булки</Tab>
@@ -112,7 +112,7 @@ function BurgerIngredients({data}) {
           <IngredientDetails component={component} />
         </Modal>
       )}
-    </div>
+    </section>
   )
 };
 
