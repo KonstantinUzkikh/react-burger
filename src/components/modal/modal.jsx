@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from "react-dom";
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 // eslint-disable-next-line no-unused-vars
@@ -8,7 +9,20 @@ import { CloseIcon, Typography, Box } from '@ya.praktikum/react-developer-burger
 import ModalOverlay from '../modal-overlay/modal-overlay';
 import modalLayout from './modal.module.css';
 
-function Modal({ title, onClose, ...props }) {
+import { MODAL_CLOSE } from '../../services/actions/modal';
+
+function Modal({ title, ...props }) {
+
+  const dispatch = useDispatch();
+
+  const { setCancelContent } = useSelector(state => state.modal);
+
+  const onClose = () => {
+    dispatch(setCancelContent());
+    dispatch({
+      type: MODAL_CLOSE
+    });
+  }
 
   const keyboardListener = React.useEffect(() => {
     const escCloseModal = (evt) => { if (evt.key === 'Escape') {onClose()} }
@@ -32,13 +46,12 @@ function Modal({ title, onClose, ...props }) {
         </div>
       </div>
     </ModalOverlay>,
-    document.body
+    document.getElementById('modal')
   );
 }
 
 Modal.propTypes = {
   title: PropTypes.string,
-  onClose: PropTypes.func.isRequired,
   children: PropTypes.element
 };
 
