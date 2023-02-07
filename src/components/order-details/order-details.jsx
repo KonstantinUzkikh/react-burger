@@ -3,7 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 // eslint-disable-next-line no-unused-vars
-import { Typography, Box } from '@ya.praktikum/react-developer-burger-ui-components';
+import { CheckMarkIcon, Typography, Box } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import orderLayout from './order-details.module.css';
 import done from '../../images/done.svg'
@@ -20,5 +20,10 @@ function OrderDetails() {
     </div>
   )
 }
+
+//Галочка из библиотеки не подходит под контекст по внешнему виду и размеру
+//<div className={orderLayout.icon} ><CheckMarkIcon type="primary" /></div>
+//Взял рисунок из фигмы
+//<img src={done} alt="заказ принят" className={orderLayout.icon} />
 
 export default OrderDetails

@@ -1,4 +1,4 @@
-import React, {useRef, useState } from 'react';
+import React, {useRef, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDrag } from "react-dnd";
@@ -9,14 +9,9 @@ import { Counter, CurrencyIcon, Tab, Typography, Box } from '@ya.praktikum/react
 import { ingredientType } from '../../utils/types.js';
 import ingredientsLayout from './burger-ingredients.module.css';
 
-import {
-  MODAL_OPEN
-} from '../../services/actions/modal';
+import { openModal } from '../../services/actions/modal';
 
-import {
-  UPDATE_CURRENT_INGREDIENT,
-  CANCEL_CURRENT_INGREDIENT
-} from '../../services/actions/ingredient-details';
+import { updateCurrentIngredient, cancelCurrentIngredient } from '../../services/actions/ingredient-details';
 
 const Ingredient = ({ data }) => {
 
@@ -36,25 +31,16 @@ const Ingredient = ({ data }) => {
     item: {_id}
   });
 
-  const onClickComponent = () => {
+  const onClickComponent = useCallback(() => {
     function setCancelCurrentIngredient() {
       return function(dispatch) {
-        dispatch({
-          type: CANCEL_CURRENT_INGREDIENT
-        })
+        dispatch(cancelCurrentIngredient())
       }
     }
-    dispatch({
-      type: UPDATE_CURRENT_INGREDIENT,
-      currentIngredient: data
-    })
-    dispatch({
-      type: MODAL_OPEN,
-      title: 'Детали ингредиента',
-      modalContent: 'ingredient',
-      setCancelContent: setCancelCurrentIngredient
-    });
-  }
+    dispatch(updateCurrentIngredient(data))
+    dispatch(openModal('Детали ингредиента', 'ingredient', setCancelCurrentIngredient));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div
@@ -134,29 +120,25 @@ function BurgerIngredients() {
 
   const [currentTab, setCurrentTab] = useState('one');
 
-  const elementBun = document.querySelector('#bun');
-  const elementSauce = document.querySelector('#sauce');
-  const elementMain = document.querySelector('#main');
-
-  const setCurrentTabBun = () => {
-    elementBun.scrollIntoView({behavior: 'smooth'})
-    setCurrentTab('one');
-  }
-  const setCurrentTabSauce = () => {
-    elementSauce.scrollIntoView({behavior: 'smooth'})
-    setCurrentTab('two');
-  }
-  const setCurrentTabMain = () => {
-    elementMain.scrollIntoView({behavior: 'smooth'})
-    setCurrentTab('three');
-  }
-
   const refTub = useRef();
   const refBun = useRef();
   const refSauce = useRef();
   const refMain = useRef();
 
-  const setActiveTabFromPosition = () => {
+  const setCurrentTabBun = useCallback(() => {
+    refBun.current.scrollIntoView({behavior: 'smooth'})
+    setCurrentTab('one');
+  }, []);
+  const setCurrentTabSauce = useCallback(() => {
+    refSauce.current.scrollIntoView({behavior: 'smooth'})
+    setCurrentTab('two');
+  }, []);
+  const setCurrentTabMain = useCallback(() => {
+    refMain.current.scrollIntoView({behavior: 'smooth'})
+    setCurrentTab('three');
+  }, []);
+
+  const setActiveTabFromPosition = useCallback(() => {
     const distanceBunToTub = refBun.current.getBoundingClientRect().top - refTub.current.getBoundingClientRect().bottom;
     const distanceSauceToTub = refSauce.current.getBoundingClientRect().top - refTub.current.getBoundingClientRect().bottom;
     const distanceMainToTub = refMain.current.getBoundingClientRect().top - refTub.current.getBoundingClientRect().bottom;
@@ -169,7 +151,7 @@ function BurgerIngredients() {
     if (Math.abs(distanceMainToTub) < Math.abs(distanceBunToTub)
       && Math.abs(distanceMainToTub) < Math.abs(distanceSauceToTub))
       { setCurrentTab('three') }
-  };
+  }, []);
 
   return (
     <section>
@@ -187,8 +169,5 @@ function BurgerIngredients() {
     </section>
   )
 };
-
-//BurgerIngredients.propTypes = {
-//};
 
 export default BurgerIngredients;

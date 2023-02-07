@@ -49,7 +49,7 @@ ButtonHeader.propTypes = {
 function AppHeader() {
 
     return (
-    <div className= {`${headerLayout.boxMain} mb-4 mt-4`}>
+    <header className= {`${headerLayout.boxMain} mb-4 mt-4`}>
       <nav className={headerLayout.nav}>
         <ButtonHeader content="burger" isActive={true}>Конструктор</ButtonHeader>
         <ButtonHeader content="list" isActive={false}>Лента заказов</ButtonHeader>
@@ -58,7 +58,7 @@ function AppHeader() {
         <Logo />
       </div>
       <ButtonHeader content="profile" isActive={false}>Личный кабинет</ButtonHeader>
-    </div>
+    </header>
   );
 }
 

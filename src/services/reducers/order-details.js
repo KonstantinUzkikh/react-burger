@@ -8,6 +8,7 @@ import {
 const initialState = {
   isLoadingСonfirmation: false,
   hasErrorСonfirmation: false,
+  errorOrder: '',
   orderId: null,
   nameOrderedBurger: null,
   burger: []
@@ -35,18 +36,12 @@ export const orderDetailsReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoadingСonfirmation: false,
-        hasErrorСonfirmation: true
+        hasErrorСonfirmation: true,
+        errorOrder: action.errorOrder
       };
     }
     case CANCEL_ORDER_DETAILS: {
-      return {
-        ...state,
-        isLoadingСonfirmation: false,
-        hasErrorСonfirmation: false,
-        orderId: null,
-        nameOrderedBurger: null,
-        burger: []
-      };
+      return initialState;
     }
     default: {
       return state;

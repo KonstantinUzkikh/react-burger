@@ -1,6 +1,6 @@
 import {
-  MODAL_OPEN,
-  MODAL_CLOSE
+  OPEN_MODAL,
+  CLOSE_MODAL
 }
 from '../actions/modal';
 
@@ -8,24 +8,22 @@ const initialState = {
   isModalOpen: false,
   title: '',
   modalContent: '',
-  setCancelContent: null
+  cancelContentFunc: null
 };
 
 export const modalReducer = (state = initialState, action) => {
   switch (action.type) {
-    case MODAL_OPEN: {
+    case OPEN_MODAL: {
       return {
         ...state,
         isModalOpen: true,
         title: action.title,
         modalContent: action.modalContent,
-        setCancelContent: action.setCancelContent
+        cancelContentFunc: action.cancelContentFunc
       };
     }
-    case MODAL_CLOSE: {
-      return {
-        state: initialState
-      };
+    case CLOSE_MODAL: {
+      return initialState;
     }
     default: {
       return state;

@@ -16,10 +16,7 @@ export const ingredientDetailsReducer = (state = initialState, action) => {
       };
     }
     case CANCEL_CURRENT_INGREDIENT: {
-      return {
-        ...state,
-        currentIngredient: {}
-      };
+      return initialState;
     }
     default: {
       return state;

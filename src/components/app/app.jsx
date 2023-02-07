@@ -1,5 +1,5 @@
 import React, { useEffect} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
@@ -11,12 +11,11 @@ import AppHeader from '../app-header/app-header';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import ModalLoader from '../modal-loader/modal-loader';
+import Notifier from '../notifier/notifier';
 // eslint-disable-next-line no-unused-vars
 import appLayout from './app.module.css'
 
 function App() {
-
-  const { isLoadingIngredients, hasErrorIngredients } = useSelector(state => state.ingredients);
 
   const dispatch = useDispatch();
 
@@ -24,22 +23,15 @@ function App() {
 
   return (
     <>
-      {isLoadingIngredients && 'Загрузка...'}
-      {hasErrorIngredients && 'Произошла ошибка'}
-      {!isLoadingIngredients && !hasErrorIngredients &&
-        <>
-          <header>
-            <AppHeader />
-          </header>
-          <main>
-            <DndProvider backend={HTML5Backend}>
-              <BurgerIngredients />
-              <BurgerConstructor  />
-            </DndProvider>
-          </main>
-        </>
-      }
+      <AppHeader />
+      <main>
+        <DndProvider backend={HTML5Backend}>
+          <BurgerIngredients />
+          <BurgerConstructor  />
+        </DndProvider>
+      </main>
       <ModalLoader />
+      <Notifier />
     </>
   );
 }

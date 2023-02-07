@@ -5,6 +5,7 @@ import {
 
   INCREASE_COUNT_BURGER_INGREDIENT,
   DECREASE_COUNT_BURGER_INGREDIENT,
+  CANCEL_COUNT_ALL_INGREDIENTS,
   CANCEL_COUNT_BURGER_BUN,
   SET_DOUBLE_COUNT_BURGER_BUN
 
@@ -13,7 +14,8 @@ import {
 const initialState = {
   isLoadingIngredients: false,
   hasErrorIngredients: false,
-  ingredients: [],
+  errorIngredients: '',
+  ingredients: []
 };
 
 export const burgerIngradientsReducer = (state = initialState, action) => {
@@ -36,39 +38,46 @@ export const burgerIngradientsReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoadingIngredients: false,
-        hasErrorIngredients: true
+        hasErrorIngredients: true,
+        errorIngredients: action.errorIngredients
       };
     }
     case INCREASE_COUNT_BURGER_INGREDIENT: {
       return {
         ...state,
-        ingredients: [...state.ingredients].map((item, index) =>
+        ingredients: state.ingredients.map((item, index) =>
           item._id === action._id ? { ...item, count: ++item.count } : item )
       };
     }
     case DECREASE_COUNT_BURGER_INGREDIENT: {
       return {
         ...state,
-        ingredients: [...state.ingredients].map((item) =>
+        ingredients: state.ingredients.map((item) =>
           item._id === action._id ? { ...item, count: --item.count } : item )
       }
     }
     case CANCEL_COUNT_BURGER_BUN: {
       return {
         ...state,
-        ingredients: [...state.ingredients].map((item) =>
-          item._id === action._id ? { ...item, count: 0 } : item )
+        ingredients: state.ingredients.map((item) => item._id === action._id ? { ...item, count: 0 } : item )
       };
     }
     case SET_DOUBLE_COUNT_BURGER_BUN: {
       return {
         ...state,
-        ingredients: [...state.ingredients].map((item) =>
-          item._id === action._id ? { ...item, count: 2 } : item )
+        ingredients: state.ingredients.map((item) => item._id === action._id ? { ...item, count: 2 } : item )
       };
+    }
+    case CANCEL_COUNT_ALL_INGREDIENTS: {
+      return {
+        ...state,
+        ingredients: state.ingredients.map((item) => { return {...item, count: 0} })
+      }
     }
     default: {
       return state;
     }
   }
 };
+
+//        ingredients: [...state.ingredients].map((item) => { return {...item, count: 0} })

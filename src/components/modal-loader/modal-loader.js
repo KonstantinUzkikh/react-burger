@@ -24,17 +24,18 @@ function ModalLoader() {
         }
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [isModalOpen]
   );
 
   return (
-    <div>
+    <>
       {isModalOpen && (
         <Modal title={title} >
           {valueModalContent}
         </Modal>
       )}
-    </div>
+    </>
   );
 }
 

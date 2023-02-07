@@ -1,8 +1,7 @@
-import React from 'react';
+import React, {useCallback, useRef} from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
-import { useDrag } from "react-dnd";
-import { useDrop } from "react-dnd";
+import { useDrag, useDrop } from "react-dnd";
 
 // eslint-disable-next-line no-unused-vars
 import { ConstructorElement, Button, DragIcon, CurrencyIcon, Typography, Box }
@@ -10,48 +9,69 @@ import { ConstructorElement, Button, DragIcon, CurrencyIcon, Typography, Box }
 
 import { getConfirmOrder } from '../../services/get-data';
 import { ingredientType } from '../../utils/types.js';
-import currency from '../../images/currency-icon.svg';
 import componentsLayout from './burger-constructor.module.css';
 
-import { MODAL_OPEN } from '../../services/actions/modal';
+import { openModal } from '../../services/actions/modal';
 
-import { CANCEL_ORDER_DETAILS } from '../../services/actions/order-details';
+import { cancelOrderDetails } from '../../services/actions/order-details';
 
-import {
-  ADD_BURGER_INGREDIENT,
-  DELETE_BURGER_INGREDIENT,
-  UPDATE_BURGER_BUN
-} from '../../services/actions/burger-constructor';
+import { addBurgerIngredient, deleteBurgerIngredient, updateBurgerBun, cancelBurger, moveBurgerIngredient }
+  from '../../services/actions/burger-constructor';
 
-import {
-  INCREASE_COUNT_BURGER_INGREDIENT,
-  DECREASE_COUNT_BURGER_INGREDIENT,
-  CANCEL_COUNT_BURGER_BUN,
-  SET_DOUBLE_COUNT_BURGER_BUN
-} from '../../services/actions/burger-ingradients';
+import { increaseCountIngredient, decreaseCountIngredient, cancelCountBun, setCountBun, cancelCountAllIngredients }
+  from '../../services/actions/burger-ingradients';
 
-const BurgerComponent = ({type, component }) => {
+const BurgerComponent = ({type, component, index, moveHandler }) => {
 
   const dispatch = useDispatch();
+  const ref = useRef(null);
 
   const { key, _id } = component;
 
-  const onDelete = () => {
-    dispatch({
-      type: DELETE_BURGER_INGREDIENT,
-      key: key
-    });
-    dispatch({
-      type: DECREASE_COUNT_BURGER_INGREDIENT,
-      _id: component._id
-    });
-  }
+  const onDelete = useCallback(() => {
+    dispatch(deleteBurgerIngredient(key));
+    dispatch(decreaseCountIngredient(_id));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const [{isDrag}, dragBurgerIngredientRef] = useDrag({
+  const [{handlerId}, drop] = useDrop({
+    accept: 'burger ingredient',
+    collect(monitor) {
+      return {
+        handlerId: monitor.getHandlerId(),
+      }
+    },
+    hover(item, monitor) {
+      if (!ref.current) {
+        return;
+      }
+      const dragIndex = item.index;
+      const hoverIndex = index;
+      if (dragIndex === hoverIndex) {
+        return;
+      }
+      const hoverBoundingRect = ref.current?.getBoundingClientRect();
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const clientOffset = monitor.getClientOffset();
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+        return;
+      }
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+        return;
+      }
+      moveHandler(dragIndex, hoverIndex);
+      item.index = hoverIndex;
+    },
+  });
+
+  const [{isDragging}, drag] = useDrag({
     type: 'burger ingredient',
-    item: { key, _id },
+    item: () => {
+      return { key, index }
+    },
     collect: monitor => ({
-      isDrag: monitor.isDragging()
+      isDragging: monitor.isDragging()
     })
   });
 
@@ -68,18 +88,20 @@ const BurgerComponent = ({type, component }) => {
     }
   }
 
+  const opacity = isDragging ? 0.3 : 1;
+  drag(drop(ref));
+
   return (
-    !isDrag &&
-    <div className={componentsLayout.component} ref={dragBurgerIngredientRef}>
-        <ConstructorElement
-          type={type}
-          isLocked={component.type === 'bun' ? true : false}
-          text={`${component.name} ${text}`}
-          price={component.price}
-          thumbnail={component.image}
-          extraClass={extraClass}
-          handleClose={onDelete}
-        />
+    <div className={componentsLayout.component} style={{opacity}} ref={ref} data-handler-id={handlerId}>
+      <ConstructorElement
+        type={type}
+        isLocked={component.type === 'bun' ? true : false}
+        text={`${component.name} ${text}`}
+        price={component.price}
+        thumbnail={component.image}
+        extraClass={extraClass}
+        handleClose={onDelete}
+      />
       {component.type !== 'bun' ? <DragIcon type="secondary" /> : null}
     </div>
   );
@@ -87,12 +109,15 @@ const BurgerComponent = ({type, component }) => {
 
 BurgerComponent.propTypes = {
   type: PropTypes.oneOf(["top", "bottom"]),
-  component: ingredientType
+  component: ingredientType,
+  index: PropTypes.number,
+  moveHandler: PropTypes.func
 };
 
 function BurgerConstructor() {
 
   const dispatch = useDispatch();
+
   const { burger } = useSelector(state => state.constructorContent);
   const { ingredients } = useSelector(state => state.ingredients);
 
@@ -105,23 +130,38 @@ function BurgerConstructor() {
     };
   });
 
-  const makeOrder = () => {
+  const moveIngredientToBurger = ({_id}) => {
+    dispatch(
+      addBurgerIngredient({...ingredients.filter((item) => item._id === _id)[0], count: 1, key: Date.now()})
+    );
+    dispatch(increaseCountIngredient(_id));
+  }
+
+  const moveBunToBurger = ({_id}) => {
+    burger[0].type === 'bun' && dispatch(cancelCountBun(burger[0]._id));
+    dispatch(updateBurgerBun({...ingredients.filter((item) => item._id === _id)[0], count: 2, key: Date.now()}));
+    dispatch(setCountBun(ingredients.filter((item) => item._id === _id)[0]._id));
+  }
+
+  const moveHandler = useCallback((dragIndex, hoverIndex) => {
+    dispatch(moveBurgerIngredient(dragIndex, hoverIndex));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const makeOrder = useCallback(() => {
     function setCancelOrderDetails() {
       return function(dispatch) {
-        dispatch({
-          type: CANCEL_ORDER_DETAILS
-        })
+        dispatch(cancelOrderDetails());
+        dispatch(cancelBurger());
+        dispatch(cancelCountAllIngredients());
       }
     }
     if (isBunContent && isIngredientContent) {
       dispatch(getConfirmOrder(burger));
-      dispatch({
-        type: MODAL_OPEN,
-        modalContent: 'order',
-        setCancelContent: setCancelOrderDetails
-      });
+      dispatch(openModal('', 'order', setCancelOrderDetails));
     }
-  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [burger]);
 
   const [{isHoverIngredient}, dropIngredientTarget] = useDrop({
     accept: 'ingredient',
@@ -130,17 +170,6 @@ function BurgerConstructor() {
     }),
     drop(item) {moveIngredientToBurger(item)}
   });
-
-  const moveIngredientToBurger = ({_id}) => {
-    dispatch({
-      type: ADD_BURGER_INGREDIENT,
-      ingredient: {...ingredients.filter((item) => item._id === _id)[0], count: 1, key: Date.now()}
-    });
-    dispatch({
-      type: INCREASE_COUNT_BURGER_INGREDIENT,
-      _id: _id
-    });
-  }
 
   const [{isHoverBunTop}, dropBunTopTarget] = useDrop({
     accept: 'bun',
@@ -158,53 +187,19 @@ function BurgerConstructor() {
     drop(item) {moveBunToBurger(item)}
   });
 
-  const moveBunToBurger = ({_id}) => {
-    burger[0].type === 'bun' && dispatch({
-      type: CANCEL_COUNT_BURGER_BUN,
-      _id: burger[0]._id
-    });
-    dispatch({
-      type: UPDATE_BURGER_BUN,
-      ingredient: {...ingredients.filter((item) => item._id === _id)[0], count: 2, key: Date.now()}
-    });
-    dispatch({
-      type: SET_DOUBLE_COUNT_BURGER_BUN,
-      _id: ingredients.filter((item) => item._id === _id)[0]._id
-    });
-  }
-
-  const [{isHoverBurgerIngredient}, dropBurgerIngredientTarget] = useDrop({
-    accept: 'burger ingredient',
-    collect: monitor => ({
-      isHoverBurgerIngredient: monitor.isOver()
-    }),
-    drop(item) {moveBurgerIngredientInBurger(item)}
-  });
-
-  const moveBurgerIngredientInBurger = ({key, _id}) => {
-    dispatch({
-      type: DELETE_BURGER_INGREDIENT,
-      key: key
-    });
-    dispatch({
-      type: ADD_BURGER_INGREDIENT,
-      ingredient: {...ingredients.filter((item) => item._id === _id)[0], count: 1, key: Date.now()}
-    });
-  }
-
   const isBunContent = burger[0].type === 'bun';
   const isIngredientContent = burger.length > 1;
   const typeButton = isBunContent && isIngredientContent ? "primary" : "secondary";
 
-  const classNameBunStart = `${componentsLayout.start} ${isHoverBunTop || isHoverBunBottom ? componentsLayout.onHover : ''}`;
   const classNameBunPlus = `${isHoverBunTop || isHoverBunBottom ? componentsLayout.plus : ''}`;
+  const classNameBunStart = `${componentsLayout.start} ${isHoverBunTop || isHoverBunBottom ? componentsLayout.onHover : ''}`;
   const classNameTopBun = `${classNameBunStart} text text_type_main-medium pb-4 pt-4 mb-4 ml-9 mr-1`;
   const classNameBottomBun = `${classNameBunStart} text text_type_main-medium pb-4 pt-4 mt-4 mb-4 ml-9 mr-1`;
-  const classNameIngredients =
-    `${componentsLayout.start} ${isHoverIngredient || isHoverBurgerIngredient ? componentsLayout.onHover : ''}`;
-  const classNameIngredientsFull = `${classNameIngredients} text text_type_main-medium pb-4 pt-4 ml-9 mr-1`;
   const classNameIngredientsPlus =
-    `${componentsLayout.components} ${isIngredientContent && (isHoverIngredient || isHoverBurgerIngredient) ? componentsLayout.plus : ''}`;
+    `${componentsLayout.components} ${isIngredientContent && isHoverIngredient ? componentsLayout.plus : ''}`;
+  const classNameIngredients =
+    `${componentsLayout.start} ${isHoverIngredient ? componentsLayout.onHover : ''}`;
+  const classNameIngredientsFull = `${classNameIngredients} text text_type_main-medium pb-4 pt-4 ml-9 mr-1`;
 
   return (
     <section className={componentsLayout.boxMain}>
@@ -215,14 +210,14 @@ function BurgerConstructor() {
         }
       </div>
 
-      <div ref={dropBurgerIngredientTarget}>
-        <div className={classNameIngredientsPlus} ref={dropIngredientTarget} >
-          {isIngredientContent
-            ? burger.map((item) =>
-              item.type !== 'bun' && item.type !== 'blank' && <BurgerComponent component={item} key={item.key}/>)
-            : (<h3 className={classNameIngredientsFull}>Вложите ингредиенты</h3>)
-          }
-        </div>
+      <div className={classNameIngredientsPlus} ref={dropIngredientTarget} >
+        {isIngredientContent
+          ? burger.map((item, index) =>
+            item.type !== 'bun'
+            && item.type !== 'blank'
+            && <BurgerComponent component={item} key={item.key} index={index} moveHandler={moveHandler} />)
+          : (<h3 className={classNameIngredientsFull}>Вложите ингредиенты</h3>)
+        }
       </div>
 
       <div ref={dropBunBottomTarget} >
@@ -236,7 +231,7 @@ function BurgerConstructor() {
         <Button htmlType="button" type={typeButton} size="large" extraClass="ml-10" onClick={makeOrder} >
           Оформить заказ
         </Button>
-        <img src={currency} alt="алмазик" className={componentsLayout.icon} />
+        <div className={componentsLayout.icon} ><CurrencyIcon type="primary" /></div>
         <span className="text text_type_digits-medium">{total}</span>
       </div>
     </section>
