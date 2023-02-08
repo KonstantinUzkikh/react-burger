@@ -1,46 +1,56 @@
-# Getting Started with Create React App
+# Учебный проект - "Stellar Burgers". Яндекс Практикум. Спринт 11 - 12.
+# Автор - Константин Узких
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Проект размещен по адресу: https://github.com/KonstantinUzkikh/react-burger/pull/2#issue-1570920987
 
-## Available Scripts
+# Обзор
+Проектная работа предусматривает разработку интерактивного приложения Stellar Burgers (бургерная),
+которое позволяет формировать из имеющихся компонентов и оформлять заказ бургера.
 
-In the project directory, you can run:
+Страница реализована на языке прграммрования JS с использованием библиотек React, Redux и набора компонентов, предоставленных Яндекс Практикумом.
 
-### `npm start`
+На главном экране отображается меню приложения, список доступных ингредиентов и конструктор бургера. Заказ формируется путем перетаскивания (Drag & Drop) ингредиентов в конструктор.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+На данном этапе разработки реализованы:
+* Обмен информацией с внешним сервером данных:
+  - загрузка первоначального набора ингредиентов (их характеристик, url-адресов, изображений),
+  - отправка сформированного заказа,
+  - загрузка номера и наименования заказа.
+* Отображение в режиме модальных окон:
+  - уведомления об оформлении заказа,
+  - уведомления, отражающее изображение и информацию о характеристиках компонентов,
+  - уведомления о загрузке информации с сервера (preloader),
+  - уведомления об произошедшей ошибке при попытке загрузки данных с сервера.
+* Скроллинг отображения внутри блока доступных ингредиентов:
+  - по нажатию на соответствующий элемент меню,
+  - отображение активного элемента меню в зависимости от контента отображаемых элементов.
+* Drag & Drop:
+  - перетаскивание ингредиентов в конструктор бургера,
+  - перемещение (сортировка) ингредиентов внутри конструктора бургера.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+**Основные техники, использованные при разработке web-сайта**
+- разработка сайта на основе заданного макета в Figma.
 
-### `npm test`
+  *** HTML и CSS ***
+- строчные и блоковые элементы, рисунки, логотипы и иконки, скроллеры,
+- изменение прозрачности активных элементов при наведении мышки,
+- технологии flex и grid для построения сетки.
+  *** JS ***
+- модульная структура скриптов;
+- загрузка контента на сайт с внешнего сервера данных,
+- использование промисов для обработки взаимодействия с серврером,
+- использование массивов и их методов,
+- обработка событий клавиатуры, мышки, скроллинга.
+  *** React ***
+- покомпонентное построение сайта (выделение логических и функциональных частей в отдельные компоненты),
+- мемоизация обработки компонентов и коллбеков,
+- функционал DnD (перетаскивание и сортировка компонентов),
+- использование инструментов отладки React Dev Tools.
+  *** Redux ***
+- использование Store для хранения и обмена данными между компонентами,
+- взаимодействие с пользователем на основе генерации и обработки событий,
+- орагнизация функционала модальных окон для применения в любом компоненте приложения с использованием Store и обработки событий,
+- использование инструментов отладки Redux Dev Tools.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+**Figma**
+[Ссылка на макет в Figma](https://www.figma.com/file/tLatiSwpQmOsE3nSReMmqN/React_Bootcamp_Проектные-задачи_external_link?node-id=0%3A1)

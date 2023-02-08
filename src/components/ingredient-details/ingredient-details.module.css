@@ -1,0 +1,33 @@
+.boxMain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 60px;
+  margin-right: 60px;
+}
+
+.image {
+  width: 480px;
+  height: 240px;
+  object-fit: contain;
+  object-position: center;
+}
+
+.name {
+  width: 100%;
+  text-align: center;
+}
+
+.boxValues {
+  display: flex;
+  gap: 20px;
+}
+
+.boxValue {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 120px;
+  height: 56px;
+}

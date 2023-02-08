@@ -1,0 +1,61 @@
+.boxMain {
+  display: flex;
+  flex-direction: column;
+  width: 600px;
+  margin-top: 100px;
+  padding-left: 16px;
+  padding-right: 16px;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.onHover {
+  background-color: rgb(0, 0, 150);
+  opacity: .5;
+}
+
+.components {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 464px;
+  overflow: auto;
+  box-sizing:content-box;
+}
+
+.component {
+  box-sizing:content-box; /*убрать*/
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.start {
+  text-align: center;
+  border: 1px solid rgb(0, 0, 150);
+  border-radius: 30px;
+  opacity: .5;
+}
+
+.start:hover {
+  opacity: 1;
+}
+
+.plus {
+  opacity: .5;
+  z-index: 2;
+}
+
+.total {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  overflow: hidden;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  margin-left: 9.5px;
+}
