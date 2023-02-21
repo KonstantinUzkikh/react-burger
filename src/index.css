@@ -11,13 +11,11 @@
   /*border-radius: 10px;*/
 }
 
-.page {
+.body {
   display: flex;
   flex-direction: column;
   align-items: center;
   background: #131316;
-  margin: 0;
-  padding: 0;
 }
 
 .root {

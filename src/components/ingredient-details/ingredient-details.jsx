@@ -5,14 +5,14 @@ import { useSelector } from 'react-redux';
 // eslint-disable-next-line no-unused-vars
 import { Typography, Box } from '@ya.praktikum/react-developer-burger-ui-components';
 
-//import { ingredientType } from '../../utils/types.js';
+import { ingredientType, h3_type, letters_grey, digits_grey } from '../../utils/types';
 import ingredientLayout from './ingredient-details.module.css';
 
 const Value = ({name, value}) => {
   return (
     <div className={ingredientLayout.boxValue}>
-      <p className="text text_type_main-default text_color_inactive">{name}</p>
-      <p className="text text_type_digits-default text_color_inactive">{value}</p>
+      <p className={letters_grey}>{name}</p>
+      <p className={digits_grey}>{value}</p>
     </div>
   )
 }
@@ -22,14 +22,16 @@ Value.propTypes = {
   value: PropTypes.number
 };
 
-function IngredientDetails() {
+function IngredientDetails({ingredient}) {
 
-  const { currentIngredient } = useSelector(state => state.ingredientDetails);
+  let { currentIngredient } = useSelector(state => state.ingredientDetails);
+
+  if (ingredient !== undefined) { currentIngredient = ingredient}
 
   return (
     <div className={ingredientLayout.boxMain}>
       <img src={currentIngredient.image_large} alt={currentIngredient.name} className={ingredientLayout.image} />
-      <p className={`${ingredientLayout.name} text text_type_main-medium mb-8 mt-4`} >{currentIngredient.name}</p>
+      <h3 className={`${h3_type} ${ingredientLayout.name} mb-8 mt-4`} >{currentIngredient.name}</h3>
       <div className={ingredientLayout.boxValues}>
         <Value name='Калории,ккал' value={currentIngredient.calories} />
         <Value name='Белки, г' value={currentIngredient.proteins} />
@@ -39,5 +41,9 @@ function IngredientDetails() {
     </div>
   )
 }
+
+IngredientDetails.propTypes = {
+  ingredient: ingredientType
+};
 
 export default IngredientDetails

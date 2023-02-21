@@ -1,19 +1,20 @@
-import React, { useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-
-// eslint-disable-next-line no-unused-vars
-import { Box } from '@ya.praktikum/react-developer-burger-ui-components';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import { getIngredients } from '../../services/get-data';
 import AppHeader from '../app-header/app-header';
-import BurgerIngredients from '../burger-ingredients/burger-ingredients';
-import BurgerConstructor from '../burger-constructor/burger-constructor';
+import ProtectedRoute from '../protected-route/protected-route';
 import ModalLoader from '../modal-loader/modal-loader';
 import Notifier from '../notifier/notifier';
-// eslint-disable-next-line no-unused-vars
-import appLayout from './app.module.css'
+import HomePage from '../../pages/home';
+import LoginPage from '../../pages/login';
+import RegisterPage from '../../pages/register';
+import ForgotPasswordPage from '../../pages/forgot-password';
+import ResetPasswordPage from '../../pages/reset-password';
+import ProfilePage from '../../pages/profile';
+import IngredientPage from '../../pages/ingredient';
+import NotFound from '../../pages/not-found';
 
 function App() {
 
@@ -23,13 +24,21 @@ function App() {
 
   return (
     <>
-      <AppHeader />
-      <main>
-        <DndProvider backend={HTML5Backend}>
-          <BurgerIngredients />
-          <BurgerConstructor  />
-        </DndProvider>
-      </main>
+      <BrowserRouter>
+        <AppHeader />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/profile" element={<ProtectedRoute element={<ProfilePage />} />} />
+          <Route path="/ingredients/:id" element={<IngredientPage />} />
+          <Route path="/orders" element={null} />
+          <Route path="/orders/:id" element={null} />
+          <Route path="/*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
       <ModalLoader />
       <Notifier />
     </>

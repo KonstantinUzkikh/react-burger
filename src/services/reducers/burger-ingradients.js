@@ -79,5 +79,3 @@ export const burgerIngradientsReducer = (state = initialState, action) => {
     }
   }
 };
-
-//        ingredients: [...state.ingredients].map((item) => { return {...item, count: 0} })

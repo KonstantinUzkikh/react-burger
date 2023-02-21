@@ -5,7 +5,6 @@ import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 
-
 function ModalLoader() {
 
   const  { isModalOpen, title, modalContent } = useSelector(state => state.modal);
@@ -18,6 +17,9 @@ function ModalLoader() {
         }
         case 'order': {
           return <OrderDetails />
+        }
+        case 'undefined': {
+          return null
         }
         default: {
           return null

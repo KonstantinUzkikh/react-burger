@@ -18,7 +18,7 @@
 }
 
 .boxListIngredients {
-  max-height: 756px;
+  max-height: 756px; /*688px;*/
   overflow: auto;
 }
 

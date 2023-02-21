@@ -8,7 +8,7 @@ import { ConstructorElement, Button, DragIcon, CurrencyIcon, Typography, Box }
   from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { getConfirmOrder } from '../../services/get-data';
-import { ingredientType } from '../../utils/types.js';
+import { ingredientType, h3_type } from '../../utils/types.js';
 import componentsLayout from './burger-constructor.module.css';
 
 import { openModal } from '../../services/actions/modal';
@@ -148,7 +148,7 @@ function BurgerConstructor() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const makeOrder = useCallback(() => {
+  const makeOrder = () => {
     function setCancelOrderDetails() {
       return function(dispatch) {
         dispatch(cancelOrderDetails());
@@ -160,8 +160,7 @@ function BurgerConstructor() {
       dispatch(getConfirmOrder(burger));
       dispatch(openModal('', 'order', setCancelOrderDetails));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [burger]);
+  };
 
   const [{isHoverIngredient}, dropIngredientTarget] = useDrop({
     accept: 'ingredient',
@@ -193,13 +192,13 @@ function BurgerConstructor() {
 
   const classNameBunPlus = `${isHoverBunTop || isHoverBunBottom ? componentsLayout.plus : ''}`;
   const classNameBunStart = `${componentsLayout.start} ${isHoverBunTop || isHoverBunBottom ? componentsLayout.onHover : ''}`;
-  const classNameTopBun = `${classNameBunStart} text text_type_main-medium pb-4 pt-4 mb-4 ml-9 mr-1`;
-  const classNameBottomBun = `${classNameBunStart} text text_type_main-medium pb-4 pt-4 mt-4 mb-4 ml-9 mr-1`;
+  const classNameTopBun = `${classNameBunStart} ${h3_type} pb-4 pt-4 mb-4 ml-9 mr-1`;
+  const classNameBottomBun = `${classNameBunStart} ${h3_type} pb-4 pt-4 mt-4 mb-4 ml-9 mr-1`;
   const classNameIngredientsPlus =
     `${componentsLayout.components} ${isIngredientContent && isHoverIngredient ? componentsLayout.plus : ''}`;
   const classNameIngredients =
     `${componentsLayout.start} ${isHoverIngredient ? componentsLayout.onHover : ''}`;
-  const classNameIngredientsFull = `${classNameIngredients} text text_type_main-medium pb-4 pt-4 ml-9 mr-1`;
+  const classNameIngredientsFull = `${classNameIngredients} ${h3_type} pb-4 pt-4 ml-9 mr-1`;
 
   return (
     <section className={componentsLayout.boxMain}>

@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 // eslint-disable-next-line no-unused-vars
 import { CloseIcon, Typography, Box } from '@ya.praktikum/react-developer-burger-ui-components';
 
+import { h1_type } from '../../utils/types.js';
 import ModalOverlay from '../modal-overlay/modal-overlay';
 import modalLayout from './modal.module.css';
 
@@ -18,13 +19,14 @@ function Modal({ title, ...props }) {
   const { cancelContentFunc } = useSelector(state => state.modal);
 
   const onClose = useCallback(() => {
-    dispatch(cancelContentFunc());
+    cancelContentFunc !== undefined && dispatch(cancelContentFunc());
+    //dispatch(cancelContentFunc());
     dispatch(closeModal());
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    const escCloseModal = (evt) => { if (evt.key === 'Escape') {onClose()} }
+    const escCloseModal = (evt) => evt.key === 'Escape' && onClose();
     document.addEventListener('keydown', escCloseModal);
     return () => {
       document.removeEventListener('keydown', escCloseModal)
@@ -39,7 +41,7 @@ function Modal({ title, ...props }) {
           <button className={modalLayout.buttonClose} href='#' type="button" onClick={onClose}>
             <CloseIcon type="primary" />
           </button>
-          <h3 className="text text_type_main-large">{title}</h3>
+          <h1 className={h1_type}>{title}</h1>
         </div>
         <div className={modalLayout.children}>
           {props.children}

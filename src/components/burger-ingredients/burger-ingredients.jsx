@@ -6,7 +6,7 @@ import { useDrag } from "react-dnd";
 // eslint-disable-next-line no-unused-vars
 import { Counter, CurrencyIcon, Tab, Typography, Box } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { ingredientType } from '../../utils/types.js';
+import { ingredientType, h1_type, h3_type, letters, digits } from '../../utils/types.js';
 import ingredientsLayout from './burger-ingredients.module.css';
 
 import { openModal } from '../../services/actions/modal';
@@ -31,7 +31,7 @@ const Ingredient = ({ data }) => {
     item: {_id}
   });
 
-  const onClickComponent = useCallback(() => {
+  const onClickComponent = () => {
     function setCancelCurrentIngredient() {
       return function(dispatch) {
         dispatch(cancelCurrentIngredient())
@@ -39,8 +39,7 @@ const Ingredient = ({ data }) => {
     }
     dispatch(updateCurrentIngredient(data))
     dispatch(openModal('Детали ингредиента', 'ingredient', setCancelCurrentIngredient));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  };
 
   return (
     <div
@@ -54,11 +53,11 @@ const Ingredient = ({ data }) => {
         <img src={image} alt={name}/>
       </div>
       <div className={ingredientsLayout.price}>
-        <span className="text text_type_digits-default">{price}</span>
+        <span className={digits}>{price}</span>
         <CurrencyIcon type="primary" />
       </div>
       <div className={ingredientsLayout.name}>
-        <p className="text text_type_main-default">{name}</p>
+        <p className={letters}>{name}</p>
       </div>
       <div className={ingredientsLayout.counter}>
         {isCount && (<Counter count={count} size="default" />)}
@@ -96,7 +95,7 @@ const TypeIngredients = ({ type }) => {
 
   return (
     <div className={ingredientsLayout.boxTypeIngredients}>
-      <h3 id={id} className="text text_type_main-medium mb-6 mt-10">{name}</h3>
+      <h3 id={id} className={`${h3_type} mb-6 mt-10`}>{name}</h3>
       <div className={ingredientsLayout.ingradients}>
         {// eslint-disable-next-line
           ingredients.map((item) => {
@@ -138,7 +137,7 @@ function BurgerIngredients() {
     setCurrentTab('three');
   }, []);
 
-  const setActiveTabFromPosition = useCallback(() => {
+  const setActiveTabFromPosition = () => {
     const distanceBunToTub = refBun.current.getBoundingClientRect().top - refTub.current.getBoundingClientRect().bottom;
     const distanceSauceToTub = refSauce.current.getBoundingClientRect().top - refTub.current.getBoundingClientRect().bottom;
     const distanceMainToTub = refMain.current.getBoundingClientRect().top - refTub.current.getBoundingClientRect().bottom;
@@ -151,11 +150,11 @@ function BurgerIngredients() {
     if (Math.abs(distanceMainToTub) < Math.abs(distanceBunToTub)
       && Math.abs(distanceMainToTub) < Math.abs(distanceSauceToTub))
       { setCurrentTab('three') }
-  }, []);
+  };
 
   return (
     <section>
-      <h1 className="text text_type_main-large mb-5 mt-9">Соберите бургер</h1>
+      <h1 className={`${h1_type} mb-5 mt-9`}>Соберите бургер</h1>
       <div className={ingredientsLayout.boxTab} id='tab' ref={refTub} >
         <Tab value="one" active={currentTab === 'one'} onClick={setCurrentTabBun} >Булки</Tab>
         <Tab value="two" active={currentTab === 'two'} onClick={setCurrentTabSauce} >Соусы</Tab>
