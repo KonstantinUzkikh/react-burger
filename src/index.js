@@ -9,10 +9,11 @@ import { rootReducer } from './services/reducers/rootReducer';
 
 import App from './components/app/app';
 import './index.css';
+import { BrowserRouter } from 'react-router-dom';
 
 const composeEnhancers =
   typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({trace: true})
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ trace: true })
     : compose;
 
 const enhancer = composeEnhancers(applyMiddleware(thunk));
@@ -22,8 +23,10 @@ const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
 root.render(
   <StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <BrowserRouter>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </BrowserRouter>
   </StrictMode>
 );

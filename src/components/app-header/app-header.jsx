@@ -61,7 +61,7 @@ function AppHeader() {
   };
 
   const onOrders = () => {
-    navigate('/order-list');
+    navigate('/orders'); // УТОЧНИТЬ ПУТЬ ПОСЛЕ ДОРАБОТКИ ФУНКЦИОНАЛА
   };
 
   const onLogin = () => {

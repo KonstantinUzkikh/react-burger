@@ -7,10 +7,9 @@ import { Input, EmailInput, PasswordInput, Button, Typography, Box } from '@ya.p
 
 import pageLayout from './page.module.css'
 import { h3_type, letters_grey, letters } from '../utils/types.js';
-
 import { readUserData } from '../utils/cookies';
 import { setProfileFormValue, cancelInputs } from '../services/actions/form'
-import { getRegisterProfile } from '../services/get-data';
+import { getProfile } from '../services/get-data';
 
 function RegisterPage() {
 
@@ -19,6 +18,7 @@ function RegisterPage() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { dispatch(cancelInputs()) }, []);
+
   const { name, email, password } = useSelector(state => state.form);
 
   const onChange = (e) => dispatch(setProfileFormValue(e.target.name, e.target.value));
@@ -26,7 +26,7 @@ function RegisterPage() {
   const onSubmit = (e) => {
     e.preventDefault();
     //dispatch(getProfile('register', {name, email, password}, () => navigate('/')));
-    dispatch(getRegisterProfile({ name, email, password }, () => navigate('/')));
+    dispatch(getProfile('register', { name, email, password }, () => navigate('/')));
   }
 
   const onLogin = () => navigate('/login');
@@ -48,9 +48,10 @@ function RegisterPage() {
       <form className={pageLayout.boxForm} onSubmit={onSubmit}>
         <h3 className={h3_type}>Регистрация</h3>
         <Input
+          onChange={onChange}
+          icon={'EditIcon'}
           type={'text'}
           placeholder={'Имя'}
-          onChange={onChange}
           value={name}
           name={'name'}
           size={'default'}
@@ -58,13 +59,14 @@ function RegisterPage() {
         />
         <EmailInput
           onChange={onChange}
+          icon={'EditIcon'}
           value={email}
           name={'email'}
-          isIcon={false}
           extraClass="mt-6"
         />
         <PasswordInput
           onChange={onChange}
+          icon={'EditIcon'}
           value={password}
           name={'password'}
           extraClass="mt-6"

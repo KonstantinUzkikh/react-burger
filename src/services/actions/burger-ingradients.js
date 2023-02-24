@@ -22,7 +22,7 @@ export const getIngredientsRequest = () => setType(GET_INGREDIENTS_REQUEST);
 export const getIngredientsSuccess = (ingredients) => {
   return {
     type: GET_INGREDIENTS_SUCCESS,
-    ingredients: ingredients.data.map((item) => {
+    ingredients: ingredients.map((item) => {
       item.count = 0;
       return (item);
     })
@@ -37,7 +37,6 @@ export const getIngredientsFaild = (error) => {
 };
 
 export const cancelCountAllIngredients = () => setType(CANCEL_COUNT_ALL_INGREDIENTS);
-
 export const increaseCountIngredient = (id) => setCount(INCREASE_COUNT_BURGER_INGREDIENT, id);
 export const decreaseCountIngredient = (id) => setCount(DECREASE_COUNT_BURGER_INGREDIENT, id);
 export const cancelCountBun = (id) => setCount(CANCEL_COUNT_BURGER_BUN, id);

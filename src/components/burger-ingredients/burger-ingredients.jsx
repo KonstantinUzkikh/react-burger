@@ -1,7 +1,8 @@
-import React, {useRef, useState, useCallback } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useDrag } from "react-dnd";
+import { Link, useLocation } from 'react-router-dom';
 
 // eslint-disable-next-line no-unused-vars
 import { Counter, CurrencyIcon, Tab, Typography, Box } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -9,48 +10,29 @@ import { Counter, CurrencyIcon, Tab, Typography, Box } from '@ya.praktikum/react
 import { ingredientType, h1_type, h3_type, letters, digits } from '../../utils/types.js';
 import ingredientsLayout from './burger-ingredients.module.css';
 
-import { openModal } from '../../services/actions/modal';
-
-import { updateCurrentIngredient, cancelCurrentIngredient } from '../../services/actions/ingredient-details';
-
 const Ingredient = ({ data }) => {
 
-  const dispatch = useDispatch();
-
-  const {_id, image, name, price, count } = data;
+  const { _id, image, name, price, count } = data;
   const isCount = (count !== 0);
   const isBun = data.type === 'bun';
 
   const [, dragIngredientRef] = useDrag({
     type: 'ingredient',
-    item: {_id}
+    item: { _id }
   });
 
   const [, dragBunRef] = useDrag({
     type: 'bun',
-    item: {_id}
+    item: { _id }
   });
-
-  const onClickComponent = () => {
-    function setCancelCurrentIngredient() {
-      return function(dispatch) {
-        dispatch(cancelCurrentIngredient())
-      }
-    }
-    dispatch(updateCurrentIngredient(data))
-    dispatch(openModal('Детали ингредиента', 'ingredient', setCancelCurrentIngredient));
-  };
 
   return (
     <div
-      href='#'
-      type="button"
       className={ingredientsLayout.buttonIngradient}
-      onClick={onClickComponent}
       ref={isBun ? dragBunRef : dragIngredientRef}
     >
       <div className={ingredientsLayout.image}>
-        <img src={image} alt={name}/>
+        <img src={image} alt={name} />
       </div>
       <div className={ingredientsLayout.price}>
         <span className={digits}>{price}</span>
@@ -72,6 +54,7 @@ Ingredient.propTypes = {
 
 const TypeIngredients = ({ type }) => {
 
+  const location = useLocation();
   const { ingredients } = useSelector(state => state.ingredients);
 
   let name, id;
@@ -90,7 +73,7 @@ const TypeIngredients = ({ type }) => {
       break;
     default:
       name = '';
-    break;
+      break;
   };
 
   return (
@@ -101,13 +84,20 @@ const TypeIngredients = ({ type }) => {
           ingredients.map((item) => {
             if (item.type === type) {
               return (
-                <Ingredient data={item} key={item._id} />
+                <Link
+                  key={item._id}
+                  to={`/ingredients/${item._id}`}
+                  state={{ backgroundLocation: location }}
+                  style={{ color: 'white' }}
+                >
+                  <Ingredient data={item} key={item._id} />
+                </Link>
               )
             }
           })
         }
       </div>
-  </div>
+    </div>
   );
 };
 
@@ -125,15 +115,15 @@ function BurgerIngredients() {
   const refMain = useRef();
 
   const setCurrentTabBun = useCallback(() => {
-    refBun.current.scrollIntoView({behavior: 'smooth'})
+    refBun.current.scrollIntoView({ behavior: 'smooth' })
     setCurrentTab('one');
   }, []);
   const setCurrentTabSauce = useCallback(() => {
-    refSauce.current.scrollIntoView({behavior: 'smooth'})
+    refSauce.current.scrollIntoView({ behavior: 'smooth' })
     setCurrentTab('two');
   }, []);
   const setCurrentTabMain = useCallback(() => {
-    refMain.current.scrollIntoView({behavior: 'smooth'})
+    refMain.current.scrollIntoView({ behavior: 'smooth' })
     setCurrentTab('three');
   }, []);
 
@@ -142,14 +132,11 @@ function BurgerIngredients() {
     const distanceSauceToTub = refSauce.current.getBoundingClientRect().top - refTub.current.getBoundingClientRect().bottom;
     const distanceMainToTub = refMain.current.getBoundingClientRect().top - refTub.current.getBoundingClientRect().bottom;
     if (Math.abs(distanceBunToTub) < Math.abs(distanceSauceToTub)
-      && Math.abs(distanceBunToTub) < Math.abs(distanceMainToTub))
-      { setCurrentTab('one') }
+      && Math.abs(distanceBunToTub) < Math.abs(distanceMainToTub)) { setCurrentTab('one') }
     if (Math.abs(distanceSauceToTub) < Math.abs(distanceBunToTub)
-      && Math.abs(distanceSauceToTub) < Math.abs(distanceMainToTub))
-      { setCurrentTab('two') }
+      && Math.abs(distanceSauceToTub) < Math.abs(distanceMainToTub)) { setCurrentTab('two') }
     if (Math.abs(distanceMainToTub) < Math.abs(distanceBunToTub)
-      && Math.abs(distanceMainToTub) < Math.abs(distanceSauceToTub))
-      { setCurrentTab('three') }
+      && Math.abs(distanceMainToTub) < Math.abs(distanceSauceToTub)) { setCurrentTab('three') }
   };
 
   return (

@@ -7,7 +7,6 @@ import { EmailInput, Button, Typography, Box } from '@ya.praktikum/react-develop
 
 import pageLayout from './page.module.css'
 import { h3_type, letters_grey, letters } from '../utils/types.js';
-
 import { readUserData } from '../utils/cookies';
 import { setProfileFormValue } from '../services/actions/form';
 import { getForgotPassword } from '../services/get-data';
@@ -45,9 +44,9 @@ function ForgotPasswordPage() {
         <EmailInput
           placeholder={'Укажите e-mail'}
           onChange={onChange}
+          icon={'EditIcon'}
           value={email}
           name={'email'}
-          isIcon={false}
           extraClass="mt-6"
         />
         <div className={pageLayout.buttonSubmit}>

@@ -6,10 +6,10 @@ import { useNavigate, useLocation } from 'react-router-dom';
 // eslint-disable-next-line no-unused-vars
 import { Input, EmailInput, PasswordInput, Button, Typography, Box } from '@ya.praktikum/react-developer-burger-ui-components';
 
+import { getProfileRequest, getProfileSuccess, getProfileFaild } from '../services/actions/profile';
 import { readUserData, readPassword } from '../utils/cookies';
 import profileLayout from './profile.module.css'
 import { h3_type, letters_grey } from '../utils/types.js';
-
 import { setProfileFormValue, setInputs } from '../services/actions/form'
 import { getReadProfile, getUpdateProfile, getLogout } from '../services/get-data';
 
@@ -34,11 +34,24 @@ function ProfilePage() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const { name, email, password } = useSelector(state => state.form);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  //useEffect(() => dispatch(getProfile('read', {})), []);
-  useEffect(() => dispatch(getReadProfile()), []);
+  useEffect(() => {
+    async function loadUserData() {
+      dispatch(getProfileRequest());
+      const res = await getReadProfile(undefined, () => navigate('/login'));
+      try {
+        dispatch(setInputs(res.name, res.email, res.password));
+        dispatch(getProfileSuccess());
+      }
+      catch (err) {
+        dispatch(getProfileFaild(err))
+      }
+    }
+    loadUserData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
+
+  const { name, email, password } = useSelector(state => state.form);
   const [isChanged, setIsChanged] = useState(false); // ДОРАБОТАТЬ ЛОГИКУ
 
   const onChange = (e) => {
@@ -48,8 +61,7 @@ function ProfilePage() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    //dispatch(getProfile('update', {name, email, password}));
-    dispatch(getUpdateProfile({name, email, password}));
+    dispatch(getUpdateProfile({ name, email, password }, () => navigate('/login')));
   }
 
   const onReset = (e) => {
@@ -61,9 +73,7 @@ function ProfilePage() {
   }
 
   const onProfile = () => navigate('/profile');
-
   const onHistory = () => navigate('/history');
-
   const onLogout = () => dispatch(getLogout(() => navigate('/')));
 
   const typeButton = isChanged ? "primary" : "secondary"; // ДОРАБОТАТЬ ЛОГИКУ

@@ -12,16 +12,15 @@ import modalLayout from './modal.module.css';
 
 import { closeModal } from '../../services/actions/modal';
 
-function Modal({ title, ...props }) {
+function Modal({ title, closeCallback, ...props }) {
 
   const dispatch = useDispatch();
 
   const { cancelContentFunc } = useSelector(state => state.modal);
 
   const onClose = useCallback(() => {
-    cancelContentFunc !== undefined && dispatch(cancelContentFunc());
-    //dispatch(cancelContentFunc());
-    dispatch(closeModal());
+    cancelContentFunc !== null && dispatch(cancelContentFunc());
+    closeCallback !== undefined ? closeCallback() : dispatch(closeModal());
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -54,7 +53,8 @@ function Modal({ title, ...props }) {
 
 Modal.propTypes = {
   title: PropTypes.string,
-  children: PropTypes.element
+  children: PropTypes.element,
+  closeCallback: PropTypes.func
 };
 
 export default Modal

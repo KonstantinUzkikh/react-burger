@@ -51,6 +51,10 @@ function Notifier() {
   const [isOpen, setIsOpen] = useState(false);
   const [notification, setNotification] = useState({});
 
+  // ДАЛЕЕ ДОРАБОТАТЬ ПО АНАЛОГИИ С МОДАЛЬНЫМ ОКНОМ
+  // СДЕЛАТЬ ОТДЕЛЬНЫЙ СТОР ДЛЯ ФЛАГОВ: ПРОЦЕСС, ОШИБКА, СООБЩЕНИЕ
+  // ТЕКСТЫ СООБЩЕНИЙ И ОШИБОК ВЫНЕСТИ В КОНСТАНТЫ
+
   const { isLoadingIngredients, hasErrorIngredients, errorIngredients } = useSelector(state => state.ingredients);
   const { isLoadingСonfirmation, hasErrorСonfirmation, errorOrder } = useSelector(state => state.orderDetails);
   const { isLoadingProfile, hasErrorProfile, errorProfile } = useSelector(state => state.profile);

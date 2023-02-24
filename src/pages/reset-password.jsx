@@ -7,7 +7,6 @@ import { PasswordInput, Input, Button, Typography, Box } from '@ya.praktikum/rea
 
 import pageLayout from './page.module.css'
 import { h3_type, letters_grey, letters } from '../utils/types.js';
-
 import { readUserData, readForgot } from '../utils/cookies';
 import { setProfileFormValue } from '../services/actions/form';
 import { getResetPassword } from '../services/get-data';
@@ -58,9 +57,10 @@ function ResetPasswordPage() {
           extraClass="mt-6"
         />
         <Input
+          onChange={onChange}
+          icon={'EditIcon'}
           type={'text'}
           placeholder={'Введите код из письма'}
-          onChange={onChange}
           value={code}
           name={'code'}
           size={'default'}

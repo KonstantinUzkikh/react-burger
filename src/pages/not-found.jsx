@@ -4,14 +4,13 @@ import { Navigate } from 'react-router-dom';
 
 import { openModal } from '../services/actions/modal';
 
-function NotFound() {
+function NotFoundPage() {
 
   const dispatch = useDispatch();
-  const msg = 'Ошибка 404\nCтраница не существует';
 
-  dispatch(openModal(msg, 'undefinde'));
+  dispatch(openModal('', 'error404'));
 
   return <Navigate to="/" replace/>
 }
 
-export default NotFound;
+export default NotFoundPage;

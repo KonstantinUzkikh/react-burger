@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { request } from '../components/api/api';
+import { getIngredient } from '../services/get-data';
 import IngredientDetails from '../components/ingredient-details/ingredient-details';
-
 import ingredientLayout from './ingredient.module.css'
 
 function IngredientPage() {
@@ -14,23 +13,19 @@ function IngredientPage() {
   const [isLoad, setIsLoad] = useState(false);
   const [ingredient, setIngredient] = useState(null);
 
-  const loadIngredient = useCallback(() => {
-    let ingredient;
-    request('/ingredients')
-      .then(res => res.data)
-      .then(arr => {
-        ingredient = arr.find(item => item._id === id);
-        if (ingredient === undefined) { navigate('/') }
+  useEffect(() => {
+    async function loadIngredient() {
+      const ingredient = await getIngredient(id);
+      try {
+        if (ingredient === undefined) navigate('/');
         setIngredient(ingredient);
         setIsLoad(true);
-      });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
-
-  useEffect(() => {
+      }
+      catch (err) { return err }
+    }
     loadIngredient();
-  }, [id, loadIngredient]
-  );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

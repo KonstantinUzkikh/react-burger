@@ -10,7 +10,7 @@ import { h3_type, letters_grey, letters } from '../utils/types.js';
 
 import { readUserData } from '../utils/cookies';
 import { setProfileFormValue, cancelInputs } from '../services/actions/form';
-import { getLoginProfile } from '../services/get-data';
+import { getProfile } from '../services/get-data';
 
 function LoginPage() {
 
@@ -33,12 +33,10 @@ function LoginPage() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    //dispatch(getProfile('login', {email, password}, () => navigate('/')));
-    dispatch(getLoginProfile({email, password}, () => navigate('/')));
+    dispatch(getProfile('login', {email, password}, () => navigate('/')));
   }
 
   const onRegister = () => navigate('/register');
-
   const onForgotPassword = () => navigate('/forgot-password');
 
   const typeButton = isError ? "secondary" : "primary" ; // ДОРАБОТАТЬ ЛОГИКУ
@@ -56,9 +54,9 @@ function LoginPage() {
         <h3 className={h3_type}>Вход</h3>
         <EmailInput
           onChange={onChange}
+          icon={'EditIcon'}
           value={email}
           name={'email'}
-          isIcon={false}
           extraClass="mt-6"
         />
         <PasswordInput
