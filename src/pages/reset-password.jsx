@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 // eslint-disable-next-line no-unused-vars
@@ -8,21 +8,19 @@ import { PasswordInput, Input, Button, Typography, Box } from '@ya.praktikum/rea
 import pageLayout from './page.module.css'
 import { h3_type, letters_grey, letters } from '../utils/types.js';
 import { readUserData, readForgot } from '../utils/cookies';
-import { setProfileFormValue } from '../services/actions/form';
 import { getResetPassword } from '../services/get-data';
+import { useForm } from '../hooks/useForm';
 
 function ResetPasswordPage() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { newPassword, code } = useSelector(state => state.form);
-
-  const onChange = (e) => dispatch(setProfileFormValue(e.target.name, e.target.value));
+  const {values, handleChange } = useForm({newPassword: '', code: ''});
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(getResetPassword(newPassword, code, () => navigate('/')));
+    dispatch(getResetPassword(values, () => navigate('/')));
   }
 
   const onLogin = () => navigate('/login');
@@ -51,17 +49,17 @@ function ResetPasswordPage() {
         <h3 className={h3_type}>Восстановление пароля</h3>
         <PasswordInput
           placeholder={'Введите новый пароль'}
-          onChange={onChange}
-          value={newPassword}
+          onChange={handleChange}
+          value={values.newPassword}
           name={'newPassword'}
           extraClass="mt-6"
         />
         <Input
-          onChange={onChange}
+          onChange={handleChange}
           icon={'EditIcon'}
           type={'text'}
           placeholder={'Введите код из письма'}
-          value={code}
+          value={values.code}
           name={'code'}
           size={'default'}
           extraClass="mt-6"

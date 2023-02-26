@@ -1,13 +1,29 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 
 import { readUserData } from '../../utils/cookies';
 
-function ProtectedRoute({ element }) {
+export default function ProtectedRoute({ children, anonymous = false }) {
+
+  const location = useLocation();
 
   const { email } = readUserData();
+  const isLoggedIn = email !== undefined;
 
-  return email !== undefined ? element : <Navigate to="/login" replace/>;
+  const from = location.state?.from || '/';
+
+  // Если разрешен неавторизованный доступ, а пользователь авторизован...
+  if (anonymous && isLoggedIn) {
+    // ...то отправляем его на предыдущую страницу
+    return <Navigate to={ from } />;
+  }
+
+  // Если требуется авторизация, а пользователь не авторизован...
+  if (!anonymous && !isLoggedIn) {
+    // ...то отправляем его на страницу логин
+    return <Navigate to="/login" state={{ from: location}}/>;
+  }
+
+  // Если все ок, то рендерим внутреннее содержимое
+  return children;
 }
-
-export default ProtectedRoute;

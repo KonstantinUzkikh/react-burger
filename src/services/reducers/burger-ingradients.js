@@ -14,6 +14,7 @@ import {
 const initialState = {
   isLoadingIngredients: false,
   hasErrorIngredients: false,
+  isLoadIngredients: false,
   errorIngredients: '',
   ingredients: []
 };
@@ -23,14 +24,16 @@ export const burgerIngradientsReducer = (state = initialState, action) => {
     case GET_INGREDIENTS_REQUEST: {
       return {
         ...state,
-        isLoadingIngredients: true
+        isLoadingIngredients: true,
+        isLoadIngredients: false
       };
     }
     case GET_INGREDIENTS_SUCCESS: {
       return {
         ...state,
         isLoadingIngredients: false,
-        hasErrorIngredients: false,
+        //hasErrorIngredients: false,
+        isLoadIngredients: true,
         ingredients: action.ingredients
       };
     }

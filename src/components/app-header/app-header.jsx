@@ -78,7 +78,7 @@ function AppHeader() {
           <ButtonHeader content="list" isActive={pathname === '/order-list'}>Лента заказов</ButtonHeader>
         </div>
       </nav>
-      <div className={headerLayout.logo}>
+      <div className={headerLayout.logo} onClick={() => navigate('/')} >
         <Logo />
       </div>
       <div onClick={onLogin}>

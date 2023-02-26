@@ -22,6 +22,18 @@ export const user1 = {
   password: "Qd975tg",
 }
 
+export const user10 = {
+  name: "Юлий Цезарь",
+  email: "test953@yandex.ru",
+  password: "Tujs75tg",
+}
+
+export const user11 = {
+  name: "Понтий Пилат",
+  email: "test107@yandex.ru",
+  password: "Tu75tg",
+}
+
 export const user2 = {
   name: "Жак-Ив",
   email: "test-652@yandex.ru",
@@ -37,7 +49,7 @@ export const user3 = {
 export const user = {
   name: "Nick",
   email: "nick.test.nick@yandex.ru",   // pass: Gtf!63st_0
-  password: "Z67!ws0", // Tredj6& //Yhsf5%
+  password: "Gtf!63st_0", // Tredj6& //Yhsf5%
 }
 
 export const ingredient = {

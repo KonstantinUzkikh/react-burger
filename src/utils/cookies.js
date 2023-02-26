@@ -48,7 +48,7 @@ export const writePassword = (password) => setCookie('password', password);
 export const readPassword = () => getCookie('password');
 
 export function writeTokens(accessToken, refreshToken) {
-  setCookie('accessToken', accessToken.slice('Bearer '.length), { 'max-age': 10 });
+  setCookie('accessToken', accessToken.slice('Bearer '.length), { 'max-age': 1200 });
   setCookie('refreshToken', refreshToken);
 }
 
@@ -63,7 +63,7 @@ export const readForgot = () => getCookie('forgot');
 export const deleteForgot = () => setCookie('forgot', '', { 'max-age': 0 });
 
 export function writeAccessToken(accessToken) {
-  setCookie('accessToken', accessToken.slice('Bearer '.length), { 'max-age': 10 });
+  setCookie('accessToken', accessToken.slice('Bearer '.length), { 'max-age': 1200 });
 }
 
 export function deleteCookies() {

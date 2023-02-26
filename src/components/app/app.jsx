@@ -35,7 +35,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
-        <Route path="/profile" element={<ProtectedRoute element={<ProfilePage />} />} />
+        <Route path="/profile" element={<ProtectedRoute children={<ProfilePage />} />} />
         <Route path="/ingredients/:id" element={<IngredientPage />} />
         <Route path="/orders" element={null} />
         <Route path="/orders/:id" element={null} />

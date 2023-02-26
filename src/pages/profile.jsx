@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 // eslint-disable-next-line no-unused-vars
@@ -10,8 +10,8 @@ import { getProfileRequest, getProfileSuccess, getProfileFaild } from '../servic
 import { readUserData, readPassword } from '../utils/cookies';
 import profileLayout from './profile.module.css'
 import { h3_type, letters_grey } from '../utils/types.js';
-import { setProfileFormValue, setInputs } from '../services/actions/form'
 import { getReadProfile, getUpdateProfile, getLogout } from '../services/get-data';
+import { useForm } from '../hooks/useForm';
 
 const ListItem = ({ title, isActive }) => {
   let style = `${profileLayout.navItem} ${h3_type}`;
@@ -34,12 +34,15 @@ function ProfilePage() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
+  const {values, handleChange, setValues } = useForm({name: '', email: '', password: ''});
+
   useEffect(() => {
     async function loadUserData() {
       dispatch(getProfileRequest());
       const res = await getReadProfile(undefined, () => navigate('/login'));
       try {
-        dispatch(setInputs(res.name, res.email, res.password));
+        const {name, email, password} = res;
+        setValues({name, email, password});
         dispatch(getProfileSuccess());
       }
       catch (err) {
@@ -51,24 +54,23 @@ function ProfilePage() {
   }, []);
 
 
-  const { name, email, password } = useSelector(state => state.form);
   const [isChanged, setIsChanged] = useState(false); // ДОРАБОТАТЬ ЛОГИКУ
 
   const onChange = (e) => {
-    dispatch(setProfileFormValue(e.target.name, e.target.value));
+    handleChange(e);
     setIsChanged(true);
   }
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(getUpdateProfile({ name, email, password }, () => navigate('/login')));
+    dispatch(getUpdateProfile(values, () => navigate('/login')));
   }
 
   const onReset = (e) => {
     e.preventDefault();
     const { name, email } = readUserData();
     const password = readPassword();
-    dispatch(setInputs(name, email, password));
+    setValues({name, email, password});
     setIsChanged(false);
   }
 
@@ -97,7 +99,7 @@ function ProfilePage() {
             icon={'EditIcon'}
             type={'text'}
             placeholder={'Имя'}
-            value={name}
+            value={values.name}
             name={'name'}
             size={'default'}
             extraClass="mt-6"
@@ -105,14 +107,14 @@ function ProfilePage() {
           <EmailInput
             onChange={onChange}
             icon={'EditIcon'}
-            value={email}
+            value={values.email}
             name={'email'}
             extraClass="mt-6"
           />
           <PasswordInput
             onChange={onChange}
             icon={'EditIcon'}
-            value={password}
+            value={values.password}
             name={'password'}
             extraClass="mt-6"
           />

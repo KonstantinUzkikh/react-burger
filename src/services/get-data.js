@@ -6,7 +6,6 @@ import {
 import { getIngredientsRequest, getIngredientsSuccess, getIngredientsFaild } from './actions/burger-ingradients';
 import { getOrderRequest, getOrderSuccess, getOrderFaild } from './actions/order-details';
 import { getProfileRequest, getProfileSuccess, getProfileFaild } from './actions/profile';
-import { setInputs } from './actions/form';
 
 export function getIngredients() {
   return function (dispatch) {
@@ -17,14 +16,6 @@ export function getIngredients() {
   };
 }
 
-export async function getIngredient(id) {
-  const res = await request(endPoints.ingredients)
-  try {
-    return res.data.find(item => item._id === id);
-  }
-  catch (err) { return err }
-};
-
 export function getConfirmOrder(burger) {
   return function (dispatch) {
     dispatch(getOrderRequest());
@@ -34,27 +25,9 @@ export function getConfirmOrder(burger) {
   };
 }
 
-export function getProfile(source, userData, setPath) {
-  let endPoint;
-  source === 'login' ? endPoint = endPoints.login : endPoint = endPoints.register;
-  return function (dispatch) {
-    dispatch(getProfileRequest());
-    request(endPoint, 'POST', userData)
-      .then(res => {
-        writeUserData(res.user.name, res.user.email);
-        writeTokens(res.accessToken, res.refreshToken);
-        writePassword(userData.password);
-        dispatch(setInputs(res.user.name, res.user.email, userData.password));
-        dispatch(getProfileSuccess());
-        setPath !== undefined && setPath();
-      })
-      .catch(err => dispatch(getProfileFaild(err)))
-  };
-}
-
-async function requestWithAuth(endPoint, method, body, setPath) {
+async function requestWithAuth(endPoint, method, body, goPath) {
   let { accessToken, refreshToken } = readTokens();
-  if (refreshToken === undefined) return setPath();
+  if (refreshToken === undefined) return goPath();
   if (accessToken !== undefined) return request(endPoint, method, body, { authorization: accessToken });
   const res = await request(endPoints.token, 'POST', { token: refreshToken })
   try {
@@ -64,8 +37,8 @@ async function requestWithAuth(endPoint, method, body, setPath) {
   catch (err) { return err }
 }
 
-export async function getReadProfile(userData, setPath) {
-  const res = await requestWithAuth(endPoints.read, 'GET', userData, setPath);
+export async function getReadProfile(userData, goPath) {
+  const res = await requestWithAuth(endPoints.read, 'GET', userData, goPath);
   try {
     writeUserData(res.user.name, res.user.email);
     return { name: res.user.name, email: res.user.email, password: readPassword() }
@@ -73,56 +46,58 @@ export async function getReadProfile(userData, setPath) {
   catch (err) { return err }
 }
 
-export function getUpdateProfile(userData, setPath) {
+export function getUpdateProfile(userData, goPath) {
   return function (dispatch) {
     dispatch(getProfileRequest());
-    requestWithAuth(endPoints.update, 'PATCH', userData, setPath)
+    requestWithAuth(endPoints.update, 'PATCH', userData, goPath)
       .then(res => {
         writeUserData(res.user.name, res.user.email);
         writePassword(userData.password);
-        dispatch(setInputs(res.user.name, res.user.email, userData.password));
         dispatch(getProfileSuccess());
       })
       .catch(err => dispatch(getProfileFaild(err)))
   };
 }
 
-export function getLogout(setPath) {
+export function getData(dispatch, endPoint, method, body, header, handler, goPath) {
+  dispatch(getProfileRequest());
+  request(endPoint, method, body, header)
+    .then(res => {
+      dispatch(getProfileSuccess(res.message));
+      handler?.(res, dispatch);
+      goPath?.();
+    })
+    .catch(err => dispatch(getProfileFaild(err)))
+};
+
+export function getProfile(source, userData, goPath) {
+  let endPoint;
+  source === 'login' ? endPoint = endPoints.login : endPoint = endPoints.register;
+  const handler = (res) => {
+    writeUserData(res.user.name, res.user.email);
+    writeTokens(res.accessToken, res.refreshToken);
+    writePassword(userData.password);
+  }
+  return function(dispatch) {
+    getData(dispatch, endPoint, 'POST', userData, undefined, handler, goPath);
+  }
+}
+
+export function getLogout(goPath) {
   const { refreshToken } = readTokens();
-  return function (dispatch) {
-    dispatch(getProfileRequest());
-    request(endPoints.logout, 'POST', { token: refreshToken })
-      .then(res => {
-        dispatch(getProfileSuccess(res.message));
-        deleteCookies();
-        setPath !== undefined && setPath();
-      })
-      .catch(err => dispatch(getProfileFaild(err)))
-  };
+  return function(dispatch) {
+    getData(dispatch, endPoints.logout, 'POST', { token: refreshToken }, undefined, deleteCookies, goPath);
+  }
 }
 
-export function getForgotPassword(email, setPath) {
+export function getForgotPassword({ email }, goPath) {
   return function (dispatch) {
-    dispatch(getProfileRequest());
-    request(endPoints.forgot, 'POST', { email: email })
-      .then(res => {
-        dispatch(getProfileSuccess(res.message));
-        writeForgot();
-        setPath !== undefined && setPath();
-      })
-      .catch(err => dispatch(getProfileFaild(err)))
-  };
+    getData(dispatch, endPoints.forgot, 'POST', { email: email }, undefined, writeForgot, goPath);
+  }
 }
 
-export function getResetPassword(newPassword, code, setPath) {
+export function getResetPassword({ newPassword, code }, goPath) {
   return function (dispatch) {
-    dispatch(getProfileRequest());
-    request(endPoints.reset, 'POST', { password: newPassword, token: code })
-      .then(res => {
-        dispatch(getProfileSuccess(res.message));
-        deleteForgot();
-        setPath !== undefined && setPath();
-      })
-      .catch(err => dispatch(getProfileFaild(err)))
-  };
+    getData(dispatch, endPoints.reset, 'POST', {password: newPassword, token: code}, undefined, deleteForgot, goPath);
+  }
 }

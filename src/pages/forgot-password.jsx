@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 // eslint-disable-next-line no-unused-vars
@@ -8,21 +8,19 @@ import { EmailInput, Button, Typography, Box } from '@ya.praktikum/react-develop
 import pageLayout from './page.module.css'
 import { h3_type, letters_grey, letters } from '../utils/types.js';
 import { readUserData } from '../utils/cookies';
-import { setProfileFormValue } from '../services/actions/form';
 import { getForgotPassword } from '../services/get-data';
+import { useForm } from '../hooks/useForm';
 
 function ForgotPasswordPage() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { email } = useSelector(state => state.form);
-
-  const onChange = (e) => dispatch(setProfileFormValue(e.target.name, e.target.value));
+  const {values, handleChange } = useForm({email: ''});
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(getForgotPassword(email, () => navigate('/reset-password')));
+    dispatch(getForgotPassword(values, () => navigate('/reset-password')));
   }
 
   const onLogin = () => navigate('/login');
@@ -43,9 +41,9 @@ function ForgotPasswordPage() {
         <h3 className={h3_type}>Восстановление пароля</h3>
         <EmailInput
           placeholder={'Укажите e-mail'}
-          onChange={onChange}
+          onChange={handleChange}
           icon={'EditIcon'}
-          value={email}
+          value={values.email}
           name={'email'}
           extraClass="mt-6"
         />

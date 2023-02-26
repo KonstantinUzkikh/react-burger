@@ -1,27 +1,26 @@
-import React, {useCallback, useRef} from 'react';
+import React, { useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrag, useDrop } from "react-dnd";
+import { useNavigate } from 'react-router-dom';
 
 // eslint-disable-next-line no-unused-vars
 import { ConstructorElement, Button, DragIcon, CurrencyIcon, Typography, Box }
   from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { getConfirmOrder } from '../../services/get-data';
+import { readUserData } from '../../utils/cookies';
 import { ingredientType, h3_type } from '../../utils/types.js';
 import componentsLayout from './burger-constructor.module.css';
 
 import { openModal } from '../../services/actions/modal';
-
 import { cancelOrderDetails } from '../../services/actions/order-details';
-
 import { addBurgerIngredient, deleteBurgerIngredient, updateBurgerBun, cancelBurger, moveBurgerIngredient }
   from '../../services/actions/burger-constructor';
-
 import { increaseCountIngredient, decreaseCountIngredient, cancelCountBun, setCountBun, cancelCountAllIngredients }
   from '../../services/actions/burger-ingradients';
 
-const BurgerComponent = ({type, component, index, moveHandler }) => {
+const BurgerComponent = ({ type, component, index, moveHandler }) => {
 
   const dispatch = useDispatch();
   const ref = useRef(null);
@@ -31,10 +30,10 @@ const BurgerComponent = ({type, component, index, moveHandler }) => {
   const onDelete = useCallback(() => {
     dispatch(deleteBurgerIngredient(key));
     dispatch(decreaseCountIngredient(_id));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const [{handlerId}, drop] = useDrop({
+  const [{ handlerId }, drop] = useDrop({
     accept: 'burger ingredient',
     collect(monitor) {
       return {
@@ -65,7 +64,7 @@ const BurgerComponent = ({type, component, index, moveHandler }) => {
     },
   });
 
-  const [{isDragging}, drag] = useDrag({
+  const [{ isDragging }, drag] = useDrag({
     type: 'burger ingredient',
     item: () => {
       return { key, index }
@@ -75,7 +74,7 @@ const BurgerComponent = ({type, component, index, moveHandler }) => {
     })
   });
 
-  let text  = '';
+  let text = '';
   let extraClass = '';
 
   if (component.type === 'bun') {
@@ -92,7 +91,7 @@ const BurgerComponent = ({type, component, index, moveHandler }) => {
   drag(drop(ref));
 
   return (
-    <div className={componentsLayout.component} style={{opacity}} ref={ref} data-handler-id={handlerId}>
+    <div className={componentsLayout.component} style={{ opacity }} ref={ref} data-handler-id={handlerId}>
       <ConstructorElement
         type={type}
         isLocked={component.type === 'bun' ? true : false}
@@ -117,9 +116,11 @@ BurgerComponent.propTypes = {
 function BurgerConstructor() {
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { burger } = useSelector(state => state.constructorContent);
   const { ingredients } = useSelector(state => state.ingredients);
+  const { email: emailUser } = readUserData();
 
   const total = useSelector(state => {
     const { constructorContent: { burger } } = state;
@@ -130,16 +131,16 @@ function BurgerConstructor() {
     };
   });
 
-  const moveIngredientToBurger = ({_id}) => {
+  const moveIngredientToBurger = ({ _id }) => {
     dispatch(
-      addBurgerIngredient({...ingredients.filter((item) => item._id === _id)[0], count: 1, key: Date.now()})
+      addBurgerIngredient({ ...ingredients.filter((item) => item._id === _id)[0], count: 1, key: Date.now() })
     );
     dispatch(increaseCountIngredient(_id));
   }
 
-  const moveBunToBurger = ({_id}) => {
+  const moveBunToBurger = ({ _id }) => {
     burger[0].type === 'bun' && dispatch(cancelCountBun(burger[0]._id));
-    dispatch(updateBurgerBun({...ingredients.filter((item) => item._id === _id)[0], count: 2, key: Date.now()}));
+    dispatch(updateBurgerBun({ ...ingredients.filter((item) => item._id === _id)[0], count: 2, key: Date.now() }));
     dispatch(setCountBun(ingredients.filter((item) => item._id === _id)[0]._id));
   }
 
@@ -150,40 +151,44 @@ function BurgerConstructor() {
 
   const makeOrder = () => {
     function setCancelOrderDetails() {
-      return function(dispatch) {
+      return function (dispatch) {
         dispatch(cancelOrderDetails());
         dispatch(cancelBurger());
         dispatch(cancelCountAllIngredients());
       }
     }
-    if (isBunContent && isIngredientContent) {
-      dispatch(getConfirmOrder(burger));
-      dispatch(openModal('', 'order', setCancelOrderDetails));
+
+    if (emailUser === undefined) navigate('/login')
+    else {
+      if (isBunContent && isIngredientContent) {
+        dispatch(getConfirmOrder(burger));
+        dispatch(openModal('', 'order', setCancelOrderDetails));
+      }
     }
   };
 
-  const [{isHoverIngredient}, dropIngredientTarget] = useDrop({
+  const [{ isHoverIngredient }, dropIngredientTarget] = useDrop({
     accept: 'ingredient',
     collect: monitor => ({
       isHoverIngredient: monitor.isOver()
     }),
-    drop(item) {moveIngredientToBurger(item)}
+    drop(item) { moveIngredientToBurger(item) }
   });
 
-  const [{isHoverBunTop}, dropBunTopTarget] = useDrop({
+  const [{ isHoverBunTop }, dropBunTopTarget] = useDrop({
     accept: 'bun',
     collect: monitor => ({
       isHoverBunTop: monitor.isOver()
     }),
-    drop(item) {moveBunToBurger(item)}
+    drop(item) { moveBunToBurger(item) }
   });
 
-  const [{isHoverBunBottom}, dropBunBottomTarget] = useDrop({
+  const [{ isHoverBunBottom }, dropBunBottomTarget] = useDrop({
     accept: 'bun',
     collect: monitor => ({
       isHoverBunBottom: monitor.isOver()
     }),
-    drop(item) {moveBunToBurger(item)}
+    drop(item) { moveBunToBurger(item) }
   });
 
   const isBunContent = burger[0].type === 'bun';
@@ -204,7 +209,7 @@ function BurgerConstructor() {
     <section className={componentsLayout.boxMain}>
       <div ref={dropBunTopTarget} >
         {isBunContent
-          ? <div className={classNameBunPlus}><BurgerComponent component={burger[0]} type = "top" /></div>
+          ? <div className={classNameBunPlus}><BurgerComponent component={burger[0]} type="top" /></div>
           : (<h3 className={classNameTopBun}>Выберите булку</h3>)
         }
       </div>
@@ -221,7 +226,7 @@ function BurgerConstructor() {
 
       <div ref={dropBunBottomTarget} >
         {isBunContent
-          ? <div className={classNameBunPlus}><BurgerComponent component={burger[0]} type = "bottom" /></div>
+          ? <div className={classNameBunPlus}><BurgerComponent component={burger[0]} type="bottom" /></div>
           : (<h3 className={classNameBottomBun}>Выберите булку</h3>)
         }
       </div>
