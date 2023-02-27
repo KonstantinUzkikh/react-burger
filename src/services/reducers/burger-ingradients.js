@@ -1,7 +1,5 @@
 import {
-  GET_INGREDIENTS_REQUEST,
   GET_INGREDIENTS_SUCCESS,
-  GET_INGREDIENTS_FAILED,
 
   INCREASE_COUNT_BURGER_INGREDIENT,
   DECREASE_COUNT_BURGER_INGREDIENT,
@@ -12,37 +10,17 @@ import {
 } from '../actions/burger-ingradients';
 
 const initialState = {
-  isLoadingIngredients: false,
-  hasErrorIngredients: false,
   isLoadIngredients: false,
-  errorIngredients: '',
   ingredients: []
 };
 
 export const burgerIngradientsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_INGREDIENTS_REQUEST: {
-      return {
-        ...state,
-        isLoadingIngredients: true,
-        isLoadIngredients: false
-      };
-    }
     case GET_INGREDIENTS_SUCCESS: {
       return {
         ...state,
-        isLoadingIngredients: false,
-        //hasErrorIngredients: false,
         isLoadIngredients: true,
         ingredients: action.ingredients
-      };
-    }
-    case GET_INGREDIENTS_FAILED: {
-      return {
-        ...state,
-        isLoadingIngredients: false,
-        hasErrorIngredients: true,
-        errorIngredients: action.errorIngredients
       };
     }
     case INCREASE_COUNT_BURGER_INGREDIENT: {

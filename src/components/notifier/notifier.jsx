@@ -6,16 +6,19 @@ import PropTypes from 'prop-types';
 // eslint-disable-next-line no-unused-vars
 import { Typography, Box } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { cancelProfileState } from '../../services/actions/profile';
+import { loadingMessages } from '../../utils/constants';
+import { resetRequest } from '../../services/actions/api';
 import notifierLayout from './notifier.module.css';
 
 function Notifier() {
 
-  const Notification = ({ title, notification, comment, onCancel, ...props }) => {
+  const Notification = ({ title, notification, isClosed, ...props }) => {
 
     const dispatch = useDispatch();
 
-    const onClose = () => onCancel !== undefined && dispatch(onCancel());
+    const comment = 'Чтобы закрыть уведомление,\nнажмите Esc или кликните мышкой.';
+
+    const onClose = () => isClosed && dispatch(resetRequest());
 
     useEffect(() => {
       const escCloseModal = (evt) => evt.key === 'Escape' && onClose();
@@ -33,7 +36,7 @@ function Notifier() {
             {title !== undefined && <p>{title}</p>}
             {notification !== undefined && <p>{notification}</p>}
             {props.children !== undefined && <p>{props.children}</p>}
-            {comment !== undefined && <p>{comment}</p>}
+            {isClosed && <p>{comment}</p>}
           </div>
         </div>
       </div>
@@ -43,48 +46,29 @@ function Notifier() {
   Notification.propTypes = {
     title: PropTypes.string,
     notification: PropTypes.string,
-    comment: PropTypes.string,
-    onCancel: PropTypes.func,
+    isClosed: PropTypes.bool,
     children: PropTypes.string
   };
 
   const [isOpen, setIsOpen] = useState(false);
   const [notification, setNotification] = useState({});
+  const { source, isLoading, hasError, hasMessage, errorMsg, successMsg } = useSelector(state => state.api);
 
-  // ДАЛЕЕ ДОРАБОТАТЬ ПО АНАЛОГИИ С МОДАЛЬНЫМ ОКНОМ
-  // СДЕЛАТЬ ОТДЕЛЬНЫЙ СТОР ДЛЯ ФЛАГОВ: ПРОЦЕСС, ОШИБКА, СООБЩЕНИЕ
-  // ТЕКСТЫ СООБЩЕНИЙ И ОШИБОК ВЫНЕСТИ В КОНСТАНТЫ
+  let loadingMsg;
 
-  const { isLoadingIngredients, hasErrorIngredients, errorIngredients } = useSelector(state => state.ingredients);
-  const { isLoadingСonfirmation, hasErrorСonfirmation, errorOrder } = useSelector(state => state.orderDetails);
-  const { isLoadingProfile, hasErrorProfile, errorProfile } = useSelector(state => state.profile);
+  source === '' ? loadingMsg = '' : loadingMsg = loadingMessages.filter(item => item.source === source)[0].loadingMsg;
 
-  const notifications = [
-    { isFlag: isLoadingIngredients, notification: `Загружаем доступные ингредиенты...` },
-    { isFlag: hasErrorIngredients, title: 'Произошла ошибка.', notification: `${errorIngredients}` },
-    { isFlag: isLoadingСonfirmation, title: 'Ожидайте.', notification: 'Оформляем заказ...' },
-    { isFlag: hasErrorСonfirmation, title: 'Произошла ошибка.', notification: `${errorOrder}` },
-    { isFlag: isLoadingProfile, notification: 'Личный кабинет...' },
-    {
-      isFlag: hasErrorProfile,
-      title: 'Что-то пошло не так...',
-      notification: `${errorProfile}`,
-      comment: 'Чтобы закрыть уведомление,\nнажмите Esc или кликните мышкой.',
-      onCancel: cancelProfileState
-    },
-  ];
+  const notificationsNew = [
+    { isFlag: isLoading, title: 'Ожидайте', notification: `${loadingMsg}`, isClosed: false },
+    { isFlag: hasError, title: 'Что-то пошло не так...', notification: `${errorMsg}`, isClosed: true },
+    { isFlag: hasMessage, title: 'Ответ сервера:', notification: `${successMsg}`, isClosed: true }
+  ]
 
   useEffect(() => {
-    setIsOpen(
-      isLoadingIngredients || hasErrorIngredients || isLoadingСonfirmation || hasErrorСonfirmation ||
-      isLoadingProfile || hasErrorProfile
-    );
-    setNotification(notifications.find((item) => { return item.isFlag }));
+    setIsOpen(isLoading || hasError);
+    setNotification(notificationsNew.find((item) => { return item.isFlag }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    isLoadingIngredients, hasErrorIngredients, isLoadingСonfirmation, hasErrorСonfirmation,
-    isLoadingProfile, hasErrorProfile
-  ]);
+  }, [isLoading, hasError]);
 
   return (
     <>
@@ -92,8 +76,7 @@ function Notifier() {
         <Notification
           title={notification.title}
           notification={notification.notification}
-          comment={notification.comment}
-          onCancel={notification.onCancel}
+          isClosed={notification.isClosed}
         />,
         document.getElementById('notifier')
       )}

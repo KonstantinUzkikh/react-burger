@@ -6,7 +6,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 // eslint-disable-next-line no-unused-vars
 import { Input, EmailInput, PasswordInput, Button, Typography, Box } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { getProfileRequest, getProfileSuccess, getProfileFaild } from '../services/actions/profile';
+import { sendRequest, getSuccess, getFaild } from '../services/actions/api';
 import { readUserData, readPassword } from '../utils/cookies';
 import profileLayout from './profile.module.css'
 import { h3_type, letters_grey } from '../utils/types.js';
@@ -38,15 +38,15 @@ function ProfilePage() {
 
   useEffect(() => {
     async function loadUserData() {
-      dispatch(getProfileRequest());
+      dispatch(sendRequest('profile'));
       const res = await getReadProfile(undefined, () => navigate('/login'));
       try {
         const {name, email, password} = res;
         setValues({name, email, password});
-        dispatch(getProfileSuccess());
+        dispatch(getSuccess());
       }
       catch (err) {
-        dispatch(getProfileFaild(err))
+        dispatch(getFaild(err))
       }
     }
     loadUserData();

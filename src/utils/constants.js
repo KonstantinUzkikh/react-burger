@@ -1,4 +1,5 @@
 export const BASE_URL = 'https://norma.nomoreparties.space/api';
+
 export const endPoints = {
   ingredients: '/ingredients',
   orders: '/orders',
@@ -12,6 +13,20 @@ export const endPoints = {
   token: '/auth/token'
 }
 
+export const loadingMessages = [
+  {
+    source: 'ingredients',
+    loadingMsg: 'Загружаем доступные ингредиенты...',
+  },
+  {
+    source: 'order',
+    loadingMsg: 'Оформляем заказ...',
+  },
+  {
+    source: 'profile',
+    loadingMsg: 'Личный кабинет...',
+  }
+]
 
 
 // ВРЕМЕННЫЕ КОНСТАНТЫ - УБРАТЬ ПОЗЖЕ
