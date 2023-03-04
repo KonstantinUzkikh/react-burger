@@ -3,7 +3,7 @@ import { setType } from './common';
 export const ADD_BURGER_INGREDIENT = 'ADD_BURGER_INGREDIENT';
 export const DELETE_BURGER_INGREDIENT = 'DELETE_BURGER_INGREDIENT';
 export const UPDATE_BURGER_BUN = 'UPDATE_BURGER_BUN';
-export const CANCEL_BURGER = 'CANCEL_BURGER';
+export const RESET_BURGER = 'RESET_BURGER';
 export const MOVE_BURGER_INGREDIENT = 'MOVE_BURGER_INGREDIENT';
 
 export const addBurgerIngredient = (ingredient) => {
@@ -27,7 +27,7 @@ export const updateBurgerBun = (ingredient) => {
   }
 }
 
-export const cancelBurger = () => setType(CANCEL_BURGER);
+export const cancelBurger = () => setType(RESET_BURGER);
 
 export const moveBurgerIngredient = (dragIndex, hoverIndex) => {
   return {

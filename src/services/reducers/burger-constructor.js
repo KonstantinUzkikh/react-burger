@@ -2,14 +2,14 @@ import {
   ADD_BURGER_INGREDIENT,
   DELETE_BURGER_INGREDIENT,
   UPDATE_BURGER_BUN,
-  CANCEL_BURGER,
+  RESET_BURGER,
   MOVE_BURGER_INGREDIENT
 } from '../actions/burger-constructor';
 
 const initialState = {
   // булка всегда! нулевой элемент массива
   // при инициализации нулевой элемент массива устанавливаем в blank
-  burger: [{type: 'blank', key: 0, price: 0, count: 1}]
+  burger: [{type: 'blank', _id:'', key: 0, price: 0, count: 1}]
 };
 
 export const burgerConstructorReducer = (state = initialState, action) => {
@@ -34,9 +34,9 @@ export const burgerConstructorReducer = (state = initialState, action) => {
         burger: copiedStateBurger
       };
     }
-    case CANCEL_BURGER: {
+    case RESET_BURGER: {
       return {
-        burger: [{type: 'blank', key: 0, price: 0, count: 1}]
+        burger: [{type: 'blank', _id:'', key: 0, price: 0, count: 1}]
       };
     }
     case MOVE_BURGER_INGREDIENT: {

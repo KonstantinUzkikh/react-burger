@@ -1,6 +1,6 @@
 import {
-  GET_ORDER_SUCCESS,
-  CANCEL_ORDER_DETAILS
+  GET_ORDER_ID_SUCCESS,
+  CLEAR_ORDER_ID
 } from '../actions/order-details';
 
 const initialState = {
@@ -12,7 +12,7 @@ const initialState = {
 
 export const orderDetailsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_ORDER_SUCCESS: {
+    case GET_ORDER_ID_SUCCESS: {
       return {
         ...state,
         isOrder: true,
@@ -21,7 +21,7 @@ export const orderDetailsReducer = (state = initialState, action) => {
         burger: action.burger
       };
     }
-    case CANCEL_ORDER_DETAILS: {
+    case CLEAR_ORDER_ID: {
       return initialState;
     }
     default: {
