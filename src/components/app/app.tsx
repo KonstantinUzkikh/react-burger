@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { Routes, Route, useLocation } from 'react-router-dom';
 
-import { getIngredients } from '../../services/get-data';
+import { useDispatch } from '../../store/hooks';
+import { getIngredientsThunk } from '../../store/thunks';
 import AppHeader from '../app-header/app-header';
 import ProtectedRoute from '../protected-route/protected-route';
 import ModalLoader from '../modal-loader/modal-loader';
@@ -16,12 +16,13 @@ import ProfilePage from '../../pages/profile';
 import IngredientPage from '../../pages/ingredient';
 import NotFoundPage from '../../pages/not-found';
 import ModalIngredientPage from '../../pages/modal-ingredient';
+import FeedPage from '../../pages/feed';
 
 function App() {
 
   const dispatch = useDispatch();
 
-  useEffect(() => dispatch<any>(getIngredients()), [dispatch]);
+  useEffect(() => dispatch(getIngredientsThunk()));
 
   const location = useLocation();
   const state = location.state;
@@ -37,7 +38,7 @@ function App() {
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/profile" element={<ProtectedRoute children={<ProfilePage />} />} />
         <Route path="/ingredients/:id" element={<IngredientPage />} />
-        <Route path="/orders" element={null} />
+        <Route path="/feed" element={<FeedPage /> } />
         <Route path="/orders/:id" element={null} />
         <Route path="/*" element={<NotFoundPage />} />
       </Routes>

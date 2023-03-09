@@ -1,18 +1,21 @@
+import { initialIngredient } from '../../utils/constants'
+import { TIngredient } from '../../utils/types-data';
 import {
-  ADD_BURGER_INGREDIENT,
-  DELETE_BURGER_INGREDIENT,
-  UPDATE_BURGER_BUN,
-  RESET_BURGER,
-  MOVE_BURGER_INGREDIENT
-} from '../actions/burger-constructor';
+  ADD_BURGER_INGREDIENT, DELETE_BURGER_INGREDIENT, UPDATE_BURGER_BUN, RESET_BURGER,
+  MOVE_BURGER_INGREDIENT, TBurgerConstructorActions
+} from '../action-types';
 
-const initialState = {
-  // булка всегда! нулевой элемент массива
-  // при инициализации нулевой элемент массива устанавливаем в blank
-  burger: [{type: 'blank', _id:'', key: 0, price: 0, count: 1}]
+export type TBurgerConstructorState = {
+  burger: TIngredient[]
 };
 
-export const burgerConstructorReducer = (state = initialState, action) => {
+const initialState: TBurgerConstructorState = {
+  // булка всегда! нулевой элемент массива
+  // при инициализации нулевой элемент массива устанавливаем в blank
+  burger: [initialIngredient]
+};
+
+export const burgerConstructorReducer = (state = initialState, action: TBurgerConstructorActions): TBurgerConstructorState => {
   switch (action.type) {
     case ADD_BURGER_INGREDIENT: {
       return {
@@ -36,7 +39,7 @@ export const burgerConstructorReducer = (state = initialState, action) => {
     }
     case RESET_BURGER: {
       return {
-        burger: [{type: 'blank', _id:'', key: 0, price: 0, count: 1}]
+        burger: [initialIngredient]
       };
     }
     case MOVE_BURGER_INGREDIENT: {

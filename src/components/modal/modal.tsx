@@ -1,22 +1,21 @@
 import { useEffect, useCallback, FC, ReactElement } from 'react';
 import ReactDOM from "react-dom";
-import { useDispatch, useSelector } from 'react-redux';
 
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
+import { useSelector, useDispatch } from '../../store/hooks';
 import { h1_type } from '../../utils/types';
 import ModalOverlay from '../modal-overlay/modal-overlay';
-import type { TModalState } from '../../services/reducers/modal';
 import modalLayout from './modal.module.css';
 
-import { closeModal } from '../../services/actions/modal';
+import { closeModal } from '../../store/actions/modal';
 
 const Modal: FC<{ title?: string, closeCallback?: () => void; children?: ReactElement }> =
   ({ title, closeCallback, children }) => {
 
     const dispatch = useDispatch();
 
-    const { cancelContentFunc }: any = useSelector<{modal: TModalState}>(state => state.modal);
+    const { cancelContentFunc }: any = useSelector(state => state.modal);
 
     const onClose = useCallback(() => {
       cancelContentFunc !== null && dispatch(cancelContentFunc());

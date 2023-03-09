@@ -1,13 +1,13 @@
 import { FC, FormEvent } from 'react';
-import { useDispatch } from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 import { Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
+import { useDispatch } from '../store/hooks';
 import pageLayout from './page.module.css'
 import { h3_type, letters_grey, letters } from '../utils/types';
 import { checkLogin } from '../utils/utils';
-import { getRegister } from '../services/get-data';
+import { getRegisterThunk } from '../store/thunks/register';
 import { useForm } from '../hooks/useForm';
 
 const RegisterPage: FC = () => {
@@ -19,7 +19,7 @@ const RegisterPage: FC = () => {
 
   const onSubmit = (evt: FormEvent) => {
     evt.preventDefault();
-    dispatch<any>(getRegister(values, () => navigate('/')));
+    dispatch(getRegisterThunk(values, () => navigate('/')));
   }
 
   const onLogin = () => navigate('/login');

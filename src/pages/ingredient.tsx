@@ -1,9 +1,9 @@
 import { useEffect, useRef, FC } from 'react';
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { useSelector } from '../store/hooks';
 import IngredientDetails from '../components/ingredient-details/ingredient-details';
-import type { TIngredient } from '../utils/types';
+import type { TIngredient } from '../utils/types-data';
 import ingredientLayout from './ingredient.module.css'
 
 const IngredientPage: FC = () => {
@@ -11,8 +11,8 @@ const IngredientPage: FC = () => {
   const navigate = useNavigate();
   const id = useParams().id;
 
-  const { isLoadIngredients, ingredients }: any = useSelector<any>(state => state.ingredients);
-  const ingredientRef = useRef();
+  const { isLoadIngredients, ingredients } = useSelector(state => state.ingredients);
+  const ingredientRef = useRef<any>();
 
   useEffect(() => {
     if (isLoadIngredients) {

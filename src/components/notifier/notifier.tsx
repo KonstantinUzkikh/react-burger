@@ -1,9 +1,9 @@
 import { useEffect, useState, FC } from 'react';
 import ReactDOM from "react-dom";
-import { useDispatch, useSelector } from 'react-redux';
 
+import { useSelector, useDispatch } from '../../store/hooks';
 import { loadingMessages } from '../../utils/constants';
-import { resetRequest } from '../../services/actions/api';
+import { resetRequest } from '../../store/actions/api';
 import notifierLayout from './notifier.module.css';
 
 const Notifier: FC = () => {
@@ -45,7 +45,7 @@ const Notifier: FC = () => {
   const [notification, setNotification] = useState<TNotification>(initialNotification);
 
   const [isOpen, setIsOpen] = useState(false);
-  const { source, isLoading, hasError, hasMessage, errorMsg, successMsg }: any = useSelector<any>(state => state.api);
+  const { source, isLoading, hasError, hasMessage, errorMsg, successMsg } = useSelector(state => state.api);
 
   let loadingMsg: string;
 

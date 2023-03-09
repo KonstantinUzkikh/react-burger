@@ -1,21 +1,23 @@
 import { useCallback, useRef, FC } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { useDrag, useDrop } from "react-dnd";
 import { useNavigate } from 'react-router-dom';
 
 import { ConstructorElement, Button, DragIcon, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { v4 as generateKey } from 'uuid';
 
-import { getConfirmOrder } from '../../services/get-data';
+import { useSelector, useDispatch } from '../../store/hooks';
+import { getConfirmOrderThunk } from '../../store/thunks';
 import { checkLogin } from '../../utils/utils';
-import { h3_type, TIngredient  } from '../../utils/types';
+import { h3_type  } from '../../utils/types';
+import { TIngredient  } from '../../utils/types-data';
 import componentsLayout from './burger-constructor.module.css';
 
-import { openModal } from '../../services/actions/modal';
-import { clearOrderId } from '../../services/actions/order-details';
+import { openModal } from '../../store/actions/modal';
+import { orderIdReset } from '../../store/actions/order-details';
 import { addBurgerIngredient, deleteBurgerIngredient, updateBurgerBun, cancelBurger, moveBurgerIngredient }
-  from '../../services/actions/burger-constructor';
+  from '../../store/actions/burger-constructor';
 import { increaseCountIngredient, decreaseCountIngredient, cancelCountBun, setCountBun, cancelCountAllIngredients }
-  from '../../services/actions/burger-ingradients';
+  from '../../store/actions/burger-ingradients';
 
 type TBurgerComponentProps = {
   side?: 'top' | 'bottom';
@@ -113,10 +115,10 @@ function BurgerConstructor() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { burger }: any = useSelector<any>(state => state.constructorContent);
-  const { ingredients }: any = useSelector<any>(state => state.ingredients);
+  const { burger } = useSelector(state => state.constructorContent);
+  const { ingredients } = useSelector(state => state.ingredients);
 
-  const total: any = useSelector<any>(state => {
+  const total = useSelector(state => {
     const burger:TIngredient[] = state.constructorContent.burger;
     if (burger.length > 0) {
       return burger.reduce((previousValue: number, item: TIngredient) => previousValue + item.price * item.count, 0)
@@ -127,14 +129,18 @@ function BurgerConstructor() {
 
   const moveIngredientToBurger = (_id: string): void => {
     dispatch(
-      addBurgerIngredient({ ...ingredients.filter((item: TIngredient) => item._id === _id)[0], count: 1, key: Date.now() })
+      addBurgerIngredient(
+        { ...ingredients.filter((item: TIngredient) => item._id === _id)[0], count: 1, key: generateKey() }
+      )
     );
     dispatch(increaseCountIngredient(_id));
   }
 
   const moveBunToBurger = (_id: string): void => {
     burger[0].type === 'bun' && dispatch(cancelCountBun(burger[0]._id));
-    dispatch(updateBurgerBun({ ...ingredients.filter((item: TIngredient) => item._id === _id)[0], count: 2, key: Date.now() }));
+    dispatch(updateBurgerBun(
+      { ...ingredients.filter((item: TIngredient) => item._id === _id)[0], count: 2, key: generateKey() }
+    ));
     dispatch(setCountBun(ingredients.filter((item: TIngredient) => item._id === _id)[0]._id));
   }
 
@@ -146,7 +152,7 @@ function BurgerConstructor() {
   const makeOrder = () => {
     function setCancelOrderDetails() {
       return function (dispatch: any) {
-        dispatch(clearOrderId());
+        dispatch(orderIdReset());
         dispatch(cancelBurger());
         dispatch(cancelCountAllIngredients());
       }
@@ -155,7 +161,7 @@ function BurgerConstructor() {
     if (!checkLogin()) navigate('/login')
     else {
       if (isBunContent && isIngredientContent) {
-        dispatch<any>(getConfirmOrder(burger));
+        dispatch(getConfirmOrderThunk(burger));
         dispatch(openModal('', 'order', setCancelOrderDetails));
       }
     }

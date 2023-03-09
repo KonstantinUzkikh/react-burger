@@ -1,4 +1,4 @@
-import { GET_PROFILE_SUCCESS, RESET_PROFILE, type TProfilelAction } from '../actions/profile';
+import { GET_PROFILE_SUCCESS, PROFILE_RESET, type TProfileActions } from '../action-types';
 
 export type TProfileState = {
   isLoadProfile: boolean;
@@ -14,7 +14,7 @@ const initialState: TProfileState  = {
   password: ''
 };
 
-export const profileReducer = (state = initialState, action: TProfilelAction): TProfileState => {
+export const profileReducer = (state = initialState, action: TProfileActions): TProfileState => {
     switch (action.type) {
       case GET_PROFILE_SUCCESS: {
         return {
@@ -25,8 +25,8 @@ export const profileReducer = (state = initialState, action: TProfilelAction): T
           password: action.password
         };
       }
-      case RESET_PROFILE: {
-        return {
+      case PROFILE_RESET: {
+        return {    // ЗАМЕНИТЬ НА initialState
           ...state,
           isLoadProfile: false,
           name: '',

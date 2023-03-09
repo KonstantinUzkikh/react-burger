@@ -1,14 +1,14 @@
 import { FC, FormEvent } from 'react';
-import { useDispatch } from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 import { PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
+import { useDispatch } from '../store/hooks';
 import pageLayout from './page.module.css'
 import { h3_type, letters_grey, letters } from '../utils/types';
 import { checkLogin } from '../utils/utils';
 import { readForgot } from '../utils/cookies';
-import { getResetPassword } from '../services/get-data';
+import { getResetPasswordThunk } from '../store/thunks';
 import { useForm } from '../hooks/useForm';
 
 const ResetPasswordPage: FC = () => {
@@ -20,7 +20,7 @@ const ResetPasswordPage: FC = () => {
 
   const onSubmit = (evt: FormEvent) => {
     evt.preventDefault();
-    dispatch<any>(getResetPassword(values, () => navigate('/login')));
+    dispatch(getResetPasswordThunk(values, () => navigate('/login')));
   }
 
   const onLogin = () => navigate('/login');

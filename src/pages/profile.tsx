@@ -1,12 +1,12 @@
 import { useState, useEffect, FC, FormEvent, ChangeEvent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import { Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
+import { useSelector, useDispatch } from '../store/hooks';
 import profileLayout from './profile.module.css'
 import { h3_type, letters_grey } from '../utils/types';
-import { getReadProfileNew, getUpdateProfile, getLogout } from '../services/get-data';
+import { getReadProfileThunk, getUpdateProfileThunk, getLogoutThunk } from '../store/thunks';
 import { useForm } from '../hooks/useForm';
 
 const ListItem: FC<{ title: string; isActive: boolean }> = ({ title, isActive }) => {
@@ -25,13 +25,13 @@ const ProfilePage: FC = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const { isLoadProfile, name, email, password }: any = useSelector<any>(state => state.profile);
+  const { isLoadProfile, name, email, password } = useSelector(state => state.profile);
   const { values, handleChange, setValues } = useForm({ name: '', email: '', password: '' });
-  const [isFirstMount, setIsFirstMount] = useState(true);
+  const [isFirstRender, setIsFirstMount] = useState(true);
   const [initUser, setInitUser] = useState({});
 
   useEffect(() => {
-    if (!isLoadProfile && isFirstMount) dispatch<any>(getReadProfileNew(() => navigate('/login')));
+    if (!isLoadProfile && isFirstRender) dispatch(getReadProfileThunk(() => navigate('/login')));
     if (isLoadProfile) {
       setValues({ name, email, password });
       setInitUser({ name, email, password });
@@ -49,7 +49,7 @@ const ProfilePage: FC = () => {
 
   const onSubmit = (evt: FormEvent) => {
     evt.preventDefault();
-    dispatch<any>(getUpdateProfile(values, () => navigate('/login')));
+    dispatch(getUpdateProfileThunk(values, () => navigate('/login')));
   }
 
   const onReset = (evt: FormEvent) => {
@@ -60,7 +60,7 @@ const ProfilePage: FC = () => {
 
   const onProfile = () => navigate('/profile');
   const onHistory = () => navigate('/history');
-  const onLogout = () => dispatch<any>(getLogout(() => navigate('/')));
+  const onLogout = () => dispatch(getLogoutThunk(() => navigate('/')));
 
   const typeButton = isChanged ? "primary" : "secondary"; // ДОРАБОТАТЬ ЛОГИКУ
 
@@ -118,7 +118,8 @@ const ProfilePage: FC = () => {
               </div>
             </form>
           </div>
-        </div>}
+        </div>
+      }
     </>
   )
 }

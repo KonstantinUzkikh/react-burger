@@ -1,0 +1,73 @@
+.boxPage {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /*justify-content: center;*/
+  /*align-items: center;*/
+  padding-top: 40px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.boxImages {
+  display: flex;
+  position: relative;
+}
+
+.image1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 7;
+}
+
+.image2 {
+  position: absolute;
+  top: 0;
+  left: 48px;
+  z-index: 6;
+}
+
+.image3 {
+  position: absolute;
+  top: 0;
+  left: 96px;
+  z-index: 5;
+}
+
+.image4 {
+  position: absolute;
+  top: 0;
+  left: 144px;
+  z-index: 4;
+}
+
+.image5 {
+  position: absolute;
+  top: 0;
+  left: 192px;
+  z-index: 3;
+}
+
+.image6 {
+  position: absolute;
+  top: 0;
+  left: 240px;
+  z-index: 1;
+}
+
+.count {
+  position: absolute;
+  top: 0;
+  left: 240px;
+  opacity: .6;
+  z-index: 2;
+}
+
+.boxContent {
+  display: grid;
+  grid-template-columns: 608px 580px;
+  gap: 60px 40px;
+  justify-items: center;
+  justify-content: center;
+}

@@ -49,7 +49,7 @@ function AppHeader() {
   };
 
   const onOrders = () => {
-    navigate('/orders'); // УТОЧНИТЬ ПУТЬ ПОСЛЕ ДОРАБОТКИ ФУНКЦИОНАЛА
+    navigate('/feed');
   };
 
   const onLogin = () => {

@@ -1,8 +1,15 @@
-import {
-  RESET_REQUEST, SEND_REQUEST, GET_SUCCESS, GET_FAILED
-} from '../actions/api';
+import { RESET_REQUEST, SEND_REQUEST, GET_SUCCESS, GET_FAILED, type TApiActions } from '../action-types';
 
-const initialState = {
+export type TApiState = {
+  source: string;
+  isLoading: boolean;
+  hasError: boolean;
+  hasMessage: boolean;
+  errorMsg: string | undefined;
+  successMsg: string | undefined;
+};
+
+const initialState: TApiState = {
   source: '',
   isLoading: false,
   hasError: false,
@@ -11,7 +18,7 @@ const initialState = {
   successMsg: '',
 };
 
-export const apiReducer = (state = initialState, action) => {
+export const apiReducer = (state = initialState, action: TApiActions): TApiState => {
   switch (action.type) {
     case RESET_REQUEST: {
       return initialState;

@@ -1,12 +1,12 @@
 import { FC } from 'react';
-import { useSelector } from 'react-redux';
 
+import { useSelector } from '../../store/hooks';
 import { h3_type, letters, letters_grey } from '../../utils/types';
 import orderLayout from './order-details.module.css';
 import done from '../../images/done.svg'
 
 const OrderDetails: FC = () => {
-  const { orderId }: any = useSelector<any>(state => state.orderDetails);
+  const { orderId } = useSelector(state => state.orderDetails);
   return (
     <div className={orderLayout.boxMain}>
       <p className={`text text_type_digits-large`}>{orderId}</p>

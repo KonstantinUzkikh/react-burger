@@ -1,11 +1,11 @@
 import { FC } from 'react';
-import { useSelector } from 'react-redux';
 
+import { useSelector } from '../../store/hooks';
 import { h3_type, letters_grey, digits_grey } from '../../utils/types';
-import type { TIngredient } from '../../utils/types';
+import type { TIngredient } from '../../utils/types-data';
 import ingredientLayout from './ingredient-details.module.css';
 
-const Value: FC<{name: string; value: number}> = ({name, value}) => {
+const Value: FC<{ name: string; value: number }> = ({ name, value }) => {
   return (
     <div className={ingredientLayout.boxValue}>
       <p className={letters_grey}>{name}</p>
@@ -14,11 +14,11 @@ const Value: FC<{name: string; value: number}> = ({name, value}) => {
   )
 }
 
-const IngredientDetails: FC<{ingredient?: TIngredient}> = ({ingredient}) => {
+const IngredientDetails: FC<{ ingredient?: TIngredient }> = ({ ingredient }) => {
 
-  let { currentIngredient }: any = useSelector<any>(state => state.ingredientDetails);
+  let { currentIngredient } = useSelector(state => state.ingredientDetails);
 
-  if (ingredient !== undefined) { currentIngredient = ingredient}
+  if (ingredient !== undefined) { currentIngredient = ingredient }
 
   return (
     <div className={ingredientLayout.boxMain}>

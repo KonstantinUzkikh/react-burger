@@ -27,3 +27,20 @@ export const loadingMessages = [
     loadingMsg: 'Личный кабинет...',
   }
 ]
+
+export const initialIngredient = {
+  carbohydrates: 0,
+  calories: 0,
+  fat: 0,
+  image: '',
+  image_large: '',
+  image_mobile: '',
+  name: '',
+  price: 0,
+  proteins: 0,
+  type: 'blank',
+  __v: 0,
+  _id: '',
+  count: 0,
+  key: ''
+};

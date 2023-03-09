@@ -1,12 +1,12 @@
 import { useRef, useState, useCallback, FC } from 'react';
-import { useSelector } from 'react-redux';
 import { useDrag } from "react-dnd";
 import { Link, useLocation } from 'react-router-dom';
 
 import { Counter, CurrencyIcon, Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
+import { useSelector } from '../../store/hooks';
 import { h1_type, h3_type, letters, digits } from '../../utils/types';
-import type { TTypeIngredient, TIngredient } from '../../utils/types';
+import type { TIngredient } from '../../utils/types-data';
 import ingredientsLayout from './burger-ingredients.module.css';
 
 const Ingredient: FC<{data: TIngredient}> = ({data}) => {
@@ -47,13 +47,13 @@ const Ingredient: FC<{data: TIngredient}> = ({data}) => {
   );
 };
 
-const TypeIngredients: FC<{type: TTypeIngredient}> = ({type}) => {
+const TypeIngredients: FC<{type: 'bun' | 'main' | 'blank' | 'sauce' }> = ({type}) => {
 
   const location = useLocation();
-  const { ingredients }: any = useSelector<any>(state => state.ingredients);
+  const { ingredients } = useSelector(state => state.ingredients);
 
-  let name: 'Булки' | 'Соусы' | 'Начинки' | '';
-  let id: TTypeIngredient;
+  let name: 'Булки' | 'Соусы' | 'Начинки' | '' ;
+  let id: 'bun' | 'main' | 'blank' | 'sauce' ;
   switch (type) {
     case 'bun':
       name = 'Булки';
@@ -69,6 +69,7 @@ const TypeIngredients: FC<{type: TTypeIngredient}> = ({type}) => {
       break;
     default:
       name = '';
+      id = 'blank';
       break;
   };
 

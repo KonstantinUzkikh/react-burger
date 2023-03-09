@@ -1,195 +1,73 @@
-import { request } from '../components/api/api';
-import { endPoints } from '../utils/constants';
-import {
-  deleteCookies, writePassword, readPassword, writeTokens, readTokens, writeForgot, deleteForgot
-} from '../utils/cookies';
-import { sendRequest, getSuccess, getFaild } from './actions/api';
-import { getIngredientsSuccess } from './actions/burger-ingradients';
-import { getOrderIdSuccess } from './actions/order-details';
-import { getProfileSuccess, resetProfile } from './actions/profile';
-import { TUser, TIngredient } from '../utils/types';
+import { BASE_URL, endPoints } from '../utils/constants';
+import { request } from './api';
+import { writeTokens, readTokens } from '../utils/cookies';
+import { TIngredient } from '../utils/types-data';
 import type { TInputValues } from '../hooks/useForm';
+import { TResponseTokens } from './types-request';
 
-// api types
-
-export type TMethod = 'GET' | 'PATCH' | 'POST';
-
-export type TIngredientFromResponse = Omit<TIngredient, 'count' | 'key'>;
-
-export type TResponseIngredients = {
-  success: boolean;
-  data: Array<TIngredientFromResponse>;
-};
-
-export type TResponseOrder = {
-  success: boolean;
-  name: string;
-  order: {number:number};
-}
-
-export type TResponseTokens = {
-  success: boolean;
-  accessToken: string;
-  refreshToken: string;
-}
-
-export type TResponseUser = {
-  success: boolean;
-  user: TUser;
-}
-
-export type TResponseAuth = {
-  success: boolean;
-  user: TUser;
-  accessToken: string;
-  refreshToken: string;
-}
-
-export type TResponseLogout = {
-  success: boolean;
-  message: string;
-}
-
-export type TResponseForgotPassword = {
-  success: boolean;
-  message: string;
-}
-
-export type TResponseResetPassword = {
-  success: boolean;
-  message: string;
+export function createOptions(methodValue?: string | undefined,
+  bodyValue?: object | undefined, header?: object | undefined) {
+  const options: { [optionKey: string]: string | object } =
+    { headers: { 'Content-Type': 'application/json' } as { [optionKey: string]: string }}
+  if (methodValue !== undefined) options.method = `${methodValue}`;
+  if (bodyValue !== undefined) options.body = JSON.stringify(bodyValue);
+  if (header !== undefined) Object.assign(options.headers, header);
+  return options;
 }
 
 export function getIngredients() {
-  return function (dispatch: any) {
-    dispatch(sendRequest('ingredients'));
-    request(endPoints.ingredients)
-      .then((res: TResponseIngredients) => {
-        dispatch(getSuccess());
-        dispatch(getIngredientsSuccess(res.data));
-      })
-      .catch(err => dispatch(getFaild(err)))
-  };
-}
+  return request(`${BASE_URL}${endPoints.ingredients}`)
+};
 
 export function getConfirmOrder(burger: TIngredient[]) {
-  return function (dispatch: any) {
-    dispatch(sendRequest('order'));
-    request(endPoints.orders, 'POST', { ingredients: burger })
-      .then((res: TResponseOrder) => {
-        dispatch(getSuccess())
-        dispatch(getOrderIdSuccess(res.name, res.order.number, burger))
-      })
-      .catch(err => {
-        dispatch(getFaild(err))
-      })
-  };
+  return request(`${BASE_URL}${endPoints.orders}`, createOptions('POST', { ingredients: burger }));
 }
 
-async function requestWithAuth(endPoint: string, method: TMethod, body: TInputValues | undefined, goPath: () => void) {
-  let { accessToken, refreshToken } = readTokens();
+export function getResetPassword({ newPassword, code }: TInputValues) {
+  return request(`${BASE_URL}${endPoints.reset}`, createOptions('POST', { password: newPassword, token: code }));
+}
+
+export function getForgotPassword(email: TInputValues) {
+  return request(`${BASE_URL}${endPoints.forgot}`, createOptions('POST', email));
+}
+
+export function getLogout(refreshToken: string | undefined) {
+  return request(`${BASE_URL}${endPoints.logout}`, createOptions('POST', { token: refreshToken }));
+}
+
+export function getLogin(userData: TInputValues) {
+  return request(`${BASE_URL}${endPoints.login}`, createOptions('POST', userData));
+}
+
+export function getRegister(userData: TInputValues) {
+  return request(`${BASE_URL}${endPoints.register}`, createOptions('POST', userData));
+}
+
+function getAccessToken(goPath: () => void) {
+  const { accessToken, refreshToken } = readTokens();
   if (refreshToken === undefined) return goPath();
-  if (accessToken !== undefined) return request(endPoint, method, body, { authorization: accessToken });
-  const res: TResponseTokens = await request(endPoints.token, 'POST', { token: refreshToken })
-  try {
-    writeTokens(res.accessToken, res.refreshToken);
-    return request(endPoint, method, body, { authorization: res.accessToken })
-  }
-  catch (err) { return err }
+  if (accessToken !== undefined) return Promise.resolve(accessToken);
+  request(`${BASE_URL}${endPoints.token}`, createOptions('POST', { token: refreshToken }))
+    .then((res: TResponseTokens) => {
+      writeTokens(res.accessToken, res.refreshToken);
+      return res;
+    })
+    .catch((err: string) => err)
 }
 
-export function getReadProfileNew(goPath: () => void) {
-  return function (dispatch: any) {
-    dispatch(sendRequest('profile'));
-    requestWithAuth(endPoints.read, 'GET', undefined, goPath)
-      .then((res: TResponseUser) => {
-        dispatch(getSuccess());
-        dispatch(getProfileSuccess(res.user, readPassword() || ''));
-      })
-      .catch(err => dispatch(getFaild(err)))
-  };
+async function requestWithAuth(url: string, options: { [optionKey: string]: string | object }, goPath: () => void) {
+  const accessToken = await getAccessToken(goPath);
+  let fullOptions = options;
+  options.headers === undefined
+    ? fullOptions.headers = { authorization: accessToken }
+    : Object.assign(fullOptions.headers, { authorization: accessToken })
+  return request(url, fullOptions);
+}
+
+export function getReadProfile(goPath: () => void) {
+  return requestWithAuth(`${BASE_URL}${endPoints.read}`, createOptions('GET'), goPath);
 }
 
 export function getUpdateProfile(userData: TInputValues, goPath: () => void) {
-  return function (dispatch: any) {
-    dispatch(sendRequest('profile'));
-    requestWithAuth(endPoints.update, 'PATCH', userData, goPath)
-      .then((res: TResponseUser) => {
-        writePassword(userData.password);
-        dispatch(getSuccess());
-        dispatch(getProfileSuccess(res.user, userData.password));
-      })
-      .catch(err => dispatch(getFaild(err)))
-  };
-}
-
-export function getResetPassword({ newPassword, code }: TInputValues, goPath: () => void) {
-  return function (dispatch: any) {
-    dispatch(sendRequest('profile'));
-    request(endPoints.reset, 'POST', {password: newPassword, token: code})
-      .then((res: TResponseResetPassword) => {
-        dispatch(getSuccess(res.message));
-        deleteForgot();
-        goPath();
-      })
-      .catch(err => dispatch(getFaild(err)))
-  }
-}
-
-export function getForgotPassword(email: TInputValues, goPath: () => void) {
-  return function (dispatch: any) {
-    dispatch(sendRequest('profile'));
-    request(endPoints.forgot, 'POST', email)
-      .then((res: TResponseForgotPassword) => {
-        dispatch(getSuccess(res.message));
-        writeForgot();
-        goPath();
-      })
-      .catch(err => dispatch(getFaild(err)))
-  }
-}
-
-export function getLogout(goPath: () => void) {
-  const { refreshToken } = readTokens();
-  return function (dispatch: any) {
-    dispatch(sendRequest('profile'));
-    request(endPoints.logout, 'POST', { token: refreshToken })
-      .then((res: TResponseLogout) => {
-        deleteCookies();
-        dispatch(getSuccess(res.message));
-        dispatch(resetProfile());
-        goPath();
-      })
-      .catch(err => dispatch(getFaild(err)))
-  }
-}
-
-export function getLogin(userData: TInputValues, goPath: () => void) {
-  return function (dispatch: any) {
-    dispatch(sendRequest('profile'));
-    request(endPoints.login, 'POST', userData)
-      .then((res: TResponseAuth) => {
-        writeTokens(res.accessToken, res.refreshToken);
-        writePassword(userData.password);
-        dispatch(getSuccess());
-        dispatch(getProfileSuccess(res.user, userData.password));
-        goPath();
-      })
-      .catch(err => dispatch(getFaild(err)))
-  }
-}
-
-export function getRegister(userData: TInputValues, goPath: () => void) {
-  return function (dispatch: any) {
-    dispatch(sendRequest('profile'));
-    request(endPoints.register, 'POST', userData)
-      .then((res: TResponseAuth) => {
-        writeTokens(res.accessToken, res.refreshToken);
-        writePassword(userData.password);
-        dispatch(getSuccess());
-        dispatch(getProfileSuccess(res.user, userData.password));
-        goPath();
-      })
-      .catch(err => dispatch(getFaild(err)))
-  }
+  return requestWithAuth(`${BASE_URL}${endPoints.update}`, createOptions('PATCH', userData), goPath);
 }
