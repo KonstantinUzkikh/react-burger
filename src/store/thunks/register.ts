@@ -2,7 +2,7 @@ import { AppDispatch, AppThunk } from '../types-store';
 import { sendRequest, getSuccess, getFaild, getProfileSuccess } from '../actions';
 import { writeTokens, writePassword } from '../../utils/cookies';
 import { getRegister } from '../../services/get-data';
-import { TResponseAuth } from '../../services/types-request';
+import { TResponseAuth } from '../../services/types-responses';
 import type { TInputValues } from '../../hooks/useForm';
 
 export const getRegisterThunk = (userData: TInputValues, goPath: () => void): AppThunk => (dispatch: AppDispatch) => {

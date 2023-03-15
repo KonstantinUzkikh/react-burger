@@ -1,9 +1,8 @@
 import { BASE_URL, endPoints } from '../utils/constants';
 import { request } from './api';
 import { writeTokens, readTokens } from '../utils/cookies';
-import { TIngredient } from '../utils/types-data';
 import type { TInputValues } from '../hooks/useForm';
-import { TResponseTokens } from './types-request';
+import { TResponseTokens } from './types-responses';
 
 export function createOptions(methodValue?: string | undefined,
   bodyValue?: object | undefined, header?: object | undefined) {
@@ -18,10 +17,6 @@ export function createOptions(methodValue?: string | undefined,
 export function getIngredients() {
   return request(`${BASE_URL}${endPoints.ingredients}`)
 };
-
-export function getConfirmOrder(burger: TIngredient[]) {
-  return request(`${BASE_URL}${endPoints.orders}`, createOptions('POST', { ingredients: burger }));
-}
 
 export function getResetPassword({ newPassword, code }: TInputValues) {
   return request(`${BASE_URL}${endPoints.reset}`, createOptions('POST', { password: newPassword, token: code }));
@@ -43,9 +38,15 @@ export function getRegister(userData: TInputValues) {
   return request(`${BASE_URL}${endPoints.register}`, createOptions('POST', userData));
 }
 
-function getAccessToken(goPath: () => void) {
+export function getAccessToken(goPath?: () => void ) {
   const { accessToken, refreshToken } = readTokens();
-  if (refreshToken === undefined) return goPath();
+  if (refreshToken === undefined) {
+    if (goPath !== undefined) {
+      return goPath();
+    } else {
+      return console.log('Оибка авторизации');
+    }
+  }
   if (accessToken !== undefined) return Promise.resolve(accessToken);
   request(`${BASE_URL}${endPoints.token}`, createOptions('POST', { token: refreshToken }))
     .then((res: TResponseTokens) => {
@@ -70,4 +71,8 @@ export function getReadProfile(goPath: () => void) {
 
 export function getUpdateProfile(userData: TInputValues, goPath: () => void) {
   return requestWithAuth(`${BASE_URL}${endPoints.update}`, createOptions('PATCH', userData), goPath);
+}
+
+export function getConfirmOrder(burger: string[], goPath: () => void) {
+  return requestWithAuth(`${BASE_URL}${endPoints.orders}`, createOptions('POST', { ingredients: burger }), goPath);
 }

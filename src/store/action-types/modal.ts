@@ -5,7 +5,7 @@ export interface IOpenModalAction {
   readonly type: typeof OPEN_MODAL;
   readonly title?: string | undefined;
   readonly modalContent?: string | undefined;
-  readonly cancelContentFunc?: (() => void) | null;
+  readonly resetContentFunc?: (() => void) | null;
 }
 
 export interface ICloseModalAction {

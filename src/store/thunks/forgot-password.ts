@@ -2,7 +2,7 @@ import { AppDispatch, AppThunk } from '../types-store';
 import { sendRequest, getSuccess, getFaild } from '../actions';
 import { writeForgot } from '../../utils/cookies';
 import { getForgotPassword } from '../../services/get-data';
-import { TResponseForgotPassword } from '../../services/types-request';
+import { TResponseForgotPassword } from '../../services/types-responses';
 import type { TInputValues } from '../../hooks/useForm';
 
 export const getForgotPasswordThunk = (email: TInputValues, goPath: () => void): AppThunk => (dispatch: AppDispatch) => {

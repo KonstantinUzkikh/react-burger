@@ -17,7 +17,7 @@ const ModalLoader: FC = () => {
         case 'ingredient': {
           return <IngredientDetails />
         }
-        case 'order': {
+        case 'orderID': {
           return <OrderDetails />
         }
         case 'error404': {

@@ -23,7 +23,7 @@ export const updateBurgerBun = (ingredient: TIngredient): IUpdateBurgerBun => {
   }
 }
 
-export const cancelBurger = ():IResetBurger => { return {type: RESET_BURGER} };
+export const resetBurger = ():IResetBurger => { return {type: RESET_BURGER} };
 
 export const moveBurgerIngredient = (dragIndex: number, hoverIndex: number): IMoveBurgerIngredient => {
   return {

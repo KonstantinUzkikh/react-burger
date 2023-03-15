@@ -1,0 +1,23 @@
+.boxMain {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 16px;
+}
+
+.boxIngredient {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.boxName {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.total {
+  display: flex;
+  gap: 9px;
+}

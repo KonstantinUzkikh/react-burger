@@ -1,17 +1,18 @@
 import { OPEN_MODAL, CLOSE_MODAL, type TModalActions} from '../action-types';
+import { AppDispatch } from '../../store/types-store';
 
 export type TModalState = {
   isModalOpen: boolean;
   title: string | undefined;
   modalContent: string | undefined;
-  cancelContentFunc?: (() => void) | null;
+  resetContentFunc?: (() => void) | null;
 };
 
 const initialState: TModalState  = {
   isModalOpen: false,
   title: '',
   modalContent: '',
-  cancelContentFunc: null
+  resetContentFunc: null
 };
 
 export const modalReducer = (state = initialState, action: TModalActions): TModalState => {
@@ -22,7 +23,7 @@ export const modalReducer = (state = initialState, action: TModalActions): TModa
         isModalOpen: true,
         title: action.title,
         modalContent: action.modalContent,
-        cancelContentFunc: action.cancelContentFunc
+        resetContentFunc: action.resetContentFunc
       };
     }
     case CLOSE_MODAL: {

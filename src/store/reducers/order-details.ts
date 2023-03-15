@@ -5,7 +5,7 @@ export type TOrderDetailsState = {
   isOrder: boolean;
   nameOrderedBurger: string | null;
   orderId: number | null;
-  burger: Array<TIngredient>
+  burger: string[]
 };
 
 const initialState: TOrderDetailsState = {

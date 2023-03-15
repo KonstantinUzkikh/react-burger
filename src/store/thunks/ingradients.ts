@@ -1,7 +1,7 @@
 import { AppDispatch, AppThunk } from '../types-store';
 import { sendRequest, getSuccess, getFaild, getIngredientsSuccess } from '../actions';
 import { getIngredients } from '../../services/get-data';
-import { TResponseIngredients } from '../../services/types-request';
+import { TResponseIngredients } from '../../services/types-responses';
 
 export const getIngredientsThunk = (): AppThunk => (dispatch: AppDispatch) => {
   dispatch(sendRequest('ingredients'));

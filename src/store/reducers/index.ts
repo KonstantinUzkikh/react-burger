@@ -5,3 +5,5 @@ export * from './ingredient-details';
 export * from './modal';
 export * from './order-details';
 export * from './profile';
+export * from './ws';
+export * from './wsAuth';

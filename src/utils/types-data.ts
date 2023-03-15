@@ -19,3 +19,14 @@ export type TIngredient = {
   count: number;
   key: string;
 }
+
+export type TOrderFullData = {
+  name: string;
+  ingredients: TIngredient[];
+  _id: string;
+  status: string;
+  number: number;
+  createdAt: string;
+  updatedAt: string;
+  total: number;
+}

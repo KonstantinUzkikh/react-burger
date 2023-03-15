@@ -7,3 +7,4 @@ export * from './read-profile';
 export * from './register';
 export * from './reset-password';
 export * from './update-profile';
+export * from './reset-order-details';

@@ -7,21 +7,25 @@ import {
 export type TBurgerIngradientsState = {
   isLoadIngredients: boolean;
   ingredients: TIngredient[];
+  arrID: string[];
 };
 
 const initialState: TBurgerIngradientsState = {
   isLoadIngredients: false,
-  ingredients: []
+  ingredients: [],
+  arrID: []
 };
 
 export const burgerIngradientsReducer =
   (state = initialState, action: TBurgerIngredientsActions): TBurgerIngradientsState => {
     switch (action.type) {
       case GET_INGREDIENTS_SUCCESS: {
+        const arrID = action.ingredients.map(item => item._id);
         return {
           ...state,
           isLoadIngredients: true,
-          ingredients: action.ingredients
+          ingredients: action.ingredients,
+          arrID: arrID
         };
       }
       case INCREASE_COUNT_BURGER_INGREDIENT: {

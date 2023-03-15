@@ -4,11 +4,11 @@ import { ThunkAction } from 'redux-thunk';
 import { rootReducer } from './reducers/rootReducer';
 import {
   TApiActions, TBurgerConstructorActions, TBurgerIngredientsActions, TCurrentIngredientActions, TModalActions,
-  TOrderIdActions, TProfileActions
+  TOrderIdActions, TProfileActions, TWSActions, TWSAuthActions
 } from './action-types';
 
-type TAppActions = TApiActions | TBurgerConstructorActions | TBurgerIngredientsActions
-  | TCurrentIngredientActions | TModalActions | TOrderIdActions | TProfileActions;
+export type TAppActions = TApiActions | TBurgerConstructorActions | TBurgerIngredientsActions
+  | TCurrentIngredientActions | TModalActions | TOrderIdActions | TProfileActions | TWSActions | TWSAuthActions;
 
 export type RootState = ReturnType<typeof rootReducer>;
 

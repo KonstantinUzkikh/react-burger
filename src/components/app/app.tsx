@@ -17,6 +17,8 @@ import IngredientPage from '../../pages/ingredient';
 import NotFoundPage from '../../pages/not-found';
 import ModalIngredientPage from '../../pages/modal-ingredient';
 import FeedPage from '../../pages/feed';
+import OrderPage from '../../pages/order';
+import ModalOrderPage from '../../pages/modal-order';
 
 function App() {
 
@@ -37,15 +39,19 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/profile" element={<ProtectedRoute children={<ProfilePage />} />} />
+        <Route path="/profile/orders" element={<ProtectedRoute children={<ProfilePage />} />} />
+        <Route path="/profile/orders/:id" element={<ProtectedRoute children={<OrderPage /> } />} />
         <Route path="/ingredients/:id" element={<IngredientPage />} />
         <Route path="/feed" element={<FeedPage /> } />
-        <Route path="/orders/:id" element={null} />
+        <Route path="/feed/:id" element={<OrderPage /> } />
         <Route path="/*" element={<NotFoundPage />} />
       </Routes>
 
       {state?.backgroundLocation && (
         <Routes>
           <Route path="/ingredients/:id" element={<ModalIngredientPage />} />
+          <Route path="/feed/:id" element={<ModalOrderPage /> } />
+          <Route path="/profile/orders/:id" element={<ModalOrderPage /> } />
         </Routes>
       )}
 

@@ -15,10 +15,10 @@ const Modal: FC<{ title?: string, closeCallback?: () => void; children?: ReactEl
 
     const dispatch = useDispatch();
 
-    const { cancelContentFunc }: any = useSelector(state => state.modal);
+    const { resetContentFunc }: any = useSelector(state => state.modal);
 
     const onClose = useCallback(() => {
-      cancelContentFunc !== null && dispatch(cancelContentFunc());
+      resetContentFunc !== undefined && resetContentFunc !== null && dispatch(resetContentFunc());
       closeCallback !== undefined ? closeCallback() : dispatch(closeModal());
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

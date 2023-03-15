@@ -1,0 +1,70 @@
+
+.boxMain {
+  display: flex;
+  position: relative;
+  flex-flow: row-reverse;
+  height: 62px;
+  z-index: 1;
+}
+
+/*.image {
+  position: absolute;
+  top: 0;
+}*/
+
+.image1 {
+  /*display: flex;*/
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.image2 {
+  /*display: flex;*/
+  position: absolute;
+  top: 0;
+  left: 48px;
+  z-index: 1;
+}
+
+.image3 {
+  /*display: flex;*/
+  position: absolute;
+  top: 0;
+  left: 96px;
+  z-index: 1;
+}
+
+.image4 {
+  /*display: flex;*/
+  position: absolute;
+  top: 0;
+  left: 144px;
+  z-index: 1;
+}
+
+.image5 {
+  /*display: flex;*/
+  position: absolute;
+  top: 0;
+  left: 192px;
+  z-index: 1;
+}
+
+.image6 {
+  /*display: flex;*/
+  position: absolute;
+  top: 0;
+  left: 240px;
+  z-index: 0;
+}
+
+.count {
+  /*display: flex;*/
+  position: absolute;
+  top: 0;
+  left: 240px;
+  opacity: .6;
+  z-index: 1;
+}

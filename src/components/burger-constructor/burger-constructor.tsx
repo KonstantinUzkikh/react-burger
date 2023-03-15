@@ -6,17 +6,18 @@ import { ConstructorElement, Button, DragIcon, CurrencyIcon } from '@ya.praktiku
 import { v4 as generateKey } from 'uuid';
 
 import { useSelector, useDispatch } from '../../store/hooks';
-import { getConfirmOrderThunk } from '../../store/thunks';
+import { getConfirmOrderThunk, resetOrderDetailsThunk } from '../../store/thunks';
 import { checkLogin } from '../../utils/utils';
-import { h3_type  } from '../../utils/types';
-import { TIngredient  } from '../../utils/types-data';
+import { h3_type } from '../../utils/types';
+import { TIngredient } from '../../utils/types-data';
+import { AppDispatch } from '../../store/types-store';
 import componentsLayout from './burger-constructor.module.css';
 
 import { openModal } from '../../store/actions/modal';
-import { orderIdReset } from '../../store/actions/order-details';
-import { addBurgerIngredient, deleteBurgerIngredient, updateBurgerBun, cancelBurger, moveBurgerIngredient }
+import { resetOrderId } from '../../store/actions/order-details';
+import { addBurgerIngredient, deleteBurgerIngredient, updateBurgerBun, resetBurger, moveBurgerIngredient }
   from '../../store/actions/burger-constructor';
-import { increaseCountIngredient, decreaseCountIngredient, cancelCountBun, setCountBun, cancelCountAllIngredients }
+import { increaseCountIngredient, decreaseCountIngredient, resetCountBun, setCountBun, resetCountAllIngredients }
   from '../../store/actions/burger-ingradients';
 
 type TBurgerComponentProps = {
@@ -63,7 +64,7 @@ const BurgerComponent: FC<TBurgerComponentProps> = ({ side: type, component, ind
       if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
         return;
       }
-      if(moveHandler !== undefined) moveHandler(dragIndex, hoverIndex);
+      if (moveHandler !== undefined) moveHandler(dragIndex, hoverIndex);
       item.index = hoverIndex;
     },
   });
@@ -119,7 +120,7 @@ function BurgerConstructor() {
   const { ingredients } = useSelector(state => state.ingredients);
 
   const total = useSelector(state => {
-    const burger:TIngredient[] = state.constructorContent.burger;
+    const burger: TIngredient[] = state.constructorContent.burger;
     if (burger.length > 0) {
       return burger.reduce((previousValue: number, item: TIngredient) => previousValue + item.price * item.count, 0)
     } else {
@@ -137,7 +138,7 @@ function BurgerConstructor() {
   }
 
   const moveBunToBurger = (_id: string): void => {
-    burger[0].type === 'bun' && dispatch(cancelCountBun(burger[0]._id));
+    burger[0].type === 'bun' && dispatch(resetCountBun(burger[0]._id));
     dispatch(updateBurgerBun(
       { ...ingredients.filter((item: TIngredient) => item._id === _id)[0], count: 2, key: generateKey() }
     ));
@@ -150,19 +151,19 @@ function BurgerConstructor() {
   }, []);
 
   const makeOrder = () => {
-    function setCancelOrderDetails() {
-      return function (dispatch: any) {
-        dispatch(orderIdReset());
-        dispatch(cancelBurger());
-        dispatch(cancelCountAllIngredients());
+    function resetOrderDetails() {
+      return function (dispatch: AppDispatch) {
+        dispatch(resetOrderId());
+        dispatch(resetBurger());
+        dispatch(resetCountAllIngredients());
       }
     }
 
     if (!checkLogin()) navigate('/login')
     else {
       if (isBunContent && isIngredientContent) {
-        dispatch(getConfirmOrderThunk(burger));
-        dispatch(openModal('', 'order', setCancelOrderDetails));
+        dispatch(getConfirmOrderThunk(burger.map(item => item._id), () => navigate('/login')));
+        dispatch(openModal('', 'orderID', resetOrderDetails));
       }
     }
   };
@@ -210,7 +211,7 @@ function BurgerConstructor() {
       <div ref={dropBunTopTarget} >
         {isBunContent
           ? <div className={classNameBunPlus}><BurgerComponent component={burger[0]} side="top" /></div>
-          : (<h3 className={classNameTopBun}>Выберите булку</h3>)
+          : (<h3 className={classNameTopBun}>Перетащите булку</h3>)
         }
       </div>
 
@@ -220,14 +221,14 @@ function BurgerConstructor() {
             item.type !== 'bun'
             && item.type !== 'blank'
             && <BurgerComponent component={item} key={item.key} index={index} moveHandler={moveHandler} />)
-          : (<h3 className={classNameIngredientsFull}>Вложите ингредиенты</h3>)
+          : (<h3 className={classNameIngredientsFull}>Перетащите ингредиенты</h3>)
         }
       </div>
 
       <div ref={dropBunBottomTarget} >
         {isBunContent
           ? <div className={classNameBunPlus}><BurgerComponent component={burger[0]} side="bottom" /></div>
-          : (<h3 className={classNameBottomBun}>Выберите булку</h3>)
+          : (<h3 className={classNameBottomBun}>Перетащите булку</h3>)
         }
       </div>
 

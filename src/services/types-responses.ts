@@ -46,3 +46,19 @@ export type TResponseResetPassword = {
   message: string;
 }
 
+export type TOrder = {
+  name: string;
+  ingredients: string[];
+  _id: string;
+  status: string;
+  number: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type TWSMessage = {
+  success: boolean;
+  orders: TOrder[];
+  total: number;
+  totalToday: number;
+}

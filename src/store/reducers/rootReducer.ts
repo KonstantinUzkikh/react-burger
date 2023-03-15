@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import { burgerIngradientsReducer, burgerConstructorReducer, ingredientDetailsReducer, orderDetailsReducer, modalReducer,
-  apiReducer, profileReducer
+  apiReducer, profileReducer, wsReducer, wsAuthReducer
 } from './';
 
 export const rootReducer = combineReducers({
@@ -11,5 +11,7 @@ export const rootReducer = combineReducers({
   orderDetails: orderDetailsReducer,
   modal: modalReducer,
   api: apiReducer,
-  profile: profileReducer
+  profile: profileReducer,
+  ws: wsReducer,
+  wsAuth: wsAuthReducer
 })

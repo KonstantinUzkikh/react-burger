@@ -2,7 +2,7 @@ import { AppDispatch, AppThunk } from '../types-store';
 import { sendRequest, getSuccess, getFaild } from '../actions';
 import { deleteForgot } from '../../utils/cookies';
 import { getResetPassword } from '../../services/get-data';
-import { TResponseResetPassword } from '../../services/types-request';
+import { TResponseResetPassword } from '../../services/types-responses';
 import type { TInputValues } from '../../hooks/useForm';
 
 export const getResetPasswordThunk = ({ newPassword, code }: TInputValues, goPath: () => void):

@@ -1,16 +1,21 @@
-import { applyMiddleware, createStore, compose } from 'redux';
-import thunk from 'redux-thunk';
+import { applyMiddleware, legacy_createStore as createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import thunkMiddleware from 'redux-thunk';
 
+import { WS_BASE_URL, wsEndPointAll } from '../utils/constants';
 import { rootReducer } from './reducers/rootReducer';
+import { wsMiddleware } from './middleware/wsMiddleware';
+import { wsActions, wsAuthActions} from './constants-ws-actions';
 
-declare global {
-  interface Window {
-    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
-  }
-}
+const withAuth = true;
+const withoutAuth = false
 
-export const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers = composeWithDevTools({trace: true});
 
-const enhancer = composeEnhancers(applyMiddleware(thunk));
+const enhancer = composeEnhancers(applyMiddleware(
+  thunkMiddleware,
+  wsMiddleware(WS_BASE_URL + wsEndPointAll, withoutAuth, wsActions),
+  wsMiddleware(WS_BASE_URL, withAuth, wsAuthActions)
+));
 
-export const store = createStore(rootReducer, enhancer);
+export const initStore = (initialState = {}) => createStore(rootReducer, initialState, enhancer);

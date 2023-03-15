@@ -11,5 +11,4 @@ export const getProfileSuccess = (user: TUser, password: string): IProfilelSucce
   }
 };
 
-export const profileReset = (): IProfileResetAction => { return {type: PROFILE_RESET };
-}
+export const profileReset = (): IProfileResetAction => { return {type: PROFILE_RESET }; }

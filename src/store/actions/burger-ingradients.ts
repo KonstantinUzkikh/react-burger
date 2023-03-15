@@ -15,7 +15,7 @@ export const getIngredientsSuccess = (ingredients: TIngredient[]): IGetIngredien
   }
 };
 
-export const cancelCountAllIngredients = ():ICancelCountAllIngredients => { return {type: CANCEL_COUNT_ALL_INGREDIENTS} };
+export const resetCountAllIngredients = ():ICancelCountAllIngredients => { return {type: CANCEL_COUNT_ALL_INGREDIENTS} };
 
 export const increaseCountIngredient = (id: string): IIncreaseCountIngredient => {
   return {
@@ -31,7 +31,7 @@ export const decreaseCountIngredient = (id: string): IDecreaseCountIngredient =>
   }
 };
 
-export const cancelCountBun = (id: string): ICancelCountBun => {
+export const resetCountBun = (id: string): ICancelCountBun => {
   return {
     type: CANCEL_COUNT_BURGER_BUN,
     _id: id
