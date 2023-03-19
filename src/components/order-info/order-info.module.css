@@ -34,10 +34,6 @@
   gap: 9px
 }
 
-.images {
-  z-index: 1;
-}
-
 .boxColumn {
   display: flex;
   flex-direction: column;
@@ -48,7 +44,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 312px;
+  max-height: 312px;
   gap: 16px;
   overflow: auto;
 }

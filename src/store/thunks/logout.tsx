@@ -1,19 +1,19 @@
 import { AppDispatch, AppThunk } from '../types-store';
-import { sendRequest, getSuccess, getFaild, profileReset } from '../actions';
-import { readTokens, deleteCookies } from '../../utils/cookies';
+import { apiFlagUp, apiFlagDown, apiError, profileReset } from '../actions';
+import { readTokens, deleteCookies } from '../../utils';
 import { getLogout } from '../../services/get-data';
 import { TResponseLogout } from '../../services/types-responses';
 
 export const getLogoutThunk = (goPath: () => void): AppThunk => (dispatch: AppDispatch) => {
   const { refreshToken } = readTokens();
-    dispatch(sendRequest('profile'));
+    dispatch(apiFlagUp('profile'));
     getLogout(refreshToken)
       .then((res: TResponseLogout) => {
         deleteCookies();
-        dispatch(getSuccess(res.message));
+        dispatch(apiFlagDown(res.message));
         dispatch(profileReset());
         goPath();
       })
-      .catch(err => dispatch(getFaild(err)))
+      .catch(err => dispatch(apiError(err)))
 }
 

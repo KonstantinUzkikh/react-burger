@@ -1,4 +1,4 @@
-import type { TIngredient } from '../../utils/types-data';
+import type { TIngredient } from '../../utils';
 
 export const ADD_BURGER_INGREDIENT: 'ADD_BURGER_INGREDIENT' = 'ADD_BURGER_INGREDIENT';
 export const DELETE_BURGER_INGREDIENT: 'DELETE_BURGER_INGREDIENT' = 'DELETE_BURGER_INGREDIENT';

@@ -3,12 +3,12 @@ import { Navigate, useNavigate } from 'react-router-dom';
 
 import { Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { useDispatch } from '../store/hooks';
-import pageLayout from './page.module.css'
-import { h3_type, letters_grey, letters } from '../utils/types';
-import { checkLogin } from '../utils/utils';
-import { getRegisterThunk } from '../store/thunks/register';
+import { useDispatch } from '../store/hooks-store';
+import { h3_type, letters_grey, letters } from '../utils';
+import { checkLogin } from '../utils';
+import { getRegisterThunk } from '../store/thunks';
 import { useForm } from '../hooks/useForm';
+import pageLayout from './page.module.css'
 
 const RegisterPage: FC = () => {
 

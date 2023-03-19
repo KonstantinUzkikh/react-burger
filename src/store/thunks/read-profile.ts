@@ -1,15 +1,15 @@
 import { AppDispatch, AppThunk } from '../types-store';
-import { sendRequest, getSuccess, getFaild, getProfileSuccess } from '../actions';
-import { readPassword } from '../../utils/cookies';
+import { apiFlagUp, apiFlagDown, apiError, getProfileSuccess } from '../actions';
+import { readPassword } from '../../utils';
 import { getReadProfile } from '../../services/get-data';
 import { TResponseUser } from '../../services/types-responses';
 
 export const getReadProfileThunk = (goPath: () => void): AppThunk => (dispatch: AppDispatch) => {
-  dispatch(sendRequest('profile'));
+  dispatch(apiFlagUp('profile'));
   getReadProfile(goPath)
     .then((res: TResponseUser) => {
-      dispatch(getSuccess());
+      dispatch(apiFlagDown());
       dispatch(getProfileSuccess(res.user, readPassword() || ''));
     })
-    .catch(err => dispatch(getFaild(err)))
+    .catch(err => dispatch(apiError(err)))
 }

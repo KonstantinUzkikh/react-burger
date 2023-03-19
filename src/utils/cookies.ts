@@ -77,3 +77,5 @@ export const deleteCookies = (): void =>
   setCookie('refreshToken', '', { 'max-age': 0 });
   setCookie('forgot', '', { 'max-age': 0 });
 }
+
+export const checkLogin = (): boolean => readRefreshToken() === undefined ? false : true;

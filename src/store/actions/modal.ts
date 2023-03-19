@@ -1,5 +1,4 @@
 import { OPEN_MODAL, CLOSE_MODAL, IOpenModalAction, ICloseModalAction } from '../action-types';
-import { AppDispatch } from '../../store/types-store';
 
 export const openModal =
   (title: string | undefined, modalContent: string | undefined,

@@ -1,5 +1,6 @@
-import type { TIngredient } from '../../utils/types-data';
-import { GET_INGREDIENTS_SUCCESS, INCREASE_COUNT_BURGER_INGREDIENT, DECREASE_COUNT_BURGER_INGREDIENT,
+import type { TIngredient } from '../../utils';
+import {
+  GET_INGREDIENTS_SUCCESS, INCREASE_COUNT_BURGER_INGREDIENT, DECREASE_COUNT_BURGER_INGREDIENT,
   CANCEL_COUNT_ALL_INGREDIENTS, CANCEL_COUNT_BURGER_BUN, SET_DOUBLE_COUNT_BURGER_BUN,
   IGetIngredientsSuccess, ICancelCountAllIngredients, IIncreaseCountIngredient, IDecreaseCountIngredient,
   ISetCountBun, ICancelCountBun
@@ -8,14 +9,11 @@ import { GET_INGREDIENTS_SUCCESS, INCREASE_COUNT_BURGER_INGREDIENT, DECREASE_COU
 export const getIngredientsSuccess = (ingredients: TIngredient[]): IGetIngredientsSuccess => {
   return {
     type: GET_INGREDIENTS_SUCCESS,
-    ingredients: ingredients.map((item) => {
-      item.count = 0;
-      return (item);
-    })
+    ingredients: ingredients.map(item => ({ ...item, count: 0 }))
   }
 };
 
-export const resetCountAllIngredients = ():ICancelCountAllIngredients => { return {type: CANCEL_COUNT_ALL_INGREDIENTS} };
+export const resetCountAllIngredients = (): ICancelCountAllIngredients => { return { type: CANCEL_COUNT_ALL_INGREDIENTS } };
 
 export const increaseCountIngredient = (id: string): IIncreaseCountIngredient => {
   return {

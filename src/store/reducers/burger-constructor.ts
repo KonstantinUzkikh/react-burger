@@ -1,5 +1,4 @@
-import { initialIngredient } from '../../utils/constants'
-import { TIngredient } from '../../utils/types-data';
+import { initialIngredient, TIngredient } from '../../utils'
 import {
   ADD_BURGER_INGREDIENT, DELETE_BURGER_INGREDIENT, UPDATE_BURGER_BUN, RESET_BURGER,
   MOVE_BURGER_INGREDIENT, TBurgerConstructorActions

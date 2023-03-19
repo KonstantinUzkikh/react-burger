@@ -3,12 +3,12 @@ import { ThunkAction } from 'redux-thunk';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { rootReducer } from './reducers/rootReducer';
 import {
-  TApiActions, TBurgerConstructorActions, TBurgerIngredientsActions, TCurrentIngredientActions, TModalActions,
+  TNotifierActions, TBurgerConstructorActions, TBurgerIngredientsActions, TModalActions,
   TOrderIdActions, TProfileActions, TWSActions, TWSAuthActions
 } from './action-types';
 
-export type TAppActions = TApiActions | TBurgerConstructorActions | TBurgerIngredientsActions
-  | TCurrentIngredientActions | TModalActions | TOrderIdActions | TProfileActions | TWSActions | TWSAuthActions;
+export type TAppActions = TNotifierActions | TBurgerConstructorActions | TBurgerIngredientsActions
+  | TModalActions | TOrderIdActions | TProfileActions | TWSActions | TWSAuthActions;
 
 export type RootState = ReturnType<typeof rootReducer>;
 

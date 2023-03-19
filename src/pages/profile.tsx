@@ -3,9 +3,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 import ProfileForm from '../components/profile-form/profile-form';
 import ProfileHistory from '../components/profile-history/profile-history';
-import { useDispatch } from '../store/hooks';
+import { useDispatch } from '../store/hooks-store';
 import { getLogoutThunk } from '../store/thunks';
-import { h3_type, letters_grey } from '../utils/types';
+import { h3_type, letters_grey } from '../utils';
 import profileLayout from './profile.module.css'
 
 const ListItem: FC<{ title: string; isActive: boolean }> = ({ title, isActive }) => {

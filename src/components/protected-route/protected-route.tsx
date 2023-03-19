@@ -1,7 +1,7 @@
 import { FC, ReactElement } from 'react';
 import { Navigate, useLocation, NavigateProps, Location } from 'react-router-dom';
 
-import { checkLogin } from '../../utils/utils';
+import { checkLogin } from '../../utils';
 
 const ProtectedRoute: FC<{ children: ReactElement; anonymous?: boolean }> =
   ({ children, anonymous = false }): ReactElement<NavigateProps> =>

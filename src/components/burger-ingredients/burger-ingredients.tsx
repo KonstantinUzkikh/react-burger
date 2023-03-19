@@ -4,12 +4,11 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { Counter, CurrencyIcon, Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { useSelector } from '../../store/hooks';
-import { h1_type, h3_type, letters, digits } from '../../utils/types';
-import type { TIngredient } from '../../utils/types-data';
+import { useSelector } from '../../store/hooks-store';
+import { TIngredient, h1_type, h3_type, letters, digits } from '../../utils';
 import ingredientsLayout from './burger-ingredients.module.css';
 
-const Ingredient: FC<{data: TIngredient}> = ({data}) => {
+const Ingredient: FC<{ data: TIngredient }> = ({ data }) => {
 
   const { _id, image, name, price, count } = data;
   const isCount = (count !== 0);
@@ -47,13 +46,13 @@ const Ingredient: FC<{data: TIngredient}> = ({data}) => {
   );
 };
 
-const TypeIngredients: FC<{type: 'bun' | 'main' | 'blank' | 'sauce' }> = ({type}) => {
+const TypeIngredients: FC<{ type: 'bun' | 'main' | 'blank' | 'sauce' }> = ({ type }) => {
 
   const location = useLocation();
   const { ingredients } = useSelector(state => state.ingredients);
 
-  let name: 'Булки' | 'Соусы' | 'Начинки' | '' ;
-  let id: 'bun' | 'main' | 'blank' | 'sauce' ;
+  let name: 'Булки' | 'Соусы' | 'Начинки' | '';
+  let id: 'bun' | 'main' | 'blank' | 'sauce';
   switch (type) {
     case 'bun':
       name = 'Булки';
@@ -98,7 +97,7 @@ const TypeIngredients: FC<{type: 'bun' | 'main' | 'blank' | 'sauce' }> = ({type}
   );
 };
 
-function BurgerIngredients() {
+const BurgerIngredients: FC = () => {
 
   const [currentTab, setCurrentTab] = useState('one');
 

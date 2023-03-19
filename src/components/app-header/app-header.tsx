@@ -4,8 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 // eslint-disable-next-line no-unused-vars
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { checkLogin } from '../../utils/utils';
-import { letters } from '../../utils/types';
+import { checkLogin, letters } from '../../utils';
 import headerLayout from './app-header.module.css'
 
 const Icon: FC<{ content: 'burger' | 'list' | 'profile'; type: 'primary' | 'secondary'}> = ({ content, type }) => {
@@ -39,7 +38,7 @@ const ButtonHeader: FC<{ content: 'burger' | 'list' | 'profile'; isActive: boole
   )
 }
 
-function AppHeader() {
+const AppHeader: FC = () => {
 
   const navigate = useNavigate();
   const { pathname } = useLocation();

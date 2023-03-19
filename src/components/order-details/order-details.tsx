@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
-import { useSelector } from '../../store/hooks';
-import { h3_type, letters, letters_grey } from '../../utils/types';
+import { useSelector } from '../../store/hooks-store';
+import { h3_type, letters, letters_grey } from '../../utils';
 import orderLayout from './order-details.module.css';
 import done from '../../images/done.svg'
 

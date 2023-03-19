@@ -1,5 +1,4 @@
 import { GET_ORDER_ID_SUCCESS, ORDER_ID_RESET, type TOrderIdActions } from '../action-types';
-import type { TIngredient } from '../../utils/types-data';
 
 export type TOrderDetailsState = {
   isOrder: boolean;

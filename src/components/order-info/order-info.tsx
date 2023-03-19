@@ -4,10 +4,9 @@ import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burge
 
 import OrderInLine from '../order-in-line/order-in-line';
 import OrderToColumn from '../order-to-column/order-to-column';
-import { useSelector } from '../../store/hooks';
-import { h3_type, letters, letters_grey, digits } from '../../utils/types';
+import { useSelector } from '../../store/hooks-store';
+import { TIngredient, h3_type, letters, letters_grey, digits } from '../../utils';
 import type { TOrder } from '../../services/types-responses';
-import { TIngredient } from "../../utils/types-data";
 import orderInfoLayout from './order-info.module.css';
 
 const OrderInfo: FC<{ order: TOrder, source: 'feed' | 'profile', direction: 'row' | 'column' }> = ({ order, source, direction }) => {
@@ -60,7 +59,7 @@ const OrderInfo: FC<{ order: TOrder, source: 'feed' | 'profile', direction: 'row
             }
           </div>
           <div className={orderInfoLayout.boxContent} >
-            <div className={orderInfoLayout.images} ><OrderInLine arrIngredients={arrIngredients} /></div>
+            <OrderInLine arrIngredients={arrIngredients} />
             <div className={orderInfoLayout.total}>
               <CurrencyIcon type="primary" />
               <span className={digits}>{total}</span>

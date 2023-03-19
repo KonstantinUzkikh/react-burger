@@ -1,10 +1,9 @@
 import { FC, useEffect } from "react";
 import { Link, useLocation } from 'react-router-dom';
 
-import { useDispatch, useSelector } from "../store/hooks";
-import { wsConnectionStart, wsConnectionStop, wsResetOrders } from "../store/actions";
-import { TOrder } from "../services/types-responses";
-import { h1_type, h3_type, digits } from '../utils/types';
+import { useDispatch, useSelector } from "../store/hooks-store";
+import { wsConnectionStart, wsConnectionStop } from "../store/actions";
+import { h1_type, h3_type, digits } from '../utils';
 import feedLayout from './feed.module.css'
 import OrderInfo from "../components/order-info/order-info";
 
@@ -16,7 +15,6 @@ const FeedPage: FC = () => {
   useEffect(() => {
     dispatch(wsConnectionStart());
     return () => {
-      //dispatch(wsResetOrders());
       dispatch(wsConnectionStop());
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -33,14 +31,18 @@ const FeedPage: FC = () => {
           <div className={feedLayout.boxContent}>
             <div className={feedLayout.boxOrders}>
               {
-                orders.map((order: TOrder) => {
+                orders.sort((a, b) => {
+                  if (a.createdAt > b.createdAt) return -1;
+                  if (a.createdAt < b.createdAt) return 1;
+                  return 0;
+                }).map(order => {
                   return (
                     <Link
                       key={order.number}
                       to={`/feed/${order.number}`}
                       style={{ color: 'white', textDecoration: 'none' }}
                       state={{ backgroundLocation: location }}
-                      >
+                    >
                       <OrderInfo order={order} source={'feed'} direction={'row'} key={order._id} />
                     </Link>
                   )
@@ -54,8 +56,7 @@ const FeedPage: FC = () => {
                   <div className={feedLayout.orders}>
                     {
                       orders.filter(it => it.status === 'done')
-                        .map(item => item.number)
-                        .map((number, index) => <p className={`${digits} mr-2`} key={index} >{number}</p>)
+                        .map((item, index) => <p className={`${digits} mr-2`} key={index} >{item.number}</p>)
                     }
                   </div>
                 </div>
@@ -64,8 +65,7 @@ const FeedPage: FC = () => {
                   <div className={feedLayout.orders}>
                     {
                       orders.filter(it => it.status === 'pending')
-                        .map(item => item.number)
-                        .map((number, index) => <p className={`${digits} mr-2`} key={index} >{number}</p>)
+                        .map((item, index) => <p className={`${digits} mr-2`} key={index} >{item.number}</p>)
                     }
                   </div>
                 </div>

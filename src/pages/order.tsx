@@ -1,15 +1,20 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { useDispatch, useSelector } from "../store/hooks";
+import { useDispatch, useSelector } from "../store/hooks-store";
 import OrderInfo from '../components/order-info/order-info';
-import { wsAuthConnectionStart, wsAuthConnectionStop, wsConnectionStart, wsConnectionStop } from "../store/actions";
-import { IWSAuthConnectionStart, IWSAuthConnectionStop, IWSConnectionStart, IWSConnectionStop } from "../store/action-types";
+import Modal from "../components/modal/modal";
+import {
+  wsAuthConnectionStart, wsAuthConnectionStop, wsConnectionStart, wsConnectionStop
+} from "../store/actions";
+import {
+  IWSAuthConnectionStart, IWSAuthConnectionStop, IWSConnectionStart, IWSConnectionStop
+} from "../store/action-types";
 import { TOrder } from "../services/types-responses";
-import { digits } from '../utils/types';
+import { digits } from '../utils';
 import orderLayout from './order.module.css'
 
-const OrderPage: FC = () => {
+const OrderPage: FC<{ mode: 'modal' | 'page' }> = ({ mode }) => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -30,7 +35,7 @@ const OrderPage: FC = () => {
   let wsStart: (() => IWSConnectionStart) | (() => IWSAuthConnectionStart);
   let wsStop: (() => IWSConnectionStop) | (() => IWSAuthConnectionStop);
 
-  if (source ===  'feed') {
+  if (source === 'feed') {
     orders = ordersAll;
     wsStart = wsConnectionStart;
     wsStop = wsConnectionStop;
@@ -52,18 +57,25 @@ const OrderPage: FC = () => {
     if (!isFiltered && orders.length !== 0) {
       orderRef.current = orders.filter(it => String(it.number) === id)[0];
       setIsFiltered(true);
-      if (orderRef.current === undefined) navigate('/order-not-found')
+      if (orderRef.current === undefined) navigate('/not-found')
     }
     isFiltered && dispatch(wsConnectionStop());
   }, [orders, isFiltered]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const closeCallback = () => navigate(-1);
+
   return (
     <>
-      {isFiltered && (orderRef.current !== undefined) &&
+      {mode === 'page' && isFiltered && (orderRef.current !== undefined) &&
         <div className={orderLayout.boxPage}>
           <span className={`${digits} ${orderLayout.orderId}`}>#{orderRef.current.number}</span>
           <OrderInfo order={orderRef.current} source={source} direction={'column'} />
         </div>
+      }
+      {mode === 'modal' && isFiltered && (orderRef.current !== undefined) &&
+        <Modal title={`#${orderRef.current.number}`} closeCallback={closeCallback} >
+          <OrderInfo order={orderRef.current} source={source} direction={'column'} />
+        </Modal>
       }
     </>
   )

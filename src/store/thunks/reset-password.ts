@@ -1,18 +1,18 @@
 import { AppDispatch, AppThunk } from '../types-store';
-import { sendRequest, getSuccess, getFaild } from '../actions';
-import { deleteForgot } from '../../utils/cookies';
+import { apiFlagUp, apiFlagDown, apiError } from '../actions';
+import { deleteForgot } from '../../utils';
 import { getResetPassword } from '../../services/get-data';
 import { TResponseResetPassword } from '../../services/types-responses';
 import type { TInputValues } from '../../hooks/useForm';
 
 export const getResetPasswordThunk = ({ newPassword, code }: TInputValues, goPath: () => void):
   AppThunk => (dispatch: AppDispatch) => {
-    dispatch(sendRequest('profile'));
+    dispatch(apiFlagUp('profile'));
     getResetPassword({ newPassword, code })
       .then((res: TResponseResetPassword) => {
-        dispatch(getSuccess(res.message));
+        dispatch(apiFlagDown(res.message));
         deleteForgot();
         goPath();
       })
-      .catch(err => dispatch(getFaild(err)))
+      .catch(err => dispatch(apiError(err)))
 }

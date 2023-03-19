@@ -3,13 +3,11 @@ import { Navigate, useNavigate } from 'react-router-dom';
 
 import { PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { useDispatch } from '../store/hooks';
-import pageLayout from './page.module.css'
-import { h3_type, letters_grey, letters } from '../utils/types';
-import { checkLogin } from '../utils/utils';
-import { readForgot } from '../utils/cookies';
+import { useDispatch } from '../store/hooks-store';
+import { checkLogin, readForgot, h3_type, letters_grey, letters } from '../utils';
 import { getResetPasswordThunk } from '../store/thunks';
 import { useForm } from '../hooks/useForm';
+import pageLayout from './page.module.css'
 
 const ResetPasswordPage: FC = () => {
 

@@ -3,12 +3,12 @@ import ReactDOM from "react-dom";
 
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { useSelector, useDispatch } from '../../store/hooks';
-import { h1_type } from '../../utils/types';
+import { useSelector, useDispatch } from '../../store/hooks-store';
+import { closeModal } from '../../store/actions';
 import ModalOverlay from '../modal-overlay/modal-overlay';
+import { h1_type } from '../../utils';
 import modalLayout from './modal.module.css';
 
-import { closeModal } from '../../store/actions/modal';
 
 const Modal: FC<{ title?: string, closeCallback?: () => void; children?: ReactElement }> =
   ({ title, closeCallback, children }) => {

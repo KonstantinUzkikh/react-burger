@@ -3,11 +3,10 @@ import { Navigate, useNavigate } from 'react-router-dom';
 
 import { EmailInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { useDispatch } from '../store/hooks';
+import { useDispatch } from '../store/hooks-store';
 import pageLayout from './page.module.css'
-import { h3_type, letters_grey, letters } from '../utils/types';
-import { checkLogin } from '../utils/utils';
-import { getForgotPasswordThunk } from '../store/thunks/forgot-password';
+import { checkLogin, h3_type, letters_grey, letters } from '../utils';
+import { getForgotPasswordThunk } from '../store/thunks';
 import { useForm } from '../hooks/useForm';
 
 const ForgotPasswordPage: FC = () => {

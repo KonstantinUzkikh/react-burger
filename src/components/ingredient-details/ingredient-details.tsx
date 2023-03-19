@@ -1,8 +1,6 @@
 import { FC } from 'react';
 
-import { useSelector } from '../../store/hooks';
-import { h3_type, letters_grey, digits_grey } from '../../utils/types';
-import type { TIngredient } from '../../utils/types-data';
+import { TIngredient, h3_type, letters_grey, digits_grey } from '../../utils';
 import ingredientLayout from './ingredient-details.module.css';
 
 const Value: FC<{ name: string; value: number }> = ({ name, value }) => {
@@ -14,21 +12,17 @@ const Value: FC<{ name: string; value: number }> = ({ name, value }) => {
   )
 }
 
-const IngredientDetails: FC<{ ingredient?: TIngredient }> = ({ ingredient }) => {
-
-  let { currentIngredient } = useSelector(state => state.ingredientDetails);
-
-  if (ingredient !== undefined) { currentIngredient = ingredient }
+const IngredientDetails: FC<{ ingredient: TIngredient }> = ({ ingredient }) => {
 
   return (
     <div className={ingredientLayout.boxMain}>
-      <img src={currentIngredient.image_large} alt={currentIngredient.name} className={ingredientLayout.image} />
-      <h3 className={`${h3_type} ${ingredientLayout.name} mb-8 mt-4`} >{currentIngredient.name}</h3>
+      <img src={ingredient.image_large} alt={ingredient.name} className={ingredientLayout.image} />
+      <h3 className={`${h3_type} ${ingredientLayout.name} mb-8 mt-4`} >{ingredient.name}</h3>
       <div className={ingredientLayout.boxValues}>
-        <Value name='Калории,ккал' value={currentIngredient.calories} />
-        <Value name='Белки, г' value={currentIngredient.proteins} />
-        <Value name='Жиры, г' value={currentIngredient.fat} />
-        <Value name='Углеводы, г' value={currentIngredient.carbohydrates} />
+        <Value name='Калории,ккал' value={ingredient.calories} />
+        <Value name='Белки, г' value={ingredient.proteins} />
+        <Value name='Жиры, г' value={ingredient.fat} />
+        <Value name='Углеводы, г' value={ingredient.carbohydrates} />
       </div>
     </div>
   )

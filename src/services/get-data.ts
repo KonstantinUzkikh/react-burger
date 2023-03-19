@@ -1,6 +1,6 @@
-import { BASE_URL, endPoints } from '../utils/constants';
+import { BASE_URL, endPoints } from '../utils';
 import { request } from './api';
-import { writeTokens, readTokens } from '../utils/cookies';
+import { writeTokens, readTokens } from '../utils';
 import type { TInputValues } from '../hooks/useForm';
 import { TResponseTokens } from './types-responses';
 

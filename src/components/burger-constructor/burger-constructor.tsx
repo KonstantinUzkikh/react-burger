@@ -5,20 +5,17 @@ import { useNavigate } from 'react-router-dom';
 import { ConstructorElement, Button, DragIcon, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { v4 as generateKey } from 'uuid';
 
-import { useSelector, useDispatch } from '../../store/hooks';
-import { getConfirmOrderThunk, resetOrderDetailsThunk } from '../../store/thunks';
-import { checkLogin } from '../../utils/utils';
-import { h3_type } from '../../utils/types';
-import { TIngredient } from '../../utils/types-data';
+import { useSelector, useDispatch } from '../../store/hooks-store';
+import { getConfirmOrderThunk } from '../../store/thunks';
+import { checkLogin, h3_type, TIngredient } from '../../utils';
 import { AppDispatch } from '../../store/types-store';
 import componentsLayout from './burger-constructor.module.css';
 
-import { openModal } from '../../store/actions/modal';
-import { resetOrderId } from '../../store/actions/order-details';
-import { addBurgerIngredient, deleteBurgerIngredient, updateBurgerBun, resetBurger, moveBurgerIngredient }
-  from '../../store/actions/burger-constructor';
-import { increaseCountIngredient, decreaseCountIngredient, resetCountBun, setCountBun, resetCountAllIngredients }
-  from '../../store/actions/burger-ingradients';
+import {
+  openModal, resetOrderId,
+  addBurgerIngredient, deleteBurgerIngredient, updateBurgerBun, resetBurger, moveBurgerIngredient,
+  increaseCountIngredient, decreaseCountIngredient, resetCountBun, setCountBun, resetCountAllIngredients
+} from '../../store/actions';
 
 type TBurgerComponentProps = {
   side?: 'top' | 'bottom';
@@ -111,7 +108,7 @@ const BurgerComponent: FC<TBurgerComponentProps> = ({ side: type, component, ind
   );
 }
 
-function BurgerConstructor() {
+const BurgerConstructor: FC = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

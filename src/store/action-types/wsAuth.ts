@@ -4,7 +4,6 @@ export const WS_AUTH_CONNECTION_START: 'WS_AUTH_CONNECTION_START' = 'WS_AUTH_CON
 export const WS_AUTH_CONNECTION_STOP: 'WS_AUTH_CONNECTION_STOP' = 'WS_AUTH_CONNECTION_STOP';
 export const WS_AUTH_CONNECTION_OPENED: 'WS_AUTH_CONNECTION_OPENED' = 'WS_AUTH_CONNECTION_OPENED';
 export const WS_AUTH_CONNECTION_CLOSED: 'WS_AUTH_CONNECTION_CLOSED' = 'WS_AUTH_CONNECTION_CLOSED';
-export const WS_AUTH_CONNECTION_ERROR: 'WS_AUTH_CONNECTION_ERROR' = 'WS_AUTH_CONNECTION_ERROR';
 export const WS_AUTH_GET_MESSAGE: 'WS_AUTH_GET_MESSAGE' = 'WS_AUTH_GET_MESSAGE';
 export const WS_AUTH_RESET_ORDERS: 'WS_AUTH_RESET_ORDERS' = 'WS_AUTH_RESET_ORDERS';
 
@@ -24,11 +23,6 @@ export interface IWSAuthConnectionClosed {
   readonly type: typeof WS_AUTH_CONNECTION_CLOSED;
 }
 
-export interface IWSAuthConnectionError {
-  readonly type: typeof WS_AUTH_CONNECTION_ERROR;
-  readonly error: Event;
-}
-
 export interface IWSAuthGetMessage {
   readonly type: typeof WS_AUTH_GET_MESSAGE;
   readonly orders: TOrder[];
@@ -40,5 +34,5 @@ export interface IWSAuthResetOrders {
   readonly type: typeof WS_AUTH_RESET_ORDERS;
 }
 
-export type TWSAuthActions = IWSAuthConnectionStart | IWSAuthConnectionStop |
-  IWSAuthConnectionOpened | IWSAuthConnectionError | IWSAuthConnectionClosed | IWSAuthGetMessage | IWSAuthResetOrders;
+export type TWSAuthActions = IWSAuthConnectionStart | IWSAuthConnectionStop | IWSAuthConnectionOpened
+  | IWSAuthConnectionClosed | IWSAuthGetMessage | IWSAuthResetOrders;

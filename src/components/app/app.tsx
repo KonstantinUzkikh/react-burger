@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 
-import { useDispatch } from '../../store/hooks';
-import { getIngredientsThunk } from '../../store/thunks';
+import { useDispatch } from '../../store/hooks-store';
+import { getIngredientsThunk, updateDataThunk } from '../../store/thunks';
 import AppHeader from '../app-header/app-header';
 import ProtectedRoute from '../protected-route/protected-route';
 import ModalLoader from '../modal-loader/modal-loader';
@@ -15,16 +15,17 @@ import ResetPasswordPage from '../../pages/reset-password';
 import ProfilePage from '../../pages/profile';
 import IngredientPage from '../../pages/ingredient';
 import NotFoundPage from '../../pages/not-found';
-import ModalIngredientPage from '../../pages/modal-ingredient';
+import IngredientModalPage from '../../pages/ingredient-modal';
 import FeedPage from '../../pages/feed';
 import OrderPage from '../../pages/order';
-import ModalOrderPage from '../../pages/modal-order';
 
-function App() {
+const App: FC = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => dispatch(getIngredientsThunk()));
+  useEffect(() => dispatch(getIngredientsThunk()), []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => dispatch(updateDataThunk()));
 
   const location = useLocation();
   const state = location.state;
@@ -40,18 +41,18 @@ function App() {
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/profile" element={<ProtectedRoute children={<ProfilePage />} />} />
         <Route path="/profile/orders" element={<ProtectedRoute children={<ProfilePage />} />} />
-        <Route path="/profile/orders/:id" element={<ProtectedRoute children={<OrderPage /> } />} />
+        <Route path="/profile/orders/:id" element={<ProtectedRoute children={<OrderPage mode={'page'} /> } />} />
         <Route path="/ingredients/:id" element={<IngredientPage />} />
         <Route path="/feed" element={<FeedPage /> } />
-        <Route path="/feed/:id" element={<OrderPage /> } />
+        <Route path="/feed/:id" element={<OrderPage mode={'page'} /> } />
         <Route path="/*" element={<NotFoundPage />} />
       </Routes>
 
       {state?.backgroundLocation && (
         <Routes>
-          <Route path="/ingredients/:id" element={<ModalIngredientPage />} />
-          <Route path="/feed/:id" element={<ModalOrderPage /> } />
-          <Route path="/profile/orders/:id" element={<ModalOrderPage /> } />
+          <Route path="/ingredients/:id" element={<IngredientModalPage />} />
+          <Route path="/feed/:id" element={<OrderPage mode={'modal'} /> } />
+          <Route path="/profile/orders/:id" element={<OrderPage mode={'modal'} /> } />
         </Routes>
       )}
 

@@ -1,5 +1,4 @@
 import { OPEN_MODAL, CLOSE_MODAL, type TModalActions} from '../action-types';
-import { AppDispatch } from '../../store/types-store';
 
 export type TModalState = {
   isModalOpen: boolean;
@@ -8,7 +7,7 @@ export type TModalState = {
   resetContentFunc?: (() => void) | null;
 };
 
-const initialState: TModalState  = {
+export const initialState: TModalState  = {
   isModalOpen: false,
   title: '',
   modalContent: '',

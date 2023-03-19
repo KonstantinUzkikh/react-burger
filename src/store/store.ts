@@ -2,7 +2,7 @@ import { applyMiddleware, legacy_createStore as createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunkMiddleware from 'redux-thunk';
 
-import { WS_BASE_URL, wsEndPointAll } from '../utils/constants';
+import { WS_BASE_URL, wsEndPointAll } from '../utils';
 import { rootReducer } from './reducers/rootReducer';
 import { wsMiddleware } from './middleware/wsMiddleware';
 import { wsActions, wsAuthActions} from './constants-ws-actions';

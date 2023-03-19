@@ -3,13 +3,11 @@ import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 
 import { EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { useDispatch } from '../store/hooks';
-import pageLayout from './page.module.css'
-import { h3_type, letters_grey, letters } from '../utils/types';
-
-import { checkLogin } from '../utils/utils';
-import { getLoginThunk } from '../store/thunks/login'
+import { useDispatch } from '../store/hooks-store';
+import { checkLogin, h3_type, letters_grey, letters } from '../utils';
+import { getLoginThunk } from '../store/thunks'
 import { useForm } from '../hooks/useForm';
+import pageLayout from './page.module.css'
 
 const LoginPage: FC = () => {
 

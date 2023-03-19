@@ -1,6 +1,8 @@
-import type { TIngredient } from '../../utils/types-data';
-import { ADD_BURGER_INGREDIENT, DELETE_BURGER_INGREDIENT, UPDATE_BURGER_BUN, RESET_BURGER, MOVE_BURGER_INGREDIENT,
-  IAddBurgerIngredient, IDeleteBurgerIngredient, IUpdateBurgerBun, IResetBurger, IMoveBurgerIngredient } from '../action-types';
+import type { TIngredient } from '../../utils';
+import {
+  ADD_BURGER_INGREDIENT, DELETE_BURGER_INGREDIENT, UPDATE_BURGER_BUN, RESET_BURGER, MOVE_BURGER_INGREDIENT,
+  IAddBurgerIngredient, IDeleteBurgerIngredient, IUpdateBurgerBun, IResetBurger, IMoveBurgerIngredient
+} from '../action-types';
 
 export const addBurgerIngredient = (ingredient: TIngredient): IAddBurgerIngredient => {
   return {
@@ -23,7 +25,7 @@ export const updateBurgerBun = (ingredient: TIngredient): IUpdateBurgerBun => {
   }
 }
 
-export const resetBurger = ():IResetBurger => { return {type: RESET_BURGER} };
+export const resetBurger = (): IResetBurger => { return { type: RESET_BURGER } };
 
 export const moveBurgerIngredient = (dragIndex: number, hoverIndex: number): IMoveBurgerIngredient => {
   return {

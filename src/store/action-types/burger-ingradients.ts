@@ -1,4 +1,4 @@
-import type { TIngredient } from '../../utils/types-data';
+import type { TIngredient } from '../../utils';
 
 export const GET_INGREDIENTS_SUCCESS: 'GET_INGREDIENTS_SUCCESS' = 'GET_INGREDIENTS_SUCCESS';
 export const CANCEL_COUNT_ALL_INGREDIENTS: 'CANCEL_COUNT_ALL_INGREDIENTS' = 'CANCEL_COUNT_ALL_INGREDIENTS';
