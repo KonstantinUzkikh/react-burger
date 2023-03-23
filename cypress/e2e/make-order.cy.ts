@@ -4,6 +4,8 @@ import { bun1_count0, bun2_count0, main_count0, sauce_count0 } from '../../src/u
 describe('запускаем приложение', function () {
   beforeEach(() => {
     cy.visit('http://localhost:3000');
+    cy.intercept('GET', `${BASE_URL}${endPoints.ingredients}`,
+      { statusCode: 200, body: {success: true, data: [bun1_count0, bun2_count0, main_count0, sauce_count0]} });
     cy.intercept('POST', `${BASE_URL}${endPoints.login}`, { fixture: "user.json" });
     cy.intercept('POST', `${BASE_URL}${endPoints.orders}`, { fixture: "order.json" });
     cy.intercept('POST', `${BASE_URL}${endPoints.logout}`, { fixture: "logout.json" });
