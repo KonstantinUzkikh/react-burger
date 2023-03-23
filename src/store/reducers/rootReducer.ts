@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
 
 import {
-  burgerIngradientsReducer, burgerConstructorReducer, modalReducer, notifierReducer, orderDetailsReducer,
+  ingradientsReducer, burgerConstructorReducer, modalReducer, notifierReducer, orderDetailsReducer,
   profileReducer, wsReducer, wsAuthReducer
 } from './';
 
 export const rootReducer = combineReducers({
-  ingredients: burgerIngradientsReducer,
+  ingredients: ingradientsReducer,
   constructorContent: burgerConstructorReducer,
   modal: modalReducer,
   notifier: notifierReducer,

@@ -7,14 +7,14 @@ export type TModalState = {
   resetContentFunc?: (() => void) | null;
 };
 
-export const initialState: TModalState  = {
+export const initialModalState: TModalState  = {
   isModalOpen: false,
   title: '',
   modalContent: '',
   resetContentFunc: null
 };
 
-export const modalReducer = (state = initialState, action: TModalActions): TModalState => {
+export const modalReducer = (state = initialModalState, action: TModalActions): TModalState => {
   switch (action.type) {
     case OPEN_MODAL: {
       return {
@@ -26,7 +26,7 @@ export const modalReducer = (state = initialState, action: TModalActions): TModa
       };
     }
     case CLOSE_MODAL: {
-      return initialState;
+      return initialModalState;
     }
     default: {
       return state;

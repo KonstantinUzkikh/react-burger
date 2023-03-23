@@ -8,13 +8,14 @@ export type TBurgerConstructorState = {
   burger: TIngredient[]
 };
 
-const initialState: TBurgerConstructorState = {
+export const initialConstructorState: TBurgerConstructorState = {
   // булка всегда! нулевой элемент массива
   // при инициализации нулевой элемент массива устанавливаем в blank
   burger: [initialIngredient]
 };
 
-export const burgerConstructorReducer = (state = initialState, action: TBurgerConstructorActions): TBurgerConstructorState => {
+export const burgerConstructorReducer =
+  (state = initialConstructorState, action: TBurgerConstructorActions): TBurgerConstructorState => {
   switch (action.type) {
     case ADD_BURGER_INGREDIENT: {
       return {

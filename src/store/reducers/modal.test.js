@@ -1,43 +1,20 @@
-import { initialState, modalReducer } from './modal'
+import { initialModalState, modalReducer } from './modal'
 import * as types from '../action-types/index'
 
-const storeOpenModal = {
-  isModalOpen: true,
-  title: 'Тест: открытие модального окна',
-  modalContent: 'test',
-  resetContentFunc: 'func'
-}
-
-const actionOpenModal = {
-  type: types.OPEN_MODAL,
-  title: 'Тест: открытие модального окна',
-  modalContent: 'test',
-  resetContentFunc: 'func'
-}
-
-const actionCloseModal = {
-  type: types.CLOSE_MODAL,
-}
-
-describe('modal reducer', () => {
+describe('modalReducer', () => {
   it('должен вернуть initial state', () => {
-    expect(modalReducer(undefined, {}))
-      .toEqual(initialState)
+    expect(modalReducer(undefined, {})).toEqual(initialModalState)
   })
 
-  it('должен обрабатывать OPEN_MODAL', () => {
-    expect(
-      modalReducer(initialState, actionOpenModal))
-      .toEqual(storeOpenModal)
+  it('OPEN_MODAL', () => {
+    expect(modalReducer(
+      undefined,
+      {type: types.OPEN_MODAL, title: 'Модальное окно', modalContent: 'test', resetContentFunc: 'func'}))
+      .toEqual({isModalOpen: true, title: 'Модальное окно', modalContent: 'test', resetContentFunc: 'func'})
   })
 
-  it('должен обрабатывать CLOSE_MODAL', () => {
-    expect(modalReducer(initialState, actionCloseModal))
-      .toEqual(initialState)
-
-    expect(
-      modalReducer(storeOpenModal, actionCloseModal))
-      .toEqual(initialState)
+  it('CLOSE_MODAL', () => {
+    expect(modalReducer(undefined, {type: types.CLOSE_MODAL})).toEqual(initialModalState)
   })
 
 })

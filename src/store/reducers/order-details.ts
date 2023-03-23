@@ -2,31 +2,28 @@ import { GET_ORDER_ID_SUCCESS, ORDER_ID_RESET, type TOrderIdActions } from '../a
 
 export type TOrderDetailsState = {
   isOrder: boolean;
-  nameOrderedBurger: string | null;
+  nameBurger: string | null;
   orderId: number | null;
-  burger: string[]
 };
 
-const initialState: TOrderDetailsState = {
+export const initialOrderDetailsState: TOrderDetailsState = {
   isOrder: false,
-  nameOrderedBurger: null,
+  nameBurger: null,
   orderId: null,
-  burger: []
 };
 
-export const orderDetailsReducer = (state = initialState, action: TOrderIdActions): TOrderDetailsState => {
+export const orderDetailsReducer = (state = initialOrderDetailsState, action: TOrderIdActions): TOrderDetailsState => {
   switch (action.type) {
     case GET_ORDER_ID_SUCCESS: {
       return {
         ...state,
         isOrder: true,
+        nameBurger: action.nameBurger,
         orderId: action.orderId,
-        nameOrderedBurger: action.nameOrderedBurger,
-        burger: action.burger
       };
     }
     case ORDER_ID_RESET: {
-      return initialState;
+      return initialOrderDetailsState;
     }
     default: {
       return state;

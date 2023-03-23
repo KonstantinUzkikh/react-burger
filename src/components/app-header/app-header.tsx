@@ -68,7 +68,7 @@ const AppHeader: FC = () => {
       <div className={headerLayout.logo} onClick={() => navigate('/')} >
         <Logo />
       </div>
-      <div onClick={onLogin}>
+      <div onClick={onLogin} data-testid={'profile'} >
         <ButtonHeader content="profile" isActive={pathname === '/login'}>Личный кабинет</ButtonHeader>
       </div>
     </header>

@@ -7,7 +7,7 @@ import { initStore } from './store/store';
 import App from './components/app/app';
 import './index.css';
 
-const store = initStore();
+export const store = initStore();
 
 const root = ReactDOM.createRoot( document.getElementById('root') as Element );
 

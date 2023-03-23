@@ -37,7 +37,7 @@ const ProfilePage: FC = () => {
               <ul className={profileLayout.ul}>
                 <li onClick={onProfile}><ListItem title='Профиль' isActive={pathname === '/profile'} /></li>
                 <li onClick={onHistory}><ListItem title='История заказов' isActive={pathname === '/profile/orders'} /></li>
-                <li onClick={onLogout}><ListItem title='Выход' isActive={pathname === '/logout'} /></li>
+                <li onClick={onLogout} id='logout' ><ListItem title='Выход' isActive={pathname === '/logout'} /></li>
               </ul>
             </nav>
             <span className={`${profileLayout.span} ${letters_grey}`} >

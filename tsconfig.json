@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "lib": [
+      "es5",
       "dom",
       "dom.iterable",
       "esnext"
@@ -19,9 +20,17 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "plugins": [{ "name": "typescript-plugin-css-modules" }]
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules"
+      }
+    ]
   },
   "include": [
     "./src",
-    "./declarations", "temp/get-data.js" ]
+    "./declarations",
+    "cypress.d.ts",
+    "src/components/*/*.cy.tsx",
+    "./cypress/*/*.cy.tsx"
+  ]
 }

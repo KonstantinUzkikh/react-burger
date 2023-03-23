@@ -1,7 +1,7 @@
 import { TIngredient } from '../../utils';
 import {
-  GET_INGREDIENTS_SUCCESS, INCREASE_COUNT_BURGER_INGREDIENT, DECREASE_COUNT_BURGER_INGREDIENT,
-  CANCEL_COUNT_ALL_INGREDIENTS, CANCEL_COUNT_BURGER_BUN, SET_DOUBLE_COUNT_BURGER_BUN,
+  GET_INGREDIENTS_SUCCESS, INCREASE_COUNT_INGREDIENT, DECREASE_COUNT_INGREDIENT,
+  RESET_COUNT_ALL_INGREDIENTS, RESET_COUNT_BUN, SET_DOUBLE_COUNT_BUN,
   TBurgerIngredientsActions
 } from '../action-types';
 
@@ -10,13 +10,13 @@ export type TBurgerIngradientsState = {
   ingredients: TIngredient[];
 };
 
-const initialState: TBurgerIngradientsState = {
+export const initialIngradientsState: TBurgerIngradientsState = {
   isLoadIngredients: false,
   ingredients: [],
 };
 
-export const burgerIngradientsReducer =
-  (state = initialState, action: TBurgerIngredientsActions): TBurgerIngradientsState => {
+export const ingradientsReducer =
+  (state = initialIngradientsState, action: TBurgerIngredientsActions): TBurgerIngradientsState => {
     switch (action.type) {
       case GET_INGREDIENTS_SUCCESS: {
         return {
@@ -25,34 +25,36 @@ export const burgerIngradientsReducer =
           ingredients: action.ingredients,
         };
       }
-      case INCREASE_COUNT_BURGER_INGREDIENT: {
+      case INCREASE_COUNT_INGREDIENT: {
         return {
           ...state,
-          ingredients: state.ingredients.map(item => item._id === action._id ? { ...item, count: ++item.count } : item)
+          ingredients: state.ingredients.map(item =>
+            item._id === action._id ? { ...item, count: ++item.count } : item)
         };
       }
-      case DECREASE_COUNT_BURGER_INGREDIENT: {
+      case DECREASE_COUNT_INGREDIENT: {
         return {
           ...state,
-          ingredients: state.ingredients.map(item => item._id === action._id ? { ...item, count: --item.count } : item)
-        }
+          ingredients: state.ingredients.map(item =>
+            item._id === action._id ? { ...item, count: --item.count } : item)
+        };
       }
-      case CANCEL_COUNT_BURGER_BUN: {
+      case RESET_COUNT_BUN: {
         return {
           ...state,
           ingredients: state.ingredients.map(item => item._id === action._id ? { ...item, count: 0 } : item)
         };
       }
-      case SET_DOUBLE_COUNT_BURGER_BUN: {
+      case SET_DOUBLE_COUNT_BUN: {
         return {
           ...state,
           ingredients: state.ingredients.map(item => item._id === action._id ? { ...item, count: 2 } : item)
         };
       }
-      case CANCEL_COUNT_ALL_INGREDIENTS: {
+      case RESET_COUNT_ALL_INGREDIENTS: {
         return {
           ...state,
-          ingredients: state.ingredients.map(item => { return { ...item, count: 0 } })
+          ingredients: state.ingredients.map(item => ({ ...item, count: 0 }) )
         }
       }
       default: {

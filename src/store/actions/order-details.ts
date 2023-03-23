@@ -4,12 +4,11 @@ import {
 } from '../action-types';
 
 export const getOrderIdSuccess =
-  (nameOrderedBurger: string, orderId: number, burger: string[]): IOrderIdSuccessAction => {
+  (nameBurger: string, orderId: number): IOrderIdSuccessAction => {
     return {
       type: GET_ORDER_ID_SUCCESS,
-      nameOrderedBurger,
+      nameBurger: nameBurger,
       orderId,
-      burger
     }
   };
 

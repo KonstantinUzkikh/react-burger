@@ -3,7 +3,7 @@ import {
   type TNotifierActions
 } from '../action-types';
 
-export type TApiState = {
+export type TNotifierState = {
   source: string;
   isAPI: boolean;
   isWS: boolean;
@@ -13,7 +13,7 @@ export type TApiState = {
   message: string | undefined;
 };
 
-const initialState: TApiState = {
+export const initialNotifierState: TNotifierState = {
   source: '',
   isAPI: false,
   isWS: false,
@@ -23,10 +23,10 @@ const initialState: TApiState = {
   message: '',
 };
 
-export const notifierReducer = (state = initialState, action: TNotifierActions): TApiState => {
+export const notifierReducer = (state = initialNotifierState, action: TNotifierActions): TNotifierState => {
   switch (action.type) {
     case RESET_NOTIFIER: {
-      return initialState;
+      return initialNotifierState;
     }
     case API_FLAG_UP: {
       return {

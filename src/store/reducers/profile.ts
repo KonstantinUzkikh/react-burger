@@ -7,14 +7,14 @@ export type TProfileState = {
   password: string;
 };
 
-const initialState: TProfileState  = {
+export const initialProfileState: TProfileState  = {
   isLoadProfile: false,
   name: '',
   email: '',
   password: ''
 };
 
-export const profileReducer = (state = initialState, action: TProfileActions): TProfileState => {
+export const profileReducer = (state = initialProfileState, action: TProfileActions): TProfileState => {
     switch (action.type) {
       case GET_PROFILE_SUCCESS: {
         return {
@@ -26,13 +26,7 @@ export const profileReducer = (state = initialState, action: TProfileActions): T
         };
       }
       case PROFILE_RESET: {
-        return {    // ЗАМЕНИТЬ НА initialState
-          ...state,
-          isLoadProfile: false,
-          name: '',
-          email: '',
-          password: ''
-        };
+        return initialProfileState;
       }
       default: {
         return state;

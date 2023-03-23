@@ -7,29 +7,27 @@ type TWSState = {
   totalToday: number;
 }
 
-const initialState: TWSState = {
+export const initialWSAuthState: TWSState = {
   orders: [],
   total: 0,
   totalToday: 0
 };
 
-export const wsAuthReducer = (state = initialState, action: TWSAuthActions): TWSState => {
+export const wsAuthReducer = (state = initialWSAuthState, action: TWSAuthActions): TWSState => {
   switch (action.type) {
-    case WS_AUTH_GET_MESSAGE:
+    case WS_AUTH_GET_MESSAGE: {
       return {
         ...state,
         orders: action.orders,
         total: action.total,
         totalToday: action.totalToday
-      };
-    case WS_AUTH_RESET_ORDERS:
-      return {
-        ...state,
-        orders: [],
-        total: 0,
-        totalToday: 0
-      };
-    default:
+      }
+    }
+    case WS_AUTH_RESET_ORDERS: {
+      return initialWSAuthState;
+    }
+    default: {
       return state;
+    }
   }
 };

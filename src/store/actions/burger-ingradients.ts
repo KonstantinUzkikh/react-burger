@@ -1,9 +1,9 @@
 import type { TIngredient } from '../../utils';
 import {
-  GET_INGREDIENTS_SUCCESS, INCREASE_COUNT_BURGER_INGREDIENT, DECREASE_COUNT_BURGER_INGREDIENT,
-  CANCEL_COUNT_ALL_INGREDIENTS, CANCEL_COUNT_BURGER_BUN, SET_DOUBLE_COUNT_BURGER_BUN,
-  IGetIngredientsSuccess, ICancelCountAllIngredients, IIncreaseCountIngredient, IDecreaseCountIngredient,
-  ISetCountBun, ICancelCountBun
+  GET_INGREDIENTS_SUCCESS, INCREASE_COUNT_INGREDIENT, DECREASE_COUNT_INGREDIENT,
+  RESET_COUNT_ALL_INGREDIENTS, RESET_COUNT_BUN, SET_DOUBLE_COUNT_BUN,
+  IGetIngredientsSuccess, IResetCountAllIngredients, IIncreaseCountIngredient, IDecreaseCountIngredient,
+  ISetDoubleCountBun, IResetCountBun
 } from '../action-types';
 
 export const getIngredientsSuccess = (ingredients: TIngredient[]): IGetIngredientsSuccess => {
@@ -13,32 +13,32 @@ export const getIngredientsSuccess = (ingredients: TIngredient[]): IGetIngredien
   }
 };
 
-export const resetCountAllIngredients = (): ICancelCountAllIngredients => { return { type: CANCEL_COUNT_ALL_INGREDIENTS } };
+export const resetCountAllIngredients = (): IResetCountAllIngredients => { return { type: RESET_COUNT_ALL_INGREDIENTS } };
 
 export const increaseCountIngredient = (id: string): IIncreaseCountIngredient => {
   return {
-    type: INCREASE_COUNT_BURGER_INGREDIENT,
+    type: INCREASE_COUNT_INGREDIENT,
     _id: id
   }
 };
 
 export const decreaseCountIngredient = (id: string): IDecreaseCountIngredient => {
   return {
-    type: DECREASE_COUNT_BURGER_INGREDIENT,
+    type: DECREASE_COUNT_INGREDIENT,
     _id: id
   }
 };
 
-export const resetCountBun = (id: string): ICancelCountBun => {
+export const resetCountBun = (id: string): IResetCountBun => {
   return {
-    type: CANCEL_COUNT_BURGER_BUN,
+    type: RESET_COUNT_BUN,
     _id: id
   }
 };
 
-export const setCountBun = (id: string): ISetCountBun => {
+export const setDoubleCountBun = (id: string): ISetDoubleCountBun => {
   return {
-    type: SET_DOUBLE_COUNT_BURGER_BUN,
+    type: SET_DOUBLE_COUNT_BUN,
     _id: id
   }
 };

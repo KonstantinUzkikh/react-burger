@@ -8,7 +8,7 @@ export const getConfirmOrderThunk = (burger: string[], goPath: () => void): AppT
   getConfirmOrder(burger, goPath)
     .then((res: TResponseOrder) => {
       dispatch(apiFlagDown())
-      dispatch(getOrderIdSuccess(res.name, res.order.number, burger))
+      dispatch(getOrderIdSuccess(res.name, res.order.number))
     })
     .catch(err => {
       dispatch(apiError(err))

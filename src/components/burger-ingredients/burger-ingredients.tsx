@@ -26,6 +26,7 @@ const Ingredient: FC<{ data: TIngredient }> = ({ data }) => {
 
   return (
     <div
+      id={_id}
       className={ingredientsLayout.buttonIngradient}
       ref={isBun ? dragBunRef : dragIngredientRef}
     >

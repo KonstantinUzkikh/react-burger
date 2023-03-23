@@ -14,7 +14,7 @@ import componentsLayout from './burger-constructor.module.css';
 import {
   openModal, resetOrderId,
   addBurgerIngredient, deleteBurgerIngredient, updateBurgerBun, resetBurger, moveBurgerIngredient,
-  increaseCountIngredient, decreaseCountIngredient, resetCountBun, setCountBun, resetCountAllIngredients
+  increaseCountIngredient, decreaseCountIngredient, resetCountBun, setDoubleCountBun, resetCountAllIngredients
 } from '../../store/actions';
 
 type TBurgerComponentProps = {
@@ -139,7 +139,7 @@ const BurgerConstructor: FC = () => {
     dispatch(updateBurgerBun(
       { ...ingredients.filter((item: TIngredient) => item._id === _id)[0], count: 2, key: generateKey() }
     ));
-    dispatch(setCountBun(ingredients.filter((item: TIngredient) => item._id === _id)[0]._id));
+    dispatch(setDoubleCountBun(ingredients.filter((item: TIngredient) => item._id === _id)[0]._id));
   }
 
   const moveHandler = useCallback((dragIndex: number, hoverIndex: number): void => {
@@ -205,14 +205,14 @@ const BurgerConstructor: FC = () => {
 
   return (
     <section className={componentsLayout.boxMain}>
-      <div ref={dropBunTopTarget} >
+      <div ref={dropBunTopTarget} data-testid={'bunTopTarget'} >
         {isBunContent
           ? <div className={classNameBunPlus}><BurgerComponent component={burger[0]} side="top" /></div>
           : (<h3 className={classNameTopBun}>Перетащите булку</h3>)
         }
       </div>
 
-      <div className={classNameIngredientsPlus} ref={dropIngredientTarget} >
+      <div className={classNameIngredientsPlus} ref={dropIngredientTarget} data-testid={'bunIngredientTarget'} >
         {isIngredientContent
           ? burger.map((item: TIngredient, index: number) =>
             item.type !== 'bun'
@@ -222,7 +222,7 @@ const BurgerConstructor: FC = () => {
         }
       </div>
 
-      <div ref={dropBunBottomTarget} >
+      <div ref={dropBunBottomTarget} data-testid={'bunBottomTarget'} >
         {isBunContent
           ? <div className={classNameBunPlus}><BurgerComponent component={burger[0]} side="bottom" /></div>
           : (<h3 className={classNameBottomBun}>Перетащите булку</h3>)
@@ -230,9 +230,11 @@ const BurgerConstructor: FC = () => {
       </div>
 
       <div className={componentsLayout.total} >
-        <Button htmlType="button" type={typeButton} size="large" extraClass="ml-10" onClick={makeOrder} >
-          Оформить заказ
-        </Button>
+        <div data-testid={'buttonMakeOrder'} >
+          <Button htmlType="button" type={typeButton} size="large" extraClass="ml-10" onClick={makeOrder} >
+            Оформить заказ
+          </Button>
+        </div>
         <div className={componentsLayout.icon} ><CurrencyIcon type="primary" /></div>
         <span className="text text_type_digits-medium">{total}</span>
       </div>

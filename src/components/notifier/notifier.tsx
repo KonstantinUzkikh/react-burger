@@ -30,7 +30,7 @@ const Notifier: FC = () => {
           <div className={notifierLayout.boxMain} >
             <div className={notifierLayout.children}>
               {title !== undefined && <p>{title}</p>}
-              {notification !== undefined && <p>{notification}</p>}
+              {notification !== undefined && <p data-testid={'notification'} >{notification}</p>}
               {children !== undefined && <p>{children}</p>}
               {isClosed && <p>{comment}</p>}
             </div>
