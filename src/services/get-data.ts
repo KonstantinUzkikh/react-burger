@@ -7,7 +7,7 @@ import { TResponseTokens } from './types-responses';
 export function createOptions(methodValue?: string | undefined,
   bodyValue?: object | undefined, header?: object | undefined) {
   const options: { [optionKey: string]: string | object } =
-    { headers: { 'Content-Type': 'application/json' } as { [optionKey: string]: string }}
+    { headers: { 'Content-Type': 'application/json' } as { [optionKey: string]: string } }
   if (methodValue !== undefined) options.method = `${methodValue}`;
   if (bodyValue !== undefined) options.body = JSON.stringify(bodyValue);
   if (header !== undefined) Object.assign(options.headers, header);
@@ -38,14 +38,10 @@ export function getRegister(userData: TInputValues) {
   return request(`${BASE_URL}${endPoints.register}`, createOptions('POST', userData));
 }
 
-export function getAccessToken(goPath?: () => void ) {
+export function getAccessToken(goPath?: () => void) {
   const { accessToken, refreshToken } = readTokens();
   if (refreshToken === undefined) {
-    if (goPath !== undefined) {
-      return goPath();
-    } else {
-      return console.log('Оибка авторизации');
-    }
+    if (goPath !== undefined) { goPath() } else console.log('Оибка авторизации');
   }
   if (accessToken !== undefined) return Promise.resolve(accessToken);
   request(`${BASE_URL}${endPoints.token}`, createOptions('POST', { token: refreshToken }))

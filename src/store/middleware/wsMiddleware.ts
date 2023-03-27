@@ -1,78 +1,45 @@
 import type { Middleware } from 'redux';
 
 import type { TAppActions } from '../types-store';
-import { wsFlagUp, wsFlagDown, wsError } from '../actions';
-import { getAccessToken } from '../../services/get-data';
-import { TOrder, TWSMessage } from '../../services/types-responses';
-import { TypeWSActions, TypeWSAuthActions } from '../constants-ws-actions';
-import { TIngredient } from '../../utils';
+import { TypeWSAllActions, TypeWSAuthActions } from '../constants-ws-actions';
 
-export const wsMiddleware = (url: string, withAuth: boolean, wsActions: TypeWSActions | TypeWSAuthActions): Middleware => {
-  return store => {
+export const wsMiddleware = (wsUrl: string, wsActions: TypeWSAllActions | TypeWSAuthActions): Middleware => {
+  return store => next => (action: TAppActions) => {
+
+    const { dispatch } = store;
+    const { type } = action;
+    const { toConnect, toDisconnect, onOpen, onClose, onError, onMessage } = wsActions;
 
     let socket: WebSocket | null = null;
-    let isSocket = false;
 
-    return next => (action: TAppActions) => {
+    if (type === toConnect && !socket) {
+      socket = new WebSocket(`${wsUrl}${action.payload}`);
+    }
 
-      const { dispatch, getState } = store;
-      const { type } = action;
-      const { wsStart, wsStop, onOpen, onClose, onMessage } = wsActions;
+    if (type === toDisconnect && socket && socket.readyState === 1) {
+      socket.close(1000, 'прекращаем получение данных');
+    }
 
-      const { ingredients } = getState().ingredients;
+    if (socket) {
 
-      const arrID: string[] = ingredients.map((item: TIngredient) => item._id);
+      socket.onopen = (event: Event) => dispatch({ type: onOpen });
 
-      async function startAuthWebSocket() {
-        dispatch(wsFlagUp('orders'));
-        let accessToken = await getAccessToken();
-        if (typeof (accessToken) === 'string') accessToken = accessToken.slice('Bearer '.length)
-        if (!isSocket) { socket = new WebSocket(`${url}?token=${accessToken}`); isSocket = true }
-      }
+      socket.onerror = (event: Event) => dispatch({ type: onError });
 
-      if (type === wsStart && !isSocket) {
-        if (withAuth) startAuthWebSocket()
-        else {
-          dispatch(wsFlagUp('orders'));
-          socket = new WebSocket(url); isSocket = true;
+      socket.onmessage = (event: MessageEvent) => {
+        if (socket && socket.readyState === 1) {
+          dispatch({ type: onMessage, message: JSON.parse(event.data) });
+        } else {
+          dispatch({ type: onError });
         }
       }
 
-      if (type === wsStop && socket && socket.readyState === 1) {
-        socket.close(1000, 'прекращаем получение данных');
-      }
-
-      if (socket) {
-        socket.onopen = (event: Event) => {
-          dispatch({ type: onOpen });
-          dispatch(wsFlagDown());
-        };
-
-        socket.onerror = (event: Event) => {
-          dispatch(wsError(event));
-        };
-
-        socket.onmessage = (event: MessageEvent) => {
-          if (socket && socket.readyState === 1) {
-            const { data } = event;
-            let message: TWSMessage = JSON.parse(data);
-
-            // избавляемся от заказов с несуществующими _id инредиентов
-            if (message.orders?.length > 0) {
-              const orders: TOrder[] = message.orders.filter(it => it.ingredients.every(item => arrID.includes(item))) || [];
-              dispatch({ type: onMessage, orders: orders, total: message.total, totalToday: message.totalToday });
-            }
-          }
-        };
-
-        socket.onclose = event => {
-          dispatch({ type: onClose });
-          socket = null;
-          isSocket = false;
-        };
-      }
-
-      next(action);
+      socket.onclose = (event: Event) => {
+        dispatch({ type: onClose });
+        socket = null;
+      };
     }
+
+    next(action);
   }
 };

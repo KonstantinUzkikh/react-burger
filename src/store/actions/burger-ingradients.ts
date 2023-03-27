@@ -13,7 +13,7 @@ export const getIngredientsSuccess = (ingredients: TIngredient[]): IGetIngredien
   }
 };
 
-export const resetCountAllIngredients = (): IResetCountAllIngredients => { return { type: RESET_COUNT_ALL_INGREDIENTS } };
+export const resetCountAllIngredients = (): IResetCountAllIngredients => ({ type: RESET_COUNT_ALL_INGREDIENTS });
 
 export const increaseCountIngredient = (id: string): IIncreaseCountIngredient => {
   return {

@@ -1,17 +1,12 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
+import { getAccessToken } from "../services/get-data";
 import { useDispatch, useSelector } from "../store/hooks-store";
 import OrderInfo from '../components/order-info/order-info';
 import Modal from "../components/modal/modal";
-import {
-  wsAuthConnectionStart, wsAuthConnectionStop, wsConnectionStart, wsConnectionStop
-} from "../store/actions";
-import {
-  IWSAuthConnectionStart, IWSAuthConnectionStop, IWSConnectionStart, IWSConnectionStop
-} from "../store/action-types";
-import { TOrder } from "../services/types-responses";
-import { digits } from '../utils';
+import { wsAuthConnect, wsAuthDisConnect, wsConnect, wsDisConnect } from "../store/actions";
+import { TOrder, digits } from '../utils';
 import orderLayout from './order.module.css'
 
 const OrderPage: FC<{ mode: 'modal' | 'page' }> = ({ mode }) => {
@@ -28,28 +23,24 @@ const OrderPage: FC<{ mode: 'modal' | 'page' }> = ({ mode }) => {
 
   const orderRef = useRef<TOrder>();
 
+  let orders: TOrder[];
   const { orders: ordersAll } = useSelector(state => state.ws);
   const { orders: ordersAuth } = useSelector(state => state.wsAuth);
-
-  let orders: TOrder[];
-  let wsStart: (() => IWSConnectionStart) | (() => IWSAuthConnectionStart);
-  let wsStop: (() => IWSConnectionStop) | (() => IWSAuthConnectionStop);
-
-  if (source === 'feed') {
-    orders = ordersAll;
-    wsStart = wsConnectionStart;
-    wsStop = wsConnectionStop;
-  } else {
-    orders = ordersAuth;
-    wsStart = wsAuthConnectionStart;
-    wsStop = wsAuthConnectionStop;
-  };
+  source === 'feed' ? orders = ordersAll : orders = ordersAuth;
 
   useEffect(() => {
-    dispatch(wsStart());
+
+    async function openAuthWS() {
+      let accessToken = await getAccessToken();
+      if (typeof (accessToken) === 'string') accessToken = accessToken.slice('Bearer '.length)
+      dispatch(wsAuthConnect(`?token=${accessToken}`));
+    }
+
+    source === 'feed' ? dispatch(wsConnect('/all')) : openAuthWS();
+
     return () => {
       //dispatch(wsResetOrders());
-      dispatch(wsStop());
+      source === 'feed' ? dispatch(wsDisConnect()) : dispatch(wsAuthDisConnect());
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -59,7 +50,7 @@ const OrderPage: FC<{ mode: 'modal' | 'page' }> = ({ mode }) => {
       setIsFiltered(true);
       if (orderRef.current === undefined) navigate('/not-found')
     }
-    isFiltered && dispatch(wsConnectionStop());
+    isFiltered && dispatch(wsDisConnect());
   }, [orders, isFiltered]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const closeCallback = () => navigate(-1);

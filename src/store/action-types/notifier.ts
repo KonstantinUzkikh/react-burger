@@ -37,7 +37,6 @@ export interface IWSFlagDown {
 
 export interface IWSError {
   readonly type: typeof WS_ERROR;
-  readonly error: Event;
 }
 
 export interface IError {

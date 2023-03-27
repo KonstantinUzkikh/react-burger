@@ -15,7 +15,6 @@ import ResetPasswordPage from '../../pages/reset-password';
 import ProfilePage from '../../pages/profile';
 import IngredientPage from '../../pages/ingredient';
 import NotFoundPage from '../../pages/not-found';
-import IngredientModalPage from '../../pages/ingredient-modal';
 import FeedPage from '../../pages/feed';
 import OrderPage from '../../pages/order';
 
@@ -42,7 +41,7 @@ const App: FC = () => {
         <Route path="/profile" element={<ProtectedRoute children={<ProfilePage />} />} />
         <Route path="/profile/orders" element={<ProtectedRoute children={<ProfilePage />} />} />
         <Route path="/profile/orders/:id" element={<ProtectedRoute children={<OrderPage mode={'page'} /> } />} />
-        <Route path="/ingredients/:id" element={<IngredientPage />} />
+        <Route path="/ingredients/:id" element={<IngredientPage mode={'page'} />} />
         <Route path="/feed" element={<FeedPage /> } />
         <Route path="/feed/:id" element={<OrderPage mode={'page'} /> } />
         <Route path="/*" element={<NotFoundPage />} />
@@ -50,7 +49,7 @@ const App: FC = () => {
 
       {state?.backgroundLocation && (
         <Routes>
-          <Route path="/ingredients/:id" element={<IngredientModalPage />} />
+          <Route path="/ingredients/:id" element={<IngredientPage mode={'modal'} />} />
           <Route path="/feed/:id" element={<OrderPage mode={'modal'} /> } />
           <Route path="/profile/orders/:id" element={<OrderPage mode={'modal'} /> } />
         </Routes>

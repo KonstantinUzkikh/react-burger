@@ -69,13 +69,13 @@ export const notifierReducer = (state = initialNotifierState, action: TNotifierA
         ...state,
         isError: true,
         isWS: false,
-        error: action.error,
+        error: 'Ошибка сокета.'
       };
     case ERROR:
       return {
         ...state,
         isError: true,
-        error: action.error,
+        error: action.error
       };
     default: {
       return state;

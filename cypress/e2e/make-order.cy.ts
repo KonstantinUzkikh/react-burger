@@ -1,14 +1,16 @@
 import { BASE_URL, endPoints } from '../../src/utils';
-import { bun1_count0, bun2_count0, main_count0, sauce_count0 } from '../../src/utils/mock-ingredients'
+import { bun1_count0, bun2_count0, main_count0, sauce_count0 } from '../../src/utils/mock-ingredients';
+const notification = `[data-testid=notification]`;
 
 describe('запускаем приложение', function () {
   beforeEach(() => {
-    cy.visit('http://localhost:3000');
+    cy.visit('');
     cy.intercept('GET', `${BASE_URL}${endPoints.ingredients}`,
       { statusCode: 200, body: {success: true, data: [bun1_count0, bun2_count0, main_count0, sauce_count0]} });
-    cy.intercept('POST', `${BASE_URL}${endPoints.login}`, { fixture: "user.json" });
-    cy.intercept('POST', `${BASE_URL}${endPoints.orders}`, { fixture: "order.json" });
-    cy.intercept('POST', `${BASE_URL}${endPoints.logout}`, { fixture: "logout.json" });
+    // задержка 1 сек., эмулирующая задержку при получении ответа от сервера
+    cy.intercept('POST', `${BASE_URL}${endPoints.login}`, {delay: 1000, fixture: "user.json"}).as('login');
+    cy.intercept('POST', `${BASE_URL}${endPoints.orders}`, {delay: 1000, fixture: "order.json"}).as('order');
+    cy.intercept('POST', `${BASE_URL}${endPoints.logout}`, {delay: 1000, fixture: "logout.json"}).as('logout');
   })
 
   it('аутентификация пользователя и заказ бургера', function () {
@@ -25,14 +27,13 @@ describe('запускаем приложение', function () {
     cy.get('[type="submit"]').should('exist').and('contain', 'Войти');
 
     //авторизация
-    cy.get('.input__icon').first().click()
-    cy.get('[type="email"]').type('test@mail.com').should('have.value', 'test@mail.com')
-    cy.get('[type="password"]').type('TestPassword').should('have.value', 'TestPassword')
-    cy.get('[type="submit"]').contains('Войти').click()
+    cy.get('.input__icon').first().click();
+    cy.get('[type="email"]').type('test@mail.com').should('have.value', 'test@mail.com');
+    cy.get('[type="password"]').type('TestPassword').should('have.value', 'TestPassword');
+    cy.get('[type="submit"]').contains('Войти').click();
 
-    cy.get(`[data-testid=notification]`).should('exist');
-    cy.setCookie('accessToken', 'Bearer 123456789');
-    cy.setCookie('refreshToken', '987654321');
+    cy.get(notification).should('exist');
+    cy.wait('@login').setCookie('accessToken', 'Bearer 123456789').setCookie('refreshToken', '987654321');
 
     //прверка наличия булок и ингредиентов
     cy.get(`#${bun1_count0._id}`).should('exist');
@@ -56,8 +57,8 @@ describe('запускаем приложение', function () {
 
     //оформление заказа
     cy.get(`[data-testid=buttonMakeOrder]`).should('exist').and('contain', 'Оформить заказ').click();
-    cy.get(`[data-testid=notification]`).should('exist');
-    cy.get(`[data-testid=orderId]`).should('exist').and('contain', '123452');
+    cy.get(notification).should('exist');
+    cy.wait('@order').get(`[data-testid=orderId]`).should('exist').and('contain', '123452');
 
     //возврат на главную страницу
     cy.get('body').type('{esc}')
@@ -68,11 +69,10 @@ describe('запускаем приложение', function () {
 
     //logout
     cy.get('#logout').should('exist').click();
-    cy.get(`[data-testid=notification]`).should('exist');
+    cy.get(notification).should('exist');
 
     //возврат на главную страницу
-    cy.get('body').type('{esc}')
-    cy.get('h1').should('exist').and('contain', 'Соберите бургер');
+    cy.wait('@logout').get('h1').should('exist').and('contain', 'Соберите бургер');
   })
 
 });

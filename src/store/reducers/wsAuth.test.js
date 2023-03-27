@@ -45,7 +45,7 @@ describe('wsAuthReducer', () => {
   it('WS_AUTH_GET_MESSAGE', () => {
     expect(wsAuthReducer(
       initialWSAuthState,
-      {type: types.WS_AUTH_GET_MESSAGE, orders: ordersArr, total: 43568, totalToday: 115}))
+      {type: types.WS_AUTH_GET_MESSAGE, message: {orders: ordersArr, total: 43568, totalToday: 115}}))
       .toEqual({orders: ordersArr, total: 43568, totalToday: 115})
   })
 

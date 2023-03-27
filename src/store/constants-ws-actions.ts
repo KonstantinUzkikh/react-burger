@@ -1,27 +1,26 @@
+import { WS_CONNECT, WS_DISCONNECT, WS_OPENED, WS_CLOSED, WS_GET_ERROR, WS_GET_MESSAGE } from "./action-types";
 import {
-  WS_CONNECTION_START, WS_CONNECTION_STOP, WS_CONNECTION_OPENED, WS_CONNECTION_CLOSED, WS_GET_MESSAGE
-} from "./action-types";
-import {
-  WS_AUTH_CONNECTION_START, WS_AUTH_CONNECTION_STOP, WS_AUTH_CONNECTION_OPENED,
-  WS_AUTH_CONNECTION_CLOSED, WS_AUTH_GET_MESSAGE
+  WS_AUTH_CONNECT, WS_AUTH_DISCONNECT, WS_AUTH_OPENED, WS_AUTH_CLOSED, WS_AUTH_GET_ERROR, WS_AUTH_GET_MESSAGE
 } from "./action-types";
 
-export const wsActions = {
-  wsStart: WS_CONNECTION_START,
-  wsStop: WS_CONNECTION_STOP,
-  onOpen: WS_CONNECTION_OPENED,
-  onClose: WS_CONNECTION_CLOSED,
+export const wsAllActions = {
+  toConnect: WS_CONNECT,
+  toDisconnect: WS_DISCONNECT,
+  onOpen: WS_OPENED,
+  onClose: WS_CLOSED,
+  onError: WS_GET_ERROR,
   onMessage: WS_GET_MESSAGE
 };
 
 export const wsAuthActions = {
-  wsStart: WS_AUTH_CONNECTION_START,
-  wsStop: WS_AUTH_CONNECTION_STOP,
-  onOpen: WS_AUTH_CONNECTION_OPENED,
-  onClose: WS_AUTH_CONNECTION_CLOSED,
+  toConnect: WS_AUTH_CONNECT,
+  toDisconnect: WS_AUTH_DISCONNECT,
+  onOpen: WS_AUTH_OPENED,
+  onClose: WS_AUTH_CLOSED,
+  onError: WS_AUTH_GET_ERROR,
   onMessage: WS_AUTH_GET_MESSAGE
 };
 
-export type TypeWSActions = typeof wsActions;
+export type TypeWSAllActions = typeof wsAllActions;
 
 export type TypeWSAuthActions = typeof wsAuthActions;

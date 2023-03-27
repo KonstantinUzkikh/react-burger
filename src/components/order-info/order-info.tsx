@@ -5,8 +5,7 @@ import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burge
 import OrderInLine from '../order-in-line/order-in-line';
 import OrderToColumn from '../order-to-column/order-to-column';
 import { useSelector } from '../../store/hooks-store';
-import { TIngredient, h3_type, letters, letters_grey, digits } from '../../utils';
-import type { TOrder } from '../../services/types-responses';
+import { TIngredient, TOrder, h3_type, letters, letters_grey, digits } from '../../utils';
 import orderInfoLayout from './order-info.module.css';
 
 const OrderInfo: FC<{ order: TOrder, source: 'feed' | 'profile', direction: 'row' | 'column' }> = ({ order, source, direction }) => {
@@ -28,7 +27,9 @@ const OrderInfo: FC<{ order: TOrder, source: 'feed' | 'profile', direction: 'row
 
   useEffect(() => {
     if (isLoadIngredients) {
-      burgerRef.current = arrID.map(item => ingredients.find(it => it._id === item));
+      burgerRef.current = arrID.map((item) => ingredients.find((it) => it._id === item));
+      //burgerRef.current = arrID.map((item) => ingredients.reduce(
+      //  (prev, it) => it._id === item ? it : prev), {});
       setIsSecondRender(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -38,10 +39,14 @@ const OrderInfo: FC<{ order: TOrder, source: 'feed' | 'profile', direction: 'row
   let total: number = 0;
 
   if (isLoadIngredients && isSecondRender) {
-    arrIngredients = burgerRef.current;
-    total = arrIngredients.filter(it => (it !== undefined) ? it.type === 'bun' : false)[0]?.price || 0;
-    total = arrIngredients.reduce((previousValue, item) =>
-      (item !== undefined) ? previousValue + item.price : previousValue, total);
+    arrIngredients = [...burgerRef.current];
+    total = arrIngredients.reduce((previousValue, item) => {
+      if (item !== undefined) {
+        if (item.type === 'bun') return previousValue + 2 * item.price;
+        else return previousValue + item.price;
+      }
+      else return previousValue;
+    }, total);
   }
 
   return (

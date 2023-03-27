@@ -55,8 +55,8 @@ describe('notifierReducer', () => {
   it('WS_ERROR', () => {
     expect(notifierReducer(
       {...initialNotifierState, source: 'orders', isWS: true},
-      {type: types.WS_ERROR, error: 'error'}))
-      .toEqual({...initialNotifierState, source: 'orders', error: 'error', isError: true, isWS: false})
+      {type: types.WS_ERROR}))
+      .toEqual({...initialNotifierState, source: 'orders', error: 'Ошибка сокета.', isError: true, isWS: false})
   })
 
   it('ERROR', () => {

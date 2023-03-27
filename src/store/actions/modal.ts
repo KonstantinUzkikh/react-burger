@@ -11,4 +11,4 @@ export const openModal =
     }
 };
 
-export const closeModal = (): ICloseModalAction => { return {type: CLOSE_MODAL} };
+export const closeModal = (): ICloseModalAction => ({type: CLOSE_MODAL});

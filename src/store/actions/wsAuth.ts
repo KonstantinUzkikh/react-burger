@@ -1,26 +1,39 @@
 import { TWSMessage } from '../../services/types-responses';
+import { TOrdersData } from '../../utils';
 import {
-  WS_AUTH_CONNECTION_START, WS_AUTH_CONNECTION_STOP, WS_AUTH_CONNECTION_OPENED,
-  WS_AUTH_CONNECTION_CLOSED, WS_AUTH_GET_MESSAGE, WS_AUTH_RESET_ORDERS,
-  IWSAuthConnectionStart, IWSAuthConnectionStop, IWSAuthConnectionOpened,
-  IWSAuthConnectionClosed, IWSAuthGetMessage, IWSAuthResetOrders
+  WS_AUTH_CONNECT, WS_AUTH_DISCONNECT, WS_AUTH_OPENED, WS_AUTH_CLOSED, WS_AUTH_GET_ERROR,
+  WS_AUTH_GET_MESSAGE, WS_AUTH_GET_ORDERS, WS_AUTH_RESET_ORDERS,
+  IWSAuthConnect, IWSAuthDisConnect, IWSAuthOpened, IWSAuthClosed, IWSAuthGetError,
+  IWSAuthGetMessage, IWSAuthGetOrders, IWSAuthResetOrders
 } from '../action-types';
 
-export const wsAuthConnectionStart = (): IWSAuthConnectionStart => { return { type: WS_AUTH_CONNECTION_START } };
+export const wsAuthConnect = (options: string): IWSAuthConnect => {
+  return {
+    type: WS_AUTH_CONNECT,
+    payload: options
+  }
+};
 
-export const wsAuthConnectionStop = (): IWSAuthConnectionStop => { return { type: WS_AUTH_CONNECTION_STOP } };
+export const wsAuthDisConnect = (): IWSAuthDisConnect => ({ type: WS_AUTH_DISCONNECT });
 
-export const wsAuthConnectionOpened = (): IWSAuthConnectionOpened => { return { type: WS_AUTH_CONNECTION_OPENED } };
+export const wsAuthOpened = (): IWSAuthOpened => ({ type: WS_AUTH_OPENED });
 
-export const wsAuthConnectionClosed = (): IWSAuthConnectionClosed => { return { type: WS_AUTH_CONNECTION_CLOSED } };
+export const wsAuthClosed = (): IWSAuthClosed => ({ type: WS_AUTH_CLOSED });
 
-export const wsAuthGetMessage = (data: TWSMessage): IWSAuthGetMessage => {
+export const wsAuthGetError = (): IWSAuthGetError => ({ type: WS_AUTH_GET_ERROR });
+
+export const wsAuthResetOrders = (): IWSAuthResetOrders => ({ type: WS_AUTH_RESET_ORDERS });
+
+export const wsAuthGetMessage = (message: TWSMessage): IWSAuthGetMessage => {
   return {
     type: WS_AUTH_GET_MESSAGE,
-    orders: data.orders,
-    total: data.total,
-    totalToday: data.totalToday
+    message
   };
 };
 
-export const wsAuthResetOrders = (): IWSAuthResetOrders => { return { type: WS_AUTH_RESET_ORDERS } };
+export const wsAuthGetOrders = (data: TOrdersData): IWSAuthGetOrders => {
+  return {
+    type: WS_AUTH_GET_ORDERS,
+    data
+  };
+};

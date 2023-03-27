@@ -20,13 +20,18 @@ export type TIngredient = {
   key: string;
 }
 
-export type TOrderFullData = {
+export type TOrder = {
   name: string;
-  ingredients: TIngredient[];
+  ingredients: string[];
   _id: string;
   status: string;
   number: number;
   createdAt: string;
   updatedAt: string;
+}
+
+export type TOrdersData = {
+  orders: TOrder[];
   total: number;
+  totalToday: number;
 }

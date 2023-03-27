@@ -1,5 +1,5 @@
-import { WS_GET_MESSAGE, WS_RESET_ORDERS, TWSActions } from '../action-types';
-import type { TOrder } from '../../services/types-responses'
+import { WS_RESET_ORDERS, WS_GET_ORDERS, TWSActions } from '../action-types';
+import type { TOrder } from '../../utils/types-data'
 
 type TWSState = {
   orders: TOrder[];
@@ -15,12 +15,12 @@ export const initialWSState: TWSState = {
 
 export const wsReducer = (state = initialWSState, action: TWSActions): TWSState => {
   switch (action.type) {
-    case WS_GET_MESSAGE: {
+    case WS_GET_ORDERS: {
       return {
         ...state,
-        orders: action.orders,
-        total: action.total,
-        totalToday: action.totalToday
+        orders: action.data.orders,
+        total: action.data.total,
+        totalToday: action.data.totalToday
       }
     }
     case WS_RESET_ORDERS: {

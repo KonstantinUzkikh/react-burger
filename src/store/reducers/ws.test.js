@@ -42,10 +42,10 @@ describe('wsReducer', () => {
     expect(wsReducer(undefined, {})).toEqual(initialWSState)
   })
 
-  it('WS_GET_MESSAGE', () => {
+  it('WS_GET_ORDERS', () => {
     expect(wsReducer(
       initialWSState,
-      {type: types.WS_GET_MESSAGE, orders: ordersArr, total: 43568, totalToday: 115}))
+      {type: types.WS_GET_ORDERS, data: {orders: ordersArr, total: 43568, totalToday: 115}}))
       .toEqual({orders: ordersArr, total: 43568, totalToday: 115})
   })
 

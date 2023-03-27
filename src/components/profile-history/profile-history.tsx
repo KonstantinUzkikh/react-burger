@@ -2,9 +2,10 @@ import { FC, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import { useDispatch, useSelector } from "../../store/hooks-store";
-import { wsAuthConnectionStart, wsAuthConnectionStop } from "../../store/actions";
+import { wsAuthConnect, wsAuthDisConnect } from "../../store/actions";
 import profileHistoryLayout from './profile-history.module.css'
 import OrderInfo from "../order-info/order-info";
+import { getAccessToken } from "../../services/get-data";
 
 const ProfileHistory: FC = () => {
 
@@ -14,9 +15,14 @@ const ProfileHistory: FC = () => {
   const { orders } = useSelector(state => state.wsAuth);
 
   useEffect(() => {
-    dispatch(wsAuthConnectionStart());
+    async function openAuthWS() {
+      let accessToken = await getAccessToken();
+      if (typeof (accessToken) === 'string') accessToken = accessToken.slice('Bearer '.length)
+      dispatch(wsAuthConnect(`?token=${accessToken}`));
+    }
+    openAuthWS();
     return () => {
-      dispatch(wsAuthConnectionStop());
+      dispatch(wsAuthDisConnect());
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

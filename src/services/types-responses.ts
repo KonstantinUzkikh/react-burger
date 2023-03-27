@@ -1,4 +1,4 @@
-import { TUser, TIngredient } from '../utils/types-data';
+import { TUser, TIngredient, TOrder } from '../utils/types-data';
 
 export type TMethod = 'GET' | 'PATCH' | 'POST';
 
@@ -44,16 +44,6 @@ export type TResponseForgotPassword = {
 export type TResponseResetPassword = {
   success: boolean;
   message: string;
-}
-
-export type TOrder = {
-  name: string;
-  ingredients: string[];
-  _id: string;
-  status: string;
-  number: number;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export type TWSMessage = {

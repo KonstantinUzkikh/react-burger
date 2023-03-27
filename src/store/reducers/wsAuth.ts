@@ -1,5 +1,5 @@
 import { WS_AUTH_GET_MESSAGE, WS_AUTH_RESET_ORDERS, TWSAuthActions } from '../action-types';
-import { TOrder } from '../../services/types-responses';
+import type { TOrder } from '../../utils/types-data'
 
 type TWSState = {
   orders: TOrder[];
@@ -18,9 +18,9 @@ export const wsAuthReducer = (state = initialWSAuthState, action: TWSAuthActions
     case WS_AUTH_GET_MESSAGE: {
       return {
         ...state,
-        orders: action.orders,
-        total: action.total,
-        totalToday: action.totalToday
+        orders: action.message.orders,
+        total: action.message.total,
+        totalToday: action.message.totalToday
       }
     }
     case WS_AUTH_RESET_ORDERS: {

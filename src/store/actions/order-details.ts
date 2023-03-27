@@ -12,4 +12,4 @@ export const getOrderIdSuccess =
     }
   };
 
-export const resetOrderId = (): IOrderIdResetAction => { return { type: ORDER_ID_RESET } };
+export const resetOrderId = (): IOrderIdResetAction => ({ type: ORDER_ID_RESET });

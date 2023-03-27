@@ -2,7 +2,7 @@ import { FC, useEffect } from "react";
 import { Link, useLocation } from 'react-router-dom';
 
 import { useDispatch, useSelector } from "../store/hooks-store";
-import { wsConnectionStart, wsConnectionStop } from "../store/actions";
+import { wsConnect, wsDisConnect } from "../store/actions";
 import { h1_type, h3_type, digits } from '../utils';
 import feedLayout from './feed.module.css'
 import OrderInfo from "../components/order-info/order-info";
@@ -13,9 +13,9 @@ const FeedPage: FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(wsConnectionStart());
+    dispatch(wsConnect('/all'));
     return () => {
-      dispatch(wsConnectionStop());
+      dispatch(wsDisConnect());
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -23,7 +23,7 @@ const FeedPage: FC = () => {
 
   return (
     <>
-      {orders.length !== 0 &&
+      { orders.length !== 0 &&
         <div>
           <div className={feedLayout.boxPage}>
             <h1 className={`${h1_type} mb-5`} >Лента заказов</h1>

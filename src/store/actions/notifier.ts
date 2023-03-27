@@ -3,7 +3,7 @@ import {
   IResetNotifier, IApiFlagUp, IApiFlagDown, IApiError, IWSFlagUp, IWSFlagDown, IWSError, IError
 } from '../action-types';
 
-export const resetNotifier = (): IResetNotifier => { return { type: RESET_NOTIFIER } };
+export const resetNotifier = (): IResetNotifier => ({ type: RESET_NOTIFIER });
 
 export const apiFlagUp = (source: string = ''): IApiFlagUp => {
   return {
@@ -33,14 +33,9 @@ export const wsFlagUp = (source: string = ''): IWSFlagUp => {
   }
 };
 
-export const wsFlagDown = (): IWSFlagDown => { return { type: WS_FLAG_DOWN } };
+export const wsFlagDown = (): IWSFlagDown => ({ type: WS_FLAG_DOWN });
 
-export const wsError = (error: Event): IWSError => {
-  return {
-    type: WS_ERROR,
-    error
-  };
-};
+export const wsError = (): IWSError => ({ type: WS_ERROR });
 
 export const error = (error: string): IError => {
   return {

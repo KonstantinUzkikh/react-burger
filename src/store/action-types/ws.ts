@@ -1,38 +1,48 @@
-import { TOrder } from "../../services/types-responses";
+import { TWSMessage } from "../../services/types-responses";
+import { TOrdersData } from '../../utils/types-data';
 
-export const WS_CONNECTION_START: 'WS_CONNECTION_START' = 'WS_CONNECTION_START';
-export const WS_CONNECTION_STOP: 'WS_CONNECTION_STOP' = 'WS_CONNECTION_STOP';
-export const WS_CONNECTION_OPENED: 'WS_CONNECTION_OPENED' = 'WS_CONNECTION_OPENED';
-export const WS_CONNECTION_CLOSED: 'WS_CONNECTION_CLOSED' = 'WS_CONNECTION_CLOSED';
+export const WS_CONNECT: 'WS_CONNECT' = 'WS_CONNECT';
+export const WS_DISCONNECT: 'WS_DISCONNECT' = 'WS_DISCONNECT';
+export const WS_OPENED: 'WS_OPENED' = 'WS_OPENED';
+export const WS_CLOSED: 'WS_CLOSED' = 'WS_CLOSED';
+export const WS_GET_ERROR: 'WS_GET_ERROR' = 'WS_GET_ERROR';
 export const WS_GET_MESSAGE: 'WS_GET_MESSAGE' = 'WS_GET_MESSAGE';
+export const WS_GET_ORDERS: 'WS_GET_ORDERS' = 'WS_GET_ORDERS';
 export const WS_RESET_ORDERS: 'WS_RESET_ORDERS' = 'WS_RESET_ORDERS';
 
-export interface IWSConnectionStart {
-  readonly type: typeof WS_CONNECTION_START;
+export interface IWSConnect {
+  readonly type: typeof WS_CONNECT;
+  readonly payload: string;
 };
 
-export interface IWSConnectionStop {
-  readonly type: typeof WS_CONNECTION_STOP;
+export interface IWSDisConnect {
+  readonly type: typeof WS_DISCONNECT;
 };
 
-export interface IWSConnectionOpened {
-  readonly type: typeof WS_CONNECTION_OPENED;
+export interface IWSOpened {
+  readonly type: typeof WS_OPENED;
 }
 
-export interface IWSConnectionClosed {
-  readonly type: typeof WS_CONNECTION_CLOSED;
+export interface IWSClosed {
+  readonly type: typeof WS_CLOSED;
+}
+
+export interface IWSGetError {
+  readonly type: typeof WS_GET_ERROR;
 }
 
 export interface IWSGetMessage {
   readonly type: typeof WS_GET_MESSAGE;
-  readonly orders: TOrder[];
-  readonly total: number;
-  readonly totalToday: number;
+  readonly message: TWSMessage;
 }
 
+export interface IWSGetOrders {
+  readonly type: typeof WS_GET_ORDERS;
+  readonly data: TOrdersData;
+}
 export interface IWSResetOrders {
   readonly type: typeof WS_RESET_ORDERS;
 }
 
-export type TWSActions = IWSConnectionStart | IWSConnectionStop | IWSConnectionOpened
- | IWSConnectionClosed | IWSGetMessage | IWSResetOrders;
+export type TWSActions = IWSConnect | IWSDisConnect | IWSOpened | IWSClosed | IWSGetError
+  | IWSGetMessage | IWSGetOrders | IWSResetOrders;
