@@ -1,0 +1,68 @@
+.boxPage {
+  display: flex;
+  flex-direction: column;
+  /*justify-content: center;*/
+  /*align-items: center;*/
+  width: 100%;
+  padding-top: 40px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.boxContent {
+  display: grid;
+  justify-items: center;
+  justify-content: center;
+  grid-template-columns: 608px 580px;
+  gap: 60px 40px;
+}
+
+.boxOrders {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 852px; /*756px; 852*/
+  padding-left: 8px;
+  padding-right: 8px;
+  box-sizing: border-box;
+  gap: 16px;
+  overflow: auto;
+}
+
+.boxStat {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 60px;
+}
+
+.boxStatCurrent {
+  display: grid;
+  grid-template-columns: repeat(2, 272px);
+  gap: 36px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.orders {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 100%;
+  max-height: 260px;
+  /*max-height: 152px;*/
+  overflow-x: auto;
+  overflow-y:hidden
+}
+
+.done {
+  color: #00CCCC;
+}
+
+.boxStatTotal {
+
+}

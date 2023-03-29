@@ -1,0 +1,16 @@
+
+.boxMain {
+  display: flex;
+  position: relative;
+  flex-flow: row-reverse;
+  height: 62px;
+  z-index: 0;
+}
+
+.image {
+  /*display: flex;*/
+  position: absolute;
+  top: 0;
+  left: 240px;
+  z-index: 0;
+}

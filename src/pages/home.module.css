@@ -1,0 +1,7 @@
+.boxPage {
+  display: grid;
+  grid-template-columns: repeat(2, 600px);
+  gap: 70px 40px;
+  justify-items: center;
+  justify-content: center;
+}

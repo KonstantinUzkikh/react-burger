@@ -1,0 +1,11 @@
+.boxOrders {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 916px; /*756px; 852*/
+  overflow: auto;
+  /*padding-left: 8px;
+  padding-right: 8px;*/
+  box-sizing: border-box;
+  gap: 24px;
+}

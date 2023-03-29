@@ -1,0 +1,16 @@
+.boxForm {
+  width: 480px;
+  padding-top: 80px;
+  display: flex;
+  flex-direction: column;
+}
+
+.boxButtons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px
+}
+
+.button {
+  margin-top: 24px;
+}

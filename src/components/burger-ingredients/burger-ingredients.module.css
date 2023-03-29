@@ -18,7 +18,7 @@
 }
 
 .boxListIngredients {
-  max-height: 756px;
+  max-height: 756px; /*688px;*/
   overflow: auto;
 }
 
@@ -35,8 +35,11 @@
   border: none;
   cursor: pointer;
 }
+
 .buttonIngradient:hover {
-  opacity: .5;
+  border: 1px solid rgba(76, 76, 255, .7);
+  border-radius: 40px;
+  /*opacity: .5;*/
 }
 
 .image {

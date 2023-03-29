@@ -1,0 +1,6 @@
+{
+  "success": true,
+  "user": { "email": "test@mail.com", "password": "TestPassword" },
+  "accessToken": "Bearer 123456789",
+  "refreshToken": "987654321"
+}

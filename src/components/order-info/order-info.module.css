@@ -1,0 +1,54 @@
+.boxLine {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  width: 100%;
+  padding: 24px;
+  border-radius: 40px;
+  background: #1C1C21;;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 0px 1px rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
+  gap: 24px;
+}
+
+.boxLine:hover {
+  border: 1px solid rgba(76, 76, 255, .7);
+}
+
+.boxContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.done {
+  color: #00CCCC;
+}
+
+.total {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  overflow: hidden;
+  gap: 9px
+}
+
+.boxColumn {
+  display: flex;
+  flex-direction: column;
+  width: 640px;
+}
+
+.ingredients {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 312px;
+  gap: 16px;
+  overflow: auto;
+}
+
+.orderId {
+  text-align: center;
+}
